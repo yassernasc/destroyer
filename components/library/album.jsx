@@ -1,71 +1,58 @@
-import { Component } from 'react'
-import ReactDOM from 'react-dom'
+import { useState, useEffect, useRef } from 'react'
 import { store } from '../../client.js'
 import { rafThrottle } from '../utilities'
-import shallowCompare from 'react-addons-shallow-compare'
 import inView from 'in-view'
 
-export default class Album extends Component {
-  constructor(props) {
-    super()
-    this.state = {
-      active: false,
-      fade: true
-    }
+const Album = props => {
+  const albumEl = useRef(null)
+  const [active, setActive] = useState(false)
+  const [fade, setFade] = useState(true)
+
+  useEffect(() => {
+    const coverEvent = rafThrottle(coverHandler)
+    props.container.addEventListener('scroll', coverEvent)
+    coverHandler()
+    return () => props.container.removeEventListener('scroll', coverEvent)
+  }, [])
+
+  const coverHandler = () => {
+    inView.is(albumEl.current) ? setFade(false) : setFade(true)
   }
-  componentDidMount() {
-    this.album = ReactDOM.findDOMNode(this.refs.album)
-    this.container = ReactDOM.findDOMNode(this.props.container)
-    this.coverEvent = rafThrottle(this.coverHandler)
-    this.container.addEventListener('scroll', this.coverEvent)
-    this.coverHandler()
+
+  const getCover = () => {
+    return props.album.cover
+      ? { backgroundImage: 'url("' + props.album.cover + '")' }
+      : { backgroundColor: `#333333` }
   }
-  componentWillUnmount() {
-    this.container.removeEventListener('scroll', this.coverEvent)
+
+  const handleClick = () => {
+    store.dispatch({ type: 'SHOWCASE', album: props.album })
   }
-  shouldComponentUpdate = (nextProps, nextState) => {
-    return shallowCompare(this, nextProps, nextState)
-  }
-  coverHandler = () => {
-    if (inView.is(this.album)) this.setState({ fade: false })
-    else this.setState({ fade: true })
-  }
-  handleClick = () => {
-    store.dispatch({ type: 'SHOWCASE', album: this.props.album })
-  }
-  activate = () => {
-    this.setState({ active: true })
-  }
-  reset = () => {
-    this.setState({ active: false })
-  }
-  render() {
-    let cover = { backgroundColor: `#333333` }
-    if (this.props.album.cover)
-      cover = { backgroundImage: 'url("' + this.props.album.cover + '")' }
-    return (
-      <li
-        onClick={this.handleClick}
-        onMouseOver={this.activate}
-        onMouseOut={this.reset}
-        css={[
-          styles.base,
-          this.props.newest ? { order: this.props.album.time } : { order: -2 }
-        ]}
-      >
-        <div css={this.state.fade ? styles.fade : styles.nonfade}>
-          <div
-            ref="album"
-            css={[styles.cover, cover, this.state.active ? styles.zoom : '']}
-          />
-        </div>
-        <span css={[this.state.active ? styles.active : '']}>
-          {this.props.album.artist + ' - ' + this.props.album.title}
-        </span>
-      </li>
-    )
-  }
+
+  return (
+    <li
+      onClick={handleClick}
+      onMouseOver={() => setActive(true)}
+      onMouseOut={() => setActive(false)}
+      css={[
+        styles.base,
+        props.newest ? { order: props.album.time } : { order: -2 }
+      ]}
+    >
+      <div css={fade ? styles.fade : styles.nonfade}>
+        <div
+          ref={albumEl}
+          css={[styles.cover, getCover(), active ? styles.zoom : '']}
+        />
+      </div>
+      <span css={[active ? styles.active : '']}>
+        {props.album.artist + ' - ' + props.album.title}
+      </span>
+    </li>
+  )
 }
+
+export default Album
 
 const styles = {
   base: {

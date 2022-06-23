@@ -1,71 +1,55 @@
-import { Component } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { store } from '../../client.js'
 import Local from '../connection/local.js'
 
-export default class Admin extends Component {
-  constructor() {
-    super()
-    this.state = {
-      dragging: false,
-      mouse: true
-    }
-  }
-  componentDidMount() {
-    this.local = new Local()
-    if (localStorage.getItem('fileList'))
-      this.local.collection(JSON.parse(localStorage.getItem('fileList')))
-    else store.dispatch({ type: 'ADMIN' })
-    window.addEventListener('dragenter', () => {
+const Admin = props => {
+  const local = useRef(null)
+  const [dragging, setDragging] = useState(false)
+  const [mouse, setMouse] = useState(true)
+
+  useEffect(() => {
+    local.current = new Local()
+
+    if (localStorage.getItem('fileList')) {
+      local.current.collection(JSON.parse(localStorage.getItem('fileList')))
+    } else {
       store.dispatch({ type: 'ADMIN' })
-    })
-    window.addEventListener('dragleave', () => {
-      store.dispatch({ type: 'DROP' })
-    })
-  }
-  handleDragEnter = event => {
-    this.setState({ dragging: true })
-  }
-  handleMouseOver = event => {
-    this.setState({ mouse: true })
-  }
-  handleDragOver = event => {
+    }
+
+    window.addEventListener('dragenter', () => store.dispatch({ type: 'ADMIN' }))
+    window.addEventListener('dragleave', () => store.dispatch({ type: 'DROP' }))
+  }, [])
+
+  const handleDrop = event => {
     event.preventDefault()
-  }
-  handleMouseOut = event => {
-    this.setState({ mouse: false })
-  }
-  handleDragLeave = event => {
-    this.setState({ dragging: false })
-  }
-  handleDrop = event => {
-    event.preventDefault()
-    this.setState({ dragging: false })
+    setDragging(false)
     if (event.dataTransfer.files.length > 0) {
-      this.local.collection(event.dataTransfer.files)
+      local.collection(event.dataTransfer.files)
       store.dispatch({ type: 'DROP' })
     }
   }
-  render() {
-    return (
-      <figure
-        css={[
-          styles.drop,
-          this.props.admin.display || this.state.dragging
-            ? styles.show
-            : styles.hide
-        ]}
-        onMouseOver={this.handleMouseOver}
-        onMouseOut={this.handleMouseOut}
-        onDragEnter={this.handleDragEnter}
-        onDragOver={this.handleDragOver}
-        onDragLeave={this.handleDragLeave}
-        onDrop={this.handleDrop}
-      >
-        <span css={styles.span}>Drop music collection here</span>
-      </figure>
-    )
-  }
+
+  return (
+    <figure
+      css={[
+        styles.drop,
+        props.admin.display || dragging
+          ? styles.show
+          : styles.hide
+      ]}
+      onMouseOver={() => setMouse(true)}
+      onMouseOut={() => setMouse(false)}
+      onDragEnter={() => setDragging(true)}
+      onDragLeave={() => setDragging(false)}
+      onDragOver={(event) => event.preventDefault()}
+      onDrop={handleDrop}
+    >
+      <span css={styles.span}>Drop music collection here</span>
+    </figure>
+  )
 }
+
+export default Admin
 
 const styles = {
   drop: {

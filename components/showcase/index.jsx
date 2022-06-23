@@ -1,59 +1,59 @@
 import { Component } from 'react'
 import { keyframes } from '@emotion/react'
 import { store } from '../../client.js'
-import shallowCompare from 'react-addons-shallow-compare'
 import Track from './track.jsx'
 import close from './close.png'
 import play from './play.png'
 
-export default class Showcase extends Component {
-  shouldComponentUpdate = (nextProps, nextState) => {
-    return shallowCompare(this, nextProps, nextState)
+const Showcase = props => {
+  const handleClick = event => {
+    if (event.target.tagName === 'ARTICLE') {
+      window.player.playAlbum(props.showcase.album)
+    } else {
+      store.dispatch({ type: 'CLOSE_SHOWCASE' })
+    }
   }
-  handleClick = event => {
-    if (event.target.tagName === 'ARTICLE')
-      window.player.playAlbum(this.props.showcase.album)
-    else store.dispatch({ type: 'CLOSE_SHOWCASE' })
+
+  const getCover = () => {
+    return props.showcase.album.cover
+      ? { backgroundImage: 'url("' + props.showcase.album.cover + '")' }
+      : { backgroundColor: `#333333` }
   }
-  render() {
-    let cover = { backgroundColor: `#333333` }
-    if (this.props.showcase.album.cover)
-      cover = {
-        backgroundImage: 'url("' + this.props.showcase.album.cover + '")'
-      }
-    return (
-      <section
+
+  return (
+    <section
+      css={[
+        styles.showcase,
+        props.showcase.display ? styles.show : styles.hide
+      ]}
+    >
+      <figure
         css={[
-          styles.showcase,
-          this.props.showcase.display ? styles.show : styles.hide
+          styles.figure,
+          props.showcase.display ? styles.top : styles.bottom
         ]}
+        onClick={handleClick}
       >
-        <figure
-          css={[
-            styles.figure,
-            this.props.showcase.display ? styles.top : styles.bottom
-          ]}
-          onClick={this.handleClick}
-        >
-          <article css={[styles.article, cover]} />
-        </figure>
-        <ol
-          css={[styles.ol, this.props.showcase.display ? styles.slide : '']}
-        >
-          {this.props.showcase.tracks.map((track, index) => {
-            if (
-              this.props.showcase.album.title === track.album &&
-              this.props.showcase.album.artist === track.artist
+        <article css={[styles.article, getCover()]} />
+      </figure>
+      <ol
+        css={[styles.ol, props.showcase.display ? styles.slide : '']}
+      >
+        {props.showcase.tracks.map((track, index) => {
+          if (
+            props.showcase.album.title === track.album &&
+            props.showcase.album.artist === track.artist
+          )
+            return (
+              <Track track={track} key={index} player={props.player} />
             )
-              return (
-                <Track track={track} key={index} player={this.props.player} />
-              )
-          })}
-        </ol>
-      </section>
-    )
-  }
+        })}
+      </ol>
+    </section>
+  )
 }
+
+export default Showcase
 
 const rotateKeyframes = keyframes({
   from: {

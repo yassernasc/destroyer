@@ -1,86 +1,77 @@
-import { Component } from 'react'
-import ReactDOM from 'react-dom'
-import shallowCompare from 'react-addons-shallow-compare'
-import { rafThrottle } from '../utilities'
+import { useState } from 'react'
 
-export default class Playbar extends Component {
-  constructor() {
-    super()
-    this.state = {
-      hover: false,
-      left: false
-    }
-  }
-  shouldComponentUpdate = (nextProps, nextState) => {
-    return shallowCompare(this, nextProps, nextState)
-  }
-  scan = event => {
+const Playbar = props => {
+  const [hover, setHover] = useState(false)
+  const [left, setLeft] = useState(false)
+
+  const scan = event => {
     event.preventDefault()
     window.player.scan(event.clientX / window.innerWidth)
   }
-  previous = () => {
-    let previous = this.props.player.previous
-    if (previous) window.player.playTrack(previous)
-    else window.player.stop()
+
+  const previous = () => {
+    const previous = props.player.previous
+    previous ? window.player.playTrack(previous) : window.player.stop()
   }
-  next = () => {
-    let next = this.props.player.next
-    if (next) window.player.playTrack(next)
-    else window.player.stop()
+
+  const next = () => {
+    const next = props.player.next
+    next ? window.player.playTrack(next) : window.player.stop()
   }
-  toggle = () => {
-    window.player.toggle()
-  }
-  handleMove = event => {
+
+  const toggle = () => window.player.toggle()
+
+  const handleMove = event => {
     event.preventDefault()
-    this.setState({ left: event.clientX - 4 })
+    setLeft(event.clientX - 4)
   }
-  render() {
-    return (
+
+  return (
+    <div
+      css={[
+        styles.playbar,
+        props.playbar.display ? styles.show : styles.hide
+      ]}
+    >
+      <audio id="xxx" />
       <div
-        css={[
-          styles.playbar,
-          this.props.playbar.display ? styles.show : styles.hide
-        ]}
+        css={{
+          position: 'relative',
+          height: 40,
+          width: '100%',
+          cursor: 'none'
+        }}
+        onMouseMove={handleMove}
+        onMouseOver={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        onClick={scan}
       >
-        <audio id="xxx" />
+        <div data-range css={styles.range} />
+        <div data-buffer css={styles.buffer} />
         <div
-          css={{
-            position: 'relative',
-            height: 40,
-            width: '100%',
-            cursor: 'none'
-          }}
-          onMouseMove={this.handleMove}
-          onMouseOver={() => this.setState({ hover: true })}
-          onMouseLeave={() => this.setState({ hover: false })}
-          onClick={this.scan}
-        >
-          <div data-range css={styles.range} />
-          <div data-buffer css={styles.buffer} />
-          <div
-            css={[
-              styles.slider,
-              this.state.hover ? { opacity: 1 } : { opacity: 0 },
-              { transform: `translateX(${this.state.left}px)` || 0 }
-            ]}
-          />
-        </div>
-        <div css={styles.panel}>
-          <span css={styles.span} key="previous" onClick={this.previous}>
-            previous
-          </span>
-          <span css={styles.span} key="toggle" onClick={this.toggle}>
-            {this.props.playbar.toggle}
-          </span>
-          <span css={styles.span} key="next" onClick={this.next}>
-            next
-          </span>
-        </div>
+          css={[
+            styles.slider,
+            hover ? { opacity: 1 } : { opacity: 0 },
+            { transform: `translateX(${left}px)` || 0 }
+          ]}
+        />
       </div>
-    )
-  }
+      <div css={styles.panel}>
+        <span css={styles.span} key="previous" onClick={previous}>
+          previous
+        </span>
+        <span css={styles.span} key="toggle" onClick={toggle}>
+          {props.playbar.toggle}
+        </span>
+        <span css={styles.span} key="next" onClick={next}>
+          next
+        </span>
+      </div>
+    </div>
+  )
 }
+
+export default Playbar
 
 const styles = {
   playbar: {

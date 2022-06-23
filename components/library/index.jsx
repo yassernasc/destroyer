@@ -1,53 +1,54 @@
-import { Component } from 'react'
+import { useEffect, useRef } from 'react'
 import Album from './album.jsx'
-import shallowCompare from 'react-addons-shallow-compare'
 import { store } from '../../client.js'
 
-export default class Library extends Component {
-  componentDidMount() {
-    if (localStorage.getItem('newest') === 'true')
+const Library = props => {
+  const libraryEl = useRef(null)
+
+  useEffect(() => {
+    if (localStorage.getItem('newest') === 'true') {
       store.dispatch({ type: 'NEW' })
-    else store.dispatch({ type: 'ALPHA' })
-  }
-  shouldComponentUpdate = (nextProps, nextState) => {
-    return shallowCompare(this, nextProps, nextState)
-  }
-  render() {
-    return (
-      <ul
-        ref="library"
-        css={[
-          styles.base,
-          this.props.player.track
-            ? { padding: '12.5vh 0 33vh' }
-            : { padding: '2em 0 33vh' }
-        ]}
-      >
-        {this.props.library.albums.map((album, index) => {
-          if (album.title && album.artist)
-            return (
-              <Album
-                album={album}
-                key={index}
-                container={this.refs.library}
-                newest={this.props.library.newest}
-              />
-            )
-        })}
-        <li css={styles.li} />
-        <li css={styles.li} />
-        <li css={styles.li} />
-        <li css={styles.li} />
-        <li css={styles.li} />
-        <li css={styles.li} />
-        <li css={styles.li} />
-        <li css={styles.li} />
-        <li css={styles.li} />
-        <li css={styles.li} />
-      </ul>
-    )
-  }
+    } else {
+      store.dispatch({ type: 'ALPHA' })
+    }
+  }, [])
+
+  return (
+    <ul
+      ref={libraryEl}
+      css={[
+        styles.base,
+        props.player.track
+          ? { padding: '12.5vh 0 33vh' }
+          : { padding: '2em 0 33vh' }
+      ]}
+    >
+      {props.library.albums.map((album, index) => {
+        if (album.title && album.artist)
+          return (
+            <Album
+              album={album}
+              key={index}
+              container={libraryEl.current}
+              newest={props.library.newest}
+            />
+          )
+      })}
+      <li css={styles.li} />
+      <li css={styles.li} />
+      <li css={styles.li} />
+      <li css={styles.li} />
+      <li css={styles.li} />
+      <li css={styles.li} />
+      <li css={styles.li} />
+      <li css={styles.li} />
+      <li css={styles.li} />
+      <li css={styles.li} />
+    </ul>
+  )
 }
+
+export default Library
 
 const styles = {
   base: {

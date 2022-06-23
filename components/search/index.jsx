@@ -1,53 +1,46 @@
-import { Component } from 'react'
+import { useEffect, useRef } from 'react'
 import key from 'key'
-import shallowCompare from 'react-addons-shallow-compare'
 import CloseButton from '../close-button'
 import { store } from '../../client.js'
 
-export default class Search extends Component {
-  constructor() {
-    super()
-    this.state = {
-      search: ''
-    }
-    this.handleSearch = this.handleSearch.bind(this)
-  }
-  shouldComponentUpdate = (nextProps, nextState) => {
-    return shallowCompare(this, nextProps, nextState)
-  }
-  componentDidMount() {
+const Search = props => {
+  const inputEl = useRef(null)
+
+  useEffect(() => {
     window.addEventListener('keydown', event => {
-      if (!this.props.admin.display) {
+      if (!props.admin.display) {
         if (key.is(key.code.alnum, event.which) || event.keyCode === 8) {
-          this.refs.search.focus()
+          inputEl.current.focus()
         }
       }
     })
-  }
-  handleSearch(event) {
+  }, [])
+
+  const handleSearch = (event) => {
     event.preventDefault()
     store.dispatch({ type: 'SEARCH', input: event.target.value })
   }
-  render() {
-    return (
-      <form
-        css={[
-          styles.search,
-          this.props.search.display ? styles.show : styles.hide
-        ]}
-      >
-        <CloseButton />
-        <input
-          ref="search"
-          type="text"
-          value={this.props.search.input}
-          css={styles.input}
-          onChange={this.handleSearch}
-        />
-      </form>
-    )
-  }
+
+  return (
+    <form
+      css={[
+        styles.search,
+        props.search.display ? styles.show : styles.hide
+      ]}
+    >
+      <CloseButton />
+      <input
+        ref={inputEl}
+        type="text"
+        value={props.search.input}
+        css={styles.input}
+        onChange={handleSearch}
+      />
+    </form>
+  )
 }
+
+export default Search
 
 const styles = {
   search: {

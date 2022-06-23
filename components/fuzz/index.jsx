@@ -1,53 +1,58 @@
-import { Component } from 'react'
-import ReactDOM from 'react-dom'
+import { useEffect, useRef } from 'react'
 const paper = require('paper/dist/paper-full')
 
-export default class Fuzz extends Component {
-  componentDidMount() {
+const Fuzz = () => {
+  const canvasEl = useRef(null)
+  const path = useRef(null)
+  const context = useRef(null)
+  const source = useRef(null)
+  const analyser = useRef(null)
+  const bufferLength = useRef(null)
+  const dataArray = useRef(null)
+
+  useEffect(() => {
     paper.install(window)
     paper.setup('oscilloscope')
-    this.canvas = document.getElementById('oscilloscope')
-    this.canvas.width = window.innerWidth
-    this.canvas.height = window.innerHeight
-    this.path = new Path()
-    this.path.smooth()
-    this.path.strokeColor = 'rgba(92, 67, 232, 1)'
-    this.path.strokeWidth = 5
+    canvasEl.current.width = window.innerWidth
+    canvasEl.current.height = window.innerHeight
+    path.current = new Path()
+    path.current.smooth()
+    path.current.strokeColor = 'rgba(92, 67, 232, 1)'
+    path.current.strokeWidth = 5
 
-    this.context = new window.AudioContext()
-    this.source = this.context.createMediaElementSource(
+    context.current = new window.AudioContext()
+    source.current = context.current.createMediaElementSource(
       document.getElementById('xxx')
     )
-    this.analyser = this.context.createAnalyser()
-    this.analyser.fftSize = 64
-    this.bufferLength = this.analyser.frequencyBinCount
-    this.dataArray = new Uint8Array(this.bufferLength)
-    this.analyser.getByteTimeDomainData(this.dataArray)
+    analyser.current = context.current.createAnalyser()
+    analyser.current.fftSize = 64
+    bufferLength.current = analyser.current.frequencyBinCount
+    dataArray.current = new Uint8Array(bufferLength.current)
+    analyser.current.getByteTimeDomainData(dataArray.current)
     // Get a canvas defined with ID 'oscilloscope'
-    this.source.connect(this.analyser)
-    this.analyser.connect(this.context.destination)
-    this.draw()
-  }
-  draw = () => {
-    requestAnimationFrame(this.draw)
+    source.current.connect(analyser.current)
+    analyser.current.connect(context.current.destination)
+    draw()
+  }, [])
+
+  const draw = () => {
+    requestAnimationFrame(draw)
     if (window.throttle) return
     window.throttle = true
-    setInterval(() => {
-      window.throttle = false
-    }, 250)
-    this.path.removeSegments()
-    this.analyser.getByteTimeDomainData(this.dataArray)
-    this.path.add(new Point(0, this.canvas.height / 2))
+    setInterval(() => window.throttle = false, 250)
+    path.current.removeSegments()
+    analyser.current.getByteTimeDomainData(dataArray.current)
+    path.current.add(new Point(0, canvasEl.current.height / 2))
 
-    var sliceWidth = this.canvas.width * 1.0 / this.bufferLength
+    var sliceWidth = canvasEl.current.width * 1.0 / bufferLength.current
     var x = 0
 
-    for (var i = 0; i < this.bufferLength; i++) {
-      var v = this.dataArray[i] / 128.0
-      var y = v * this.canvas.height / 2
+    for (var i = 0; i < bufferLength.current; i++) {
+      var v = dataArray.current[i] / 128.0
+      var y = v * canvasEl.current.height / 2
 
       if (i !== 0) {
-        this.path.add(new Point(x, y))
+        path.current.add(new Point(x, y))
       }
 
       x += sliceWidth
@@ -55,23 +60,24 @@ export default class Fuzz extends Component {
 
     window.view.draw()
   }
-  render() {
-    return (
-      <canvas
-        id="oscilloscope"
-        height="100%"
-        width="100%"
-        css={{
-          opacity: 0.8,
-          width: '100%',
-          pointerEvents: 'none',
-          height: '100%',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          zIndex: 4
-        }}
-      />
-    )
-  }
+
+  return (
+    <canvas
+      ref={canvasEl}
+      height="100%"
+      width="100%"
+      css={{
+        opacity: 0.8,
+        width: '100%',
+        pointerEvents: 'none',
+        height: '100%',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        zIndex: 4
+      }}
+    />
+  )
 }
+
+export default Fuzz

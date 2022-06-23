@@ -1,27 +1,25 @@
-import { Component } from 'react'
 import leftpad from 'leftpad'
 import { store } from '../../client.js'
 
-export default class Track extends Component {
-  handleClick = () => {
-    window.player.playTrack(this.props.track)
-  }
-  render() {
-    return (
-      <li css={styles.li} onClick={this.handleClick}>
-        <span css={styles.no}>{leftpad(this.props.track.track.no, 2)}</span>
-        <span
-          css={[
-            styles.span,
-            this.props.player.track === this.props.track ? styles.current : ''
-          ]}
-        >
-          {this.props.track.title}
-        </span>
-      </li>
-    )
-  }
+const Track = props => {
+  const handleClick = () => window.player.playTrack(props.track)
+
+  return (
+    <li css={styles.li} onClick={handleClick}>
+      <span css={styles.no}>{leftpad(props.track.track.no, 2)}</span>
+      <span
+        css={[
+          styles.span,
+          props.player.track === props.track ? styles.current : ''
+        ]}
+      >
+        {props.track.title}
+      </span>
+    </li>
+  )
 }
+
+export default Track
 
 const styles = {
   li: {
