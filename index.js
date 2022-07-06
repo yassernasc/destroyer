@@ -1,6 +1,7 @@
 const {app, BrowserWindow, TouchBar} = require('electron')
 const {TouchBarLabel, TouchBarSpacer} = TouchBar
 const windowStateKeeper = require('electron-window-state')
+const {default: installExtensions, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS} = require('electron-devtools-installer');
 let mainWindow
 
 const artist = new TouchBarLabel({textColor: '#5c43e8'})
@@ -47,7 +48,16 @@ const createWindow = () => {
   })
 }
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  const isDev = !app.isPackaged
+  if (isDev) {
+    installExtensions([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS], {
+      loadExtensionOptions: { allowFileAccess: true }
+    })
+  }
+
+  createWindow()
+})
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

@@ -12,6 +12,7 @@ import { showcaseReducer } from './components/showcase/reducer.js'
 import { playerReducer } from './components/player/reducer.js'
 import { playbarReducer } from './components/playbar/reducer.js'
 import { statusReducer } from './components/status/reducer.js'
+import { devToolsEnhancer } from '@redux-devtools/extension'
 
 const reducers = combineReducers({
   admin: adminReducer,
@@ -24,7 +25,7 @@ const reducers = combineReducers({
   search: searchReducer
 })
 
-export const store = createStore(reducers)
+export const store = createStore(reducers, devToolsEnhancer())
 
 const render = () => {
   ReactDOM.render(
