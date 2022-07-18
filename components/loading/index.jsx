@@ -1,10 +1,20 @@
-const Loading = props => (
-  <section
-    css={[styles.base, props.loading.display ? styles.show : styles.hide]}
-  >
-    <span css={styles.span}>{props.loading.message}</span>
-  </section>
-)
+import { useState, useEffect } from 'react'
+
+const Loading = props => {
+  const [display, setDisplay] = useState(false)
+
+  useEffect(() => {
+    props.loading.message === '' ? setDisplay(false) : setDisplay(true)
+  }, [props.loading.message])
+
+  return (
+    <section
+      css={[styles.base, props.loading.display ? styles.show : styles.hide]}
+    >
+      <span css={styles.span}>{props.loading.message}</span>
+    </section>
+  )
+}
 
 export default Loading
 

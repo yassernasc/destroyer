@@ -1,4 +1,4 @@
-import { Component } from 'react'
+import { useState, useEffect } from 'react'
 import { keyframes } from '@emotion/react'
 import { store } from '../../client.js'
 import Track from './track.jsx'
@@ -6,48 +6,75 @@ import close from './close.png'
 import play from './play.png'
 
 const Showcase = props => {
-  const handleClick = event => {
+  const [display, setDisplay] = useState(false)
+  const [album, setAlbum] = useState({ id: '', cover: '', tracks: [] })
+  const [isPlayingAlbum, setIsPlayingAlbum] = useState(false)
+
+  useEffect(() => {
+    const newAlbumId = props.showcase.albumId
+    if (newAlbumId === null) {
+      setDisplay(false)
+      setAlbum({ cover: '', tracks: [] })
+    } else {
+      const album = store.getState().library.albums.find(({ id }) => newAlbumId === id)
+      setAlbum(album)
+      setDisplay(true)
+    }
+  }, [props.showcase.albumId])
+
+  useEffect(() => {
+    if (props.showcase.albumId && props.player.albumId) {
+      setIsPlayingAlbum(props.showcase.albumId === props.player.albumId)
+    } else {
+      setIsPlayingAlbum(false)
+    }
+  }, [props.showcase.albumId, props.player.albumId])
+
+  const handleFigureClick = event => {
     if (event.target.tagName === 'ARTICLE') {
-      window.player.playAlbum(props.showcase.album)
+      store.dispatch({ type: 'PLAY_ALBUM', albumId: props.showcase.albumId })
     } else {
       store.dispatch({ type: 'CLOSE_SHOWCASE' })
     }
   }
 
+  const handleTrackClick = trackNumber => {
+    store.dispatch({
+      type: 'PLAY_TRACK',
+      albumId: props.showcase.albumId,
+      trackNumber
+    })
+  }
+
   const getCover = () => {
-    return props.showcase.album.cover
-      ? { backgroundImage: 'url("' + props.showcase.album.cover + '")' }
+    return album.cover
+      ? { backgroundImage: 'url("' + album.cover + '")' }
       : { backgroundColor: `#333333` }
   }
 
   return (
-    <section
-      css={[
-        styles.showcase,
-        props.showcase.display ? styles.show : styles.hide
-      ]}
-    >
+    <section css={[styles.showcase, display ? styles.show : styles.hide]}>
       <figure
         css={[
           styles.figure,
-          props.showcase.display ? styles.top : styles.bottom
+          display ? styles.top : styles.bottom
         ]}
-        onClick={handleClick}
+        onClick={handleFigureClick}
       >
         <article css={[styles.article, getCover()]} />
       </figure>
       <ol
-        css={[styles.ol, props.showcase.display ? styles.slide : '']}
+        css={[styles.ol, display ? styles.slide : '']}
       >
-        {props.showcase.tracks.map((track, index) => {
-          if (
-            props.showcase.album.title === track.album &&
-            props.showcase.album.artist === track.artist
-          )
-            return (
-              <Track track={track} key={index} player={props.player} />
-            )
-        })}
+        {album.tracks.map((track, index) => (
+          <Track 
+            key={index}
+            title={track.title}
+            number={track.trackNumber}
+            current={isPlayingAlbum && track.trackNumber === props.player.trackNumber}
+            onClick={handleTrackClick} 
+          />
+        ))}
       </ol>
     </section>
   )

@@ -1,20 +1,13 @@
 import { store } from '../../client.js'
 
-export const showcaseReducer = (
-  state = { album: { cover: '' }, tracks: [] },
-  action
-) => {
+export const showcaseReducer = (state = { albumId: null }, action) => {
   switch (action.type) {
     case 'SHOWCASE': {
-      let matching = []
-      store.getState().library.tracks.forEach(track => {
-        if (track.album === action.album.title) matching.push(track)
-      })
-      state = { ...state, display: true, album: action.album, tracks: matching }
+      state = { albumId: action.albumId }
       break
     }
     case 'CLOSE_SHOWCASE': {
-      state = { ...state, display: false }
+      state = { albumId: null }
       break
     }
   }

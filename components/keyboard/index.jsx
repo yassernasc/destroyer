@@ -1,38 +1,58 @@
-import { useEffect, useRef } from 'react'
-import key from 'key'
+import { useEffect, useRef, useState } from 'react'
+import keycode from 'keycode'
 import CloseButton from '../close-button'
 import { store } from '../../client.js'
 
-const Search = props => {
+const isAlphanumeric = keyCode => keyCode >= 48 && keyCode <= 90
+const deletePressed = keyCode => keyCode === keycode('del')
+const escapePressed = keyCode => keyCode === keycode('esc')
+const spacePressed = keyCode => keyCode === keycode('space')
+
+const FilterInput = props => {
   const inputEl = useRef(null)
+  const [display, setDisplay] = useState(false)
 
   useEffect(() => {
-    window.addEventListener('keydown', event => {
+    window.addEventListener('keydown', ({ keyCode }) => {
       if (!props.admin.display) {
-        if (key.is(key.code.alnum, event.which) || event.keyCode === 8) {
+        if (isAlphanumeric(keyCode) || deletePressed(keyCode)) {
           inputEl.current.focus()
         }
+      }
+
+      if (escapePressed(keyCode)) {
+        event.preventDefault()
+        store.dispatch({ type: 'ESCAPE' })
+      }
+
+      if (spacePressed(keyCode) && props.filter.text === '') {
+        event.preventDefault()
+        store.dispatch({ type: 'TOGGLE' })
       }
     })
   }, [])
 
+  useEffect(() => {
+    props.filter.title === '' ? setDisplay(false) : setDisplay(true)
+  }, [props.filter.title])
+
   const handleSearch = (event) => {
     event.preventDefault()
-    store.dispatch({ type: 'SEARCH', input: event.target.value })
+    store.dispatch({ type: 'FILTER', title: event.target.value })
   }
 
   return (
     <form
       css={[
         styles.search,
-        props.search.display ? styles.show : styles.hide
+        display ? styles.show : styles.hide
       ]}
     >
       <CloseButton />
       <input
         ref={inputEl}
         type="text"
-        value={props.search.input}
+        value={props.filter.text}
         css={styles.input}
         onChange={handleSearch}
       />
@@ -40,7 +60,7 @@ const Search = props => {
   )
 }
 
-export default Search
+export default FilterInput
 
 const styles = {
   search: {
@@ -84,3 +104,4 @@ const styles = {
     transform: 'translateY(-5em)'
   }
 }
+

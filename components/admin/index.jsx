@@ -1,17 +1,14 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { store } from '../../client.js'
-import Local from '../connection/local.js'
+import { searchLocalMusic } from '../connection/local.js'
 
 const Admin = props => {
-  const local = useRef(null)
   const [dragging, setDragging] = useState(false)
-  const [mouse, setMouse] = useState(true)
 
   useEffect(() => {
-    local.current = new Local()
-
     if (localStorage.getItem('fileList')) {
-      local.current.collection(JSON.parse(localStorage.getItem('fileList')))
+      const fileList = JSON.parse(localStorage.getItem('fileList'))
+      searchLocalMusic(fileList)
     } else {
       store.dispatch({ type: 'ADMIN' })
     }
@@ -23,8 +20,11 @@ const Admin = props => {
   const handleDrop = event => {
     event.preventDefault()
     setDragging(false)
-    if (event.dataTransfer.files.length > 0) {
-      local.collection(event.dataTransfer.files)
+    
+    const { length, ...filesInfo } = event.dataTransfer.files
+    if (length > 0) {
+      const paths = Object.values(filesInfo).map(({ path }) => path)
+      searchLocalMusic(paths)
       store.dispatch({ type: 'DROP' })
     }
   }
@@ -37,8 +37,6 @@ const Admin = props => {
           ? styles.show
           : styles.hide
       ]}
-      onMouseOver={() => setMouse(true)}
-      onMouseOut={() => setMouse(false)}
       onDragEnter={() => setDragging(true)}
       onDragLeave={() => setDragging(false)}
       onDragOver={(event) => event.preventDefault()}

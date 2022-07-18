@@ -1,15 +1,37 @@
-const Status = props => (
-  <figure
-    css={[styles.status, props.status.display ? styles.show : styles.hide]}
-  >
-    <div>
-      <h1 css={styles.h1}>{props.status.artist}</h1>
-      <h2 css={styles.h2}>{props.status.title}</h2>
-      <h3 css={styles.h3}>{props.status.album}</h3>
-      <h4 css={styles.h4}>- 00:00:00</h4>
-    </div>
-  </figure>
-)
+import { useEffect, useState } from 'react'
+import { store } from '../../client.js'
+import { playerStatus } from '../player/reducer'
+
+const Status = props => {
+  const [display, setDisplay] = useState(false)
+  const [metadata, setMetadata] = useState({})
+  
+  useEffect(() => {
+    props.player.status === playerStatus.stopped ? setDisplay(false) : setDisplay(true)
+  }, [props.player.status])
+
+  useEffect(() => {
+    if (!props.player.trackNumber) {
+      setMetadata({})
+    } else {
+      const album = store.getState().library.albums.find(album => album.id === props.player.albumId)
+      const track = album.tracks.find(track => track.trackNumber === props.player.trackNumber)
+
+      setMetadata({ artist: album.artist, title: track.title, album: album.title })
+    }
+  }, [props.player.albumId, props.player.trackNumber])
+
+  return (
+    <figure css={[styles.status, display ? styles.show : styles.hide]}>
+      <div>
+        <h1 css={styles.h1}>{metadata.artist}</h1>
+        <h2 css={styles.h2}>{metadata.title}</h2>
+        <h3 css={styles.h3}>{metadata.album}</h3>
+        <h4 css={styles.h4}>- 00:00:00</h4>
+      </div>
+    </figure>
+  )
+}
 
 export default Status
 

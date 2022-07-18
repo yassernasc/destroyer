@@ -13,6 +13,18 @@ const Library = props => {
     }
   }, [])
 
+  const getAlbumList = () => {
+    const filterAlbums = () => {
+      return props.library.albums.filter(album => {
+        const filter = props.filter.title
+        const includesTest = (a, b) => a.toLowerCase().includes(b.toLowerCase())
+        return includesTest(album.title, filter) || includesTest(album.artist, filter)
+      })
+    }
+
+    return props.filter.title === '' ? props.library.albums : filterAlbums()
+  }
+
   return (
     <ul
       ref={libraryEl}
@@ -23,17 +35,14 @@ const Library = props => {
           : { padding: '2em 0 33vh' }
       ]}
     >
-      {props.library.albums.map((album, index) => {
-        if (album.title && album.artist)
-          return (
-            <Album
-              album={album}
-              key={index}
-              container={libraryEl.current}
-              newest={props.library.newest}
-            />
-          )
-      })}
+      {getAlbumList().map((album, index) => (
+        <Album
+          album={album}
+          key={index}
+          container={libraryEl.current}
+          newest={props.library.newest}
+        />
+      ))}
       <li css={styles.li} />
       <li css={styles.li} />
       <li css={styles.li} />

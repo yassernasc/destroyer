@@ -1,8 +1,17 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { playerStatus } from '../player/reducer'
+import { store } from '../../client.js'
 
 const Playbar = props => {
   const [hover, setHover] = useState(false)
   const [left, setLeft] = useState(false)
+  const [display, setDisplay] = useState(false)
+
+  useEffect(() => {
+    props.player.status === playerStatus.stopped ? setDisplay(false) : setDisplay(true)
+  }, [props.player.status])
+
+  const getToggleAction = () => props.player.status === playerStatus.playing ? 'pause' : 'play'
 
   const scan = event => {
     event.preventDefault()
@@ -10,16 +19,25 @@ const Playbar = props => {
   }
 
   const previous = () => {
-    const previous = props.player.previous
-    previous ? window.player.playTrack(previous) : window.player.stop()
+    if (props.player.trackNumber === 1) {
+      store.dispatch({ type: 'STOP' })
+    } else {
+      store.dispatch({ type: 'PREVIOUS' })
+    }
   }
 
   const next = () => {
-    const next = props.player.next
-    next ? window.player.playTrack(next) : window.player.stop()
+    const album = store.getState().library.albums.find(album => album.id === props.player.albumId)
+    const lastSong = album.tracks.pop()
+
+    if (lastSong.trackNumber === props.player.trackNumber) {
+      store.dispatch({ type: 'STOP' })
+    } else {
+      store.dispatch({ type: 'NEXT' })
+    }
   }
 
-  const toggle = () => window.player.toggle()
+  const toggle = () => store.dispatch({ type: 'TOGGLE' })
 
   const handleMove = event => {
     event.preventDefault()
@@ -27,13 +45,7 @@ const Playbar = props => {
   }
 
   return (
-    <div
-      css={[
-        styles.playbar,
-        props.playbar.display ? styles.show : styles.hide
-      ]}
-    >
-      <audio id="xxx" />
+    <div css={[ styles.playbar, display ? styles.show : styles.hide]}>
       <div
         css={{
           position: 'relative',
@@ -61,7 +73,7 @@ const Playbar = props => {
           previous
         </span>
         <span css={styles.span} key="toggle" onClick={toggle}>
-          {props.playbar.toggle}
+          {getToggleAction()}
         </span>
         <span css={styles.span} key="next" onClick={next}>
           next

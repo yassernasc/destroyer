@@ -26,7 +26,7 @@ const Album = props => {
   }
 
   const handleClick = () => {
-    store.dispatch({ type: 'SHOWCASE', album: props.album })
+    store.dispatch({ type: 'SHOWCASE', albumId: props.album.id })
   }
 
   return (

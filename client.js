@@ -1,28 +1,23 @@
 import ReactDOM from 'react-dom'
 import App from './components/app'
 import Menu from './components/menu'
-import Keyboard from './components/keyboard'
 import Player from './components/player'
 import { combineReducers, createStore } from 'redux'
 import { adminReducer } from './components/admin/reducer.js'
-import { searchReducer } from './components/search/reducer.js'
+import { filterReducer } from './components/keyboard/reducer.js'
 import { libraryReducer } from './components/library/reducer.js'
 import { loadingReducer } from './components/loading/reducer.js'
-import { showcaseReducer } from './components/showcase/reducer.js'
 import { playerReducer } from './components/player/reducer.js'
-import { playbarReducer } from './components/playbar/reducer.js'
-import { statusReducer } from './components/status/reducer.js'
+import { showcaseReducer } from './components/showcase/reducer.js'
 import { devToolsEnhancer } from '@redux-devtools/extension'
 
 const reducers = combineReducers({
   admin: adminReducer,
+  filter: filterReducer,
   library: libraryReducer,
   loading: loadingReducer,
-  showcase: showcaseReducer,
   player: playerReducer,
-  playbar: playbarReducer,
-  status: statusReducer,
-  search: searchReducer
+  showcase: showcaseReducer,
 })
 
 export const store = createStore(reducers, devToolsEnhancer())
@@ -38,5 +33,3 @@ store.subscribe(render)
 render()
 
 new Menu()
-new Keyboard()
-window.player = new Player()

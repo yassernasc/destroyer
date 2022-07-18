@@ -1,23 +1,18 @@
-import leftpad from 'leftpad'
 import { store } from '../../client.js'
 
-const Track = props => {
-  const handleClick = () => window.player.playTrack(props.track)
-
-  return (
-    <li css={styles.li} onClick={handleClick}>
-      <span css={styles.no}>{leftpad(props.track.track.no, 2)}</span>
-      <span
-        css={[
-          styles.span,
-          props.player.track === props.track ? styles.current : ''
-        ]}
-      >
-        {props.track.title}
-      </span>
-    </li>
-  )
-}
+const Track = (props) => (
+  <li css={styles.li} onClick={() => props.onClick(props.number)}>
+    <span css={styles.no}>{props.number.toString().padStart(2, '0')}</span>
+    <span
+      css={[
+        styles.span,
+        props.current ? styles.current : ''
+      ]}
+    >
+      {props.title}
+    </span>
+  </li>
+)
 
 export default Track
 

@@ -1,7 +1,43 @@
 import { store } from '../../client.js'
 import { remote } from 'electron'
+import { useRef, useState, useEffect } from 'react'
+import { playerStatus } from './reducer'
 
-export default class Player {
+const Player = props => {
+  const audioEl = useRef(null)
+
+  useEffect(() => {
+    if (props.trackNumber) {
+      audioEl.current.src = getTrackPath()
+      play()
+    }
+  }, [props.albumId, props.trackNumber])
+
+  useEffect(() => {
+    if (props.status === playerStatus.playing) play()
+    if (props.status === playerStatus.paused) pause()
+  }, [props.status])
+
+  const getTrackPath = () => {
+    return store.getState()
+      .library.albums.find(album => album.id === props.albumId)
+      .tracks.find(track => track.trackNumber === props.trackNumber)
+      .path
+  }
+
+  const play = () => {
+    if (audioEl.current.src) audioEl.current.play()
+  }
+
+  const pause = () => audioEl.current.pause()
+
+  return <audio ref={audioEl} id="xxx" />
+}
+
+export default Player
+
+/*
+class OldPlayer {
   constructor() {
     this.playing = false
     this.audio = document.getElementById('xxx')
@@ -95,3 +131,4 @@ export default class Player {
     this.range.style.width = elapsed
   }
 }
+*/
