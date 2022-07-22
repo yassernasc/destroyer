@@ -1,8 +1,8 @@
-import { store } from '../../client.js'
+const formatNumber = number => number.toString().padStart(2, '0')
 
 const Track = (props) => (
   <li css={styles.li} onClick={() => props.onClick(props.number)}>
-    <span css={styles.no}>{props.number.toString().padStart(2, '0')}</span>
+    <span css={styles.no}>{formatNumber(props.number)}</span>
     <span
       css={[
         styles.span,

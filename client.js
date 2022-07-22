@@ -1,35 +1,32 @@
 import ReactDOM from 'react-dom'
+import { configureStore} from '@reduxjs/toolkit'
+import { Provider } from 'react-redux'
+
 import App from './components/app'
 import Menu from './components/menu'
-import Player from './components/player'
-import { combineReducers, createStore } from 'redux'
-import { adminReducer } from './components/admin/reducer.js'
-import { filterReducer } from './components/keyboard/reducer.js'
-import { libraryReducer } from './components/library/reducer.js'
-import { loadingReducer } from './components/loading/reducer.js'
-import { playerReducer } from './components/player/reducer.js'
-import { showcaseReducer } from './components/showcase/reducer.js'
-import { devToolsEnhancer } from '@redux-devtools/extension'
+import adminReducer from './components/admin/reducer.js'
+import filterReducer from './components/keyboard/reducer.js'
+import libraryReducer from './components/library/reducer.js'
+import loadingReducer from './components/loading/reducer.js'
+import playerReducer from './components/player/reducer.js'
+import showcaseReducer from './components/showcase/reducer.js'
 
-const reducers = combineReducers({
-  admin: adminReducer,
-  filter: filterReducer,
-  library: libraryReducer,
-  loading: loadingReducer,
-  player: playerReducer,
-  showcase: showcaseReducer,
+export const store = configureStore({
+  reducer: {
+    admin: adminReducer,
+    filter: filterReducer,
+    library: libraryReducer,
+    loading: loadingReducer,
+    player: playerReducer,
+    showcase: showcaseReducer,
+  }
 })
 
-export const store = createStore(reducers, devToolsEnhancer())
-
-const render = () => {
-  ReactDOM.render(
-    <App {...store.getState()} />,
-    document.getElementById('root')
-  )
-}
-
-store.subscribe(render)
-render()
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+)
 
 new Menu()

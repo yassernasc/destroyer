@@ -1,16 +1,19 @@
-const path = require('path')
-import { sortTracks, sortAlbums } from '../utilities'
-import { store } from '../../client.js'
+import { createSlice } from '@reduxjs/toolkit'
+import { reset } from '../loading/reducer'
 
-export const libraryReducer = (
-  state = { albums: [] },
-  action
-) => {
-  switch (action.type) {
-    case 'CONNECTED': {
-      state = { albums: action.albums }
-      break
+const librarySlice = createSlice({
+  name: 'library',
+  initialState: [],
+  reducers: {
+    connected(state, action) {
+      return action.payload
     }
   }
-  return state
+})
+
+const { connected } = librarySlice.actions
+export const connect = library => dispatch => {
+  dispatch(connected(library))
+  dispatch(reset())
 }
+export default librarySlice.reducer

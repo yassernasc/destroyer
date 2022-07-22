@@ -1,48 +1,45 @@
-import { useState, useEffect } from 'react'
-import { playerStatus } from '../player/reducer'
-import { store } from '../../client.js'
+import { useState, useEffect, useRef } from 'react'
+import { useDispatch } from 'react-redux'
+import { useCurrentTrack } from '../library/useLibrary'
+import { playerStatus, stop, previousTrack, nextTrack, toggle as toggleAction, tick } from '../player/reducer'
+import { usePlayerTime, usePlayerStatus } from '../player/usePlayer'
 
-const Playbar = props => {
+const Playbar = ({ updateTime }) => {
+  const dispatch = useDispatch()
+  const elapsedBar = useRef(null)
   const [hover, setHover] = useState(false)
   const [left, setLeft] = useState(false)
   const [display, setDisplay] = useState(false)
+  const status = usePlayerStatus()
+  const currentTrack = useCurrentTrack()
+  const time = usePlayerTime()
 
-  useEffect(() => {
-    props.player.status === playerStatus.stopped ? setDisplay(false) : setDisplay(true)
-  }, [props.player.status])
-
-  const getToggleAction = () => props.player.status === playerStatus.playing ? 'pause' : 'play'
+  useEffect(() => setDisplay(status !== playerStatus.stopped), [status])
 
   const scan = event => {
     event.preventDefault()
-    window.player.scan(event.clientX / window.innerWidth)
+    const percentage = event.clientX / window.innerWidth
+    const newTime = currentTrack.duration * percentage
+    
+    updateTime(newTime)
   }
 
-  const previous = () => {
-    if (props.player.trackNumber === 1) {
-      store.dispatch({ type: 'STOP' })
-    } else {
-      store.dispatch({ type: 'PREVIOUS' })
-    }
-  }
-
-  const next = () => {
-    const album = store.getState().library.albums.find(album => album.id === props.player.albumId)
-    const lastSong = album.tracks.pop()
-
-    if (lastSong.trackNumber === props.player.trackNumber) {
-      store.dispatch({ type: 'STOP' })
-    } else {
-      store.dispatch({ type: 'NEXT' })
-    }
-  }
-
-  const toggle = () => store.dispatch({ type: 'TOGGLE' })
+  const previous = () => dispatch(previousTrack())
+  const next = () => dispatch(nextTrack())
+  const toggle = () => dispatch(toggleAction())
 
   const handleMove = event => {
     event.preventDefault()
     setLeft(event.clientX - 4)
   }
+
+  useEffect(() => {
+    if (currentTrack && time > 0) {
+      elapsedBar.current.style.width = `${time / currentTrack.duration * 100}%`
+    } else {
+      elapsedBar.current.style.width = '0%'
+    }
+  }, [currentTrack, time])
 
   return (
     <div css={[ styles.playbar, display ? styles.show : styles.hide]}>
@@ -58,8 +55,8 @@ const Playbar = props => {
         onMouseLeave={() => setHover(false)}
         onClick={scan}
       >
-        <div data-range css={styles.range} />
-        <div data-buffer css={styles.buffer} />
+        <div ref={elapsedBar} css={styles.range} />
+        <div css={styles.buffer} />
         <div
           css={[
             styles.slider,
@@ -73,7 +70,7 @@ const Playbar = props => {
           previous
         </span>
         <span css={styles.span} key="toggle" onClick={toggle}>
-          {getToggleAction()}
+          {status === playerStatus.playing ? 'pause' : 'play'}
         </span>
         <span css={styles.span} key="next" onClick={next}>
           next

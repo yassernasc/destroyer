@@ -1,29 +1,35 @@
-import { store } from '../../client.js'
 import { remote } from 'electron'
-import { useRef, useState, useEffect } from 'react'
-import { playerStatus } from './reducer'
+import { useRef, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { useCurrentTrack } from '../library/useLibrary'
+import { nextTrack, playerStatus, tick } from './reducer'
+import { usePlayerStatus } from './usePlayer'
+import Playbar from '../playbar'
 
-const Player = props => {
+const Player = () => {
+  const dispatch = useDispatch()
   const audioEl = useRef(null)
+  const currentTrack = useCurrentTrack()
+  const status = usePlayerStatus()
 
   useEffect(() => {
-    if (props.trackNumber) {
-      audioEl.current.src = getTrackPath()
+    audioEl.current.onended = () => dispatch(nextTrack())
+    audioEl.current.ontimeupdate = () => {
+      dispatch(tick(audioEl.current.currentTime))
+    }
+  }, [audioEl])
+
+  useEffect(() => {
+    if (currentTrack) {
+      audioEl.current.src = currentTrack.path
       play()
     }
-  }, [props.albumId, props.trackNumber])
+  }, [currentTrack])
 
   useEffect(() => {
-    if (props.status === playerStatus.playing) play()
-    if (props.status === playerStatus.paused) pause()
-  }, [props.status])
-
-  const getTrackPath = () => {
-    return store.getState()
-      .library.albums.find(album => album.id === props.albumId)
-      .tracks.find(track => track.trackNumber === props.trackNumber)
-      .path
-  }
+    if (status === playerStatus.playing) play()
+    if (status === playerStatus.paused) pause()
+  }, [status])
 
   const play = () => {
     if (audioEl.current.src) audioEl.current.play()
@@ -31,104 +37,14 @@ const Player = props => {
 
   const pause = () => audioEl.current.pause()
 
-  return <audio ref={audioEl} id="xxx" />
+  const updateCurrentTime = (newTime) => audioEl.current.currentTime = newTime
+
+  return (
+    <>
+      <audio ref={audioEl} id="xxx" />
+      <Playbar updateTime={updateCurrentTime} />
+    </>
+  )
 }
 
 export default Player
-
-/*
-class OldPlayer {
-  constructor() {
-    this.playing = false
-    this.audio = document.getElementById('xxx')
-    let interval
-    this.audio.onplaying = () => {
-      calc()
-    }
-    this.audio.onseeked = () => {
-      calc()
-    }
-    this.audio.onended = () => {
-      this.next()
-    }
-    let calc = () => {
-      clearInterval(interval)
-      interval = setInterval(() => {
-        let d = this.audio.duration
-        let p = this.audio.currentTime
-        this.setCounter(d - p)
-        this.setPlaybar(d, p)
-      }, 50)
-    }
-  }
-  playAlbum(album) {
-    store.dispatch({ type: 'PLAY_ALBUM', album: album })
-    this.local(store.getState().player.track)
-  }
-  playTrack(track) {
-    store.dispatch({ type: 'PLAY_TRACK', track: track })
-    this.local(track)
-  }
-  next() {
-    if (store.getState().player.next)
-      this.playTrack(store.getState().player.next)
-    else this.stop()
-  }
-  stop() {
-    store.dispatch({ type: 'STOP' })
-  }
-  toggle() {
-    if (this.playing) this.pause()
-    else this.resume()
-  }
-  pause() {
-    this.audio.pause()
-    this.playing = false
-    store.dispatch({ type: 'PAUSE' })
-  }
-  resume() {
-    this.audio.play()
-    this.playing = true
-    store.dispatch({ type: 'PLAY' })
-  }
-  scan(percentage) {
-    this.audio.currentTime = percentage * this.audio.duration
-  }
-  local(track) {
-    store.dispatch({
-      type: 'METADATA',
-      artist: track.artist,
-      title: track.title,
-      album: track.album
-    })
-    remote.app.updateTouchBar({ artist: track.artist, track: track.title })
-    this.audio.src = track.path
-    this.audio.play()
-    this.playing = true
-  }
-  setCounter(seconds) {
-    if (!this.counter) this.counter = document.querySelector('figure h4')
-    let results = {}
-    results.hours = Math.floor(seconds / 60 / 60)
-    results.minutes = Math.floor((seconds / 60) % 60)
-    results.seconds = Math.floor(seconds % 60)
-    let time =
-      '- ' +
-      '00'.slice(results.hours.toString().length) +
-      results.hours +
-      ':' +
-      '00'.slice(results.minutes.toString().length) +
-      results.minutes +
-      ':' +
-      '00'.slice(results.seconds.toString().length) +
-      results.seconds
-    this.counter.innerText = time
-    remote.app.updateTouchBarTime(time)
-  }
-  setPlaybar(duration, progress) {
-    if (!this.range) this.range = document.querySelector('[data-range]')
-    let elapsed = progress / duration * 100 + '%'
-    this.range.style.width = elapsed
-  }
-}
-*/

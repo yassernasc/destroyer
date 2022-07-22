@@ -1,5 +1,6 @@
 const { remote } = require('electron')
 const { Menu, MenuItem } = remote
+import { admin } from '../admin/reducer.js'
 import { store } from '../../client.js'
 
 export default class MainMenu {
@@ -33,21 +34,6 @@ export default class MainMenu {
       {
         label: 'View',
         submenu: [
-          {
-            label: 'Sort Alphabeticaly',
-            click() {
-              store.dispatch({ type: 'ALPHA' })
-            }
-          },
-          {
-            label: 'Sort Newest',
-            click() {
-              store.dispatch({ type: 'NEW' })
-            }
-          },
-          {
-            type: 'separator'
-          },
           {
             label: 'Reload',
             accelerator: 'CmdOrCtrl+R',
@@ -99,7 +85,7 @@ export default class MainMenu {
             label: 'Add Files...',
             accelerator: 'Command+,',
             click() {
-              store.dispatch({ type: 'ADMIN' })
+              store.dispatch(admin())
             }
           },
           {

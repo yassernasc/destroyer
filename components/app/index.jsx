@@ -6,22 +6,20 @@ import FilterInput from '../keyboard'
 import Status from '../status'
 import Library from '../library'
 import Showcase from '../showcase'
-import Playbar from '../playbar'
 import Player from '../player'
 
-const App = props => (
-  <main>
+const App = () => (
+  <>
     <Global styles={styles} />
     <Bar />
-    <Admin admin={props.admin} />
-    <Library library={props.library} player={props.player} filter={props.filter} />
-    <Showcase showcase={props.showcase} player={props.player} />
-    <Status player={props.player} />
-    <Loading loading={props.loading} />
-    <Playbar player={props.player} />
-    <Player {...props.player} />
-    <FilterInput filter={props.filter} admin={props.admin} />
-  </main>
+    <Admin />
+    <Library />
+    <Showcase />
+    <Status />
+    <Loading />
+    <Player />
+    <FilterInput />
+  </>
 )
 
 export default App

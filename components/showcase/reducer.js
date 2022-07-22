@@ -1,15 +1,17 @@
-import { store } from '../../client.js'
+import { createSlice } from '@reduxjs/toolkit'
 
-export const showcaseReducer = (state = { albumId: null }, action) => {
-  switch (action.type) {
-    case 'SHOWCASE': {
-      state = { albumId: action.albumId }
-      break
-    }
-    case 'CLOSE_SHOWCASE': {
-      state = { albumId: null }
-      break
+const showcaseSlice = createSlice({
+  name: 'showcase',
+  initialState: { albumId: null },
+  reducers: {
+    showcase(state, action) {
+      state.albumId = action.payload
+    },
+    close(state) {
+      state.albumId = null
     }
   }
-  return state
-}
+})
+
+export const { showcase, close } = showcaseSlice.actions
+export default showcaseSlice.reducer

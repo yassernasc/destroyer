@@ -1,53 +1,38 @@
 import { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import { keyframes } from '@emotion/react'
-import { store } from '../../client.js'
 import Track from './track.jsx'
 import close from './close.png'
 import play from './play.png'
+import { useIsShowcasePlaying } from './useShowcase.js'
+import { usePlayerTrack } from '../player/usePlayer.js'
+import { useShowcaseAlbum } from '../library/useLibrary.js'
+import { playAlbum, playTrack } from '../player/reducer.js'
+import { close as closeAction } from './reducer'
 
-const Showcase = props => {
+const Showcase = () => {
+  const dispatch = useDispatch()
   const [display, setDisplay] = useState(false)
-  const [album, setAlbum] = useState({ id: '', cover: '', tracks: [] })
-  const [isPlayingAlbum, setIsPlayingAlbum] = useState(false)
+  const playerTrack = usePlayerTrack()
+  const album = useShowcaseAlbum()
+  const isShowcasePlaying = useIsShowcasePlaying()
 
-  useEffect(() => {
-    const newAlbumId = props.showcase.albumId
-    if (newAlbumId === null) {
-      setDisplay(false)
-      setAlbum({ cover: '', tracks: [] })
-    } else {
-      const album = store.getState().library.albums.find(({ id }) => newAlbumId === id)
-      setAlbum(album)
-      setDisplay(true)
-    }
-  }, [props.showcase.albumId])
-
-  useEffect(() => {
-    if (props.showcase.albumId && props.player.albumId) {
-      setIsPlayingAlbum(props.showcase.albumId === props.player.albumId)
-    } else {
-      setIsPlayingAlbum(false)
-    }
-  }, [props.showcase.albumId, props.player.albumId])
+  useEffect(() => setDisplay(album !== null), [album])
 
   const handleFigureClick = event => {
     if (event.target.tagName === 'ARTICLE') {
-      store.dispatch({ type: 'PLAY_ALBUM', albumId: props.showcase.albumId })
+      dispatch(playAlbum(album.id))
     } else {
-      store.dispatch({ type: 'CLOSE_SHOWCASE' })
+      dispatch(closeAction())
     }
   }
 
   const handleTrackClick = trackNumber => {
-    store.dispatch({
-      type: 'PLAY_TRACK',
-      albumId: props.showcase.albumId,
-      trackNumber
-    })
+    dispatch(playTrack({ albumId: album.id, trackNumber }))
   }
 
   const getCover = () => {
-    return album.cover
+    return album?.cover
       ? { backgroundImage: 'url("' + album.cover + '")' }
       : { backgroundColor: `#333333` }
   }
@@ -66,12 +51,12 @@ const Showcase = props => {
       <ol
         css={[styles.ol, display ? styles.slide : '']}
       >
-        {album.tracks.map((track, index) => (
+        {(album?.tracks ?? []).map((track, index) => (
           <Track 
             key={index}
             title={track.title}
             number={track.trackNumber}
-            current={isPlayingAlbum && track.trackNumber === props.player.trackNumber}
+            current={isShowcasePlaying && track.trackNumber === playerTrack.trackNumber}
             onClick={handleTrackClick} 
           />
         ))}

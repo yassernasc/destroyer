@@ -1,7 +1,9 @@
 import { store } from '../../client.js'
 import { sortTracks, sortAlbums } from '../utilities'
 import { walk } from "@root/walk"
-import { v4 as id } from 'uuid'
+import { nanoid as id } from '@reduxjs/toolkit'
+import { scanning } from '../loading/reducer.js'
+import { connect } from '../library/reducer.js'
 const path = require('path')
 const musicMetadata = require('music-metadata')
 
@@ -21,11 +23,7 @@ const addTrackToLibrary = (library, trackInfo) => {
   
   const track = getTrack(trackInfo)
   const createAlbum = () => {
-    store.dispatch({
-      type: 'SCANNING',
-      message: `SCANNING: ${trackInfo.artist} - ${trackInfo.album}`
-    })
-
+    store.dispatch(scanning(`SCANNING: ${trackInfo.artist} - ${trackInfo.album}`))
     return { id: id(), title: trackInfo.album, artist: trackInfo.artist, tracks: [track], cover: null }
   }
   const targetAlbum = library.find((album) => album.title === trackInfo.album && album.artist === trackInfo.artist)
@@ -81,5 +79,5 @@ export const searchLocalMusic = async (fileList) => {
   }
 
   newLibrary.forEach(album => album.cover = findCover(album, tempImages))
-  store.dispatch({ type: 'CONNECTED', albums: newLibrary })
+  store.dispatch(connect(newLibrary))
 }

@@ -1,17 +1,15 @@
 import { useState, useEffect } from 'react'
+import { useLoadingMessage } from './useLoading'
 
-const Loading = props => {
+const Loading = () => {
   const [display, setDisplay] = useState(false)
+  const loadingMessage = useLoadingMessage()
 
-  useEffect(() => {
-    props.loading.message === '' ? setDisplay(false) : setDisplay(true)
-  }, [props.loading.message])
+  useEffect(() => setDisplay(loadingMessage !== ''), [loadingMessage])
 
   return (
-    <section
-      css={[styles.base, props.loading.display ? styles.show : styles.hide]}
-    >
-      <span css={styles.span}>{props.loading.message}</span>
+    <section css={[styles.base, display ? styles.show : styles.hide]}>
+      <span css={styles.span}>{loadingMessage}</span>
     </section>
   )
 }

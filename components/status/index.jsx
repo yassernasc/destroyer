@@ -1,33 +1,39 @@
 import { useEffect, useState } from 'react'
-import { store } from '../../client.js'
+import { useCurrentTrack, useCurrentAlbum } from '../library/useLibrary.js'
 import { playerStatus } from '../player/reducer'
+import { usePlayerStatus, usePlayerTime } from '../player/usePlayer.js'
 
-const Status = props => {
+const Status = () => {
   const [display, setDisplay] = useState(false)
-  const [metadata, setMetadata] = useState({})
+  const status = usePlayerStatus()
+  const time = usePlayerTime()
+  const currentTrack = useCurrentTrack()
+  const currentAlbum = useCurrentAlbum()
+
+  const getTime = () => {
+    if (time === 0) {
+      return '- 00:00:00'
+    }
+
+    const remainingTime = currentTrack.duration - time
+
+    const hours = Math.floor(remainingTime / 60 / 60).toString().padStart(2, '0')
+    const minutes = Math.floor((remainingTime / 60) % 60).toString().padStart(2, '0')
+    const seconds = Math.round(Math.floor(remainingTime % 60)).toString().padStart(2, '0')
+    return `- ${hours}:${minutes}:${seconds}`
+  }
   
   useEffect(() => {
-    props.player.status === playerStatus.stopped ? setDisplay(false) : setDisplay(true)
-  }, [props.player.status])
-
-  useEffect(() => {
-    if (!props.player.trackNumber) {
-      setMetadata({})
-    } else {
-      const album = store.getState().library.albums.find(album => album.id === props.player.albumId)
-      const track = album.tracks.find(track => track.trackNumber === props.player.trackNumber)
-
-      setMetadata({ artist: album.artist, title: track.title, album: album.title })
-    }
-  }, [props.player.albumId, props.player.trackNumber])
+    status === playerStatus.stopped ? setDisplay(false) : setDisplay(true)
+  }, [status])
 
   return (
     <figure css={[styles.status, display ? styles.show : styles.hide]}>
       <div>
-        <h1 css={styles.h1}>{metadata.artist}</h1>
-        <h2 css={styles.h2}>{metadata.title}</h2>
-        <h3 css={styles.h3}>{metadata.album}</h3>
-        <h4 css={styles.h4}>- 00:00:00</h4>
+        <h1 css={styles.h1}>{currentAlbum?.artist ?? ''}</h1>
+        <h2 css={styles.h2}>{currentTrack?.title ?? ''}</h2>
+        <h3 css={styles.h3}>{currentAlbum?.title ?? ''}</h3>
+        <h4 css={styles.h4}>{getTime()}</h4>
       </div>
     </figure>
   )

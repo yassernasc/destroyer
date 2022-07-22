@@ -1,20 +1,17 @@
-export const loadingReducer = (
-  state = { message: '' },
-  action
-) => {
-  switch (action.type) {
-    case 'CONNECTED': {
-      state = { ...state, message: '' }
-      break
-    }
-    case 'SCANNING': {
-      state = { ...state, message: action.message }
-      break
-    }
-    case 'ESCAPE': {
-      state = { ...state, message: '' }
-      break
+import { createSlice } from '@reduxjs/toolkit'
+
+const loadingSlice = createSlice({
+  name: 'loading',
+  initialState: { message: '' },
+  reducers: {
+    scanning(state, action) {
+      state.message = action.payload
+    },
+    reset(state) {
+      state.message = ''
     }
   }
-  return state
-}
+})
+
+export const { scanning, reset } = loadingSlice.actions
+export default loadingSlice.reducer

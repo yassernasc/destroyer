@@ -1,20 +1,24 @@
 import { useState, useEffect } from 'react'
-import { store } from '../../client.js'
+import { useDispatch } from 'react-redux'
 import { searchLocalMusic } from '../connection/local.js'
+import { useAdminDisplay } from './useAdmin.js'
+import { admin as adminAction, drop } from './reducer.js'
 
-const Admin = props => {
+const Admin = () => {
+  const dispatch = useDispatch()
   const [dragging, setDragging] = useState(false)
+  const display = useAdminDisplay()
 
   useEffect(() => {
     if (localStorage.getItem('fileList')) {
       const fileList = JSON.parse(localStorage.getItem('fileList'))
       searchLocalMusic(fileList)
     } else {
-      store.dispatch({ type: 'ADMIN' })
+      dispatch(adminAction())
     }
 
-    window.addEventListener('dragenter', () => store.dispatch({ type: 'ADMIN' }))
-    window.addEventListener('dragleave', () => store.dispatch({ type: 'DROP' }))
+    window.addEventListener('dragenter', () => dispatch(adminAction()))
+    window.addEventListener('dragleave', () => dispatch(drop()))
   }, [])
 
   const handleDrop = event => {
@@ -25,7 +29,7 @@ const Admin = props => {
     if (length > 0) {
       const paths = Object.values(filesInfo).map(({ path }) => path)
       searchLocalMusic(paths)
-      store.dispatch({ type: 'DROP' })
+      dispatch(drop())
     }
   }
 
@@ -33,9 +37,7 @@ const Admin = props => {
     <figure
       css={[
         styles.drop,
-        props.admin.display || dragging
-          ? styles.show
-          : styles.hide
+        display || dragging ? styles.show : styles.hide
       ]}
       onDragEnter={() => setDragging(true)}
       onDragLeave={() => setDragging(false)}

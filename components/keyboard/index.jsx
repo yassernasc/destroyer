@@ -1,20 +1,28 @@
 import { useEffect, useRef, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import keycode from 'keycode'
+import { escape, filter as filterAction } from './reducer'
 import CloseButton from '../close-button'
-import { store } from '../../client.js'
+import { useAdminDisplay } from '../admin/useAdmin'
+import { useFilter, useFilterActivated } from './useFilter'
+import { toggle } from '../player/reducer'
 
 const isAlphanumeric = keyCode => keyCode >= 48 && keyCode <= 90
 const deletePressed = keyCode => keyCode === keycode('del')
 const escapePressed = keyCode => keyCode === keycode('esc')
 const spacePressed = keyCode => keyCode === keycode('space')
 
-const FilterInput = props => {
+const FilterInput = () => {
+  const dispatch = useDispatch()
   const inputEl = useRef(null)
   const [display, setDisplay] = useState(false)
+  const adminDisplay = useAdminDisplay()
+  const filter = useFilter()
+  const filterActivated = useFilterActivated()
 
   useEffect(() => {
     window.addEventListener('keydown', ({ keyCode }) => {
-      if (!props.admin.display) {
+      if (!adminDisplay) {
         if (isAlphanumeric(keyCode) || deletePressed(keyCode)) {
           inputEl.current.focus()
         }
@@ -22,37 +30,32 @@ const FilterInput = props => {
 
       if (escapePressed(keyCode)) {
         event.preventDefault()
-        store.dispatch({ type: 'ESCAPE' })
+        dispatch(escape())
       }
 
-      if (spacePressed(keyCode) && props.filter.text === '') {
+      if (spacePressed(keyCode) && !filterActivated) {
         event.preventDefault()
-        store.dispatch({ type: 'TOGGLE' })
+        dispatch(toggle())
       }
     })
   }, [])
 
-  useEffect(() => {
-    props.filter.title === '' ? setDisplay(false) : setDisplay(true)
-  }, [props.filter.title])
+  useEffect(() => setDisplay(filterActivated), [filterActivated])
 
   const handleSearch = (event) => {
     event.preventDefault()
-    store.dispatch({ type: 'FILTER', title: event.target.value })
+    dispatch(filterAction(event.target.value))
   }
 
   return (
     <form
-      css={[
-        styles.search,
-        display ? styles.show : styles.hide
-      ]}
+      css={[ styles.search, display ? styles.show : styles.hide]}
     >
       <CloseButton />
       <input
         ref={inputEl}
         type="text"
-        value={props.filter.text}
+        value={filter}
         css={styles.input}
         onChange={handleSearch}
       />

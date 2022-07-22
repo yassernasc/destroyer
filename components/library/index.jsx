@@ -1,46 +1,30 @@
 import { useEffect, useRef } from 'react'
 import Album from './album.jsx'
-import { store } from '../../client.js'
+import { usePlayerStatus } from '../player/usePlayer.js'
+import { playerStatus } from '../player/reducer.js'
+import { useFilteredLibrary } from './useLibrary.js'
 
-const Library = props => {
+const Library = () => {
   const libraryEl = useRef(null)
-
-  useEffect(() => {
-    if (localStorage.getItem('newest') === 'true') {
-      store.dispatch({ type: 'NEW' })
-    } else {
-      store.dispatch({ type: 'ALPHA' })
-    }
-  }, [])
-
-  const getAlbumList = () => {
-    const filterAlbums = () => {
-      return props.library.albums.filter(album => {
-        const filter = props.filter.title
-        const includesTest = (a, b) => a.toLowerCase().includes(b.toLowerCase())
-        return includesTest(album.title, filter) || includesTest(album.artist, filter)
-      })
-    }
-
-    return props.filter.title === '' ? props.library.albums : filterAlbums()
-  }
+  const library = useFilteredLibrary()
+  const status = usePlayerStatus()
 
   return (
     <ul
       ref={libraryEl}
       css={[
         styles.base,
-        props.player.track
+        status !== playerStatus.stopped
           ? { padding: '12.5vh 0 33vh' }
           : { padding: '2em 0 33vh' }
       ]}
     >
-      {getAlbumList().map((album, index) => (
+      {library.map((album, index) => (
         <Album
           album={album}
           key={index}
           container={libraryEl.current}
-          newest={props.library.newest}
+          newest={library.newest}
         />
       ))}
       <li css={styles.li} />

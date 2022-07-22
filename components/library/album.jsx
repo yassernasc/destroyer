@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
-import { store } from '../../client.js'
+import { useDispatch } from 'react-redux'
 import { rafThrottle } from '../utilities'
 import inView from 'in-view'
+import { showcase } from '../showcase/reducer'
 
 const Album = props => {
+  const dispatch = useDispatch()
   const albumEl = useRef(null)
   const [active, setActive] = useState(false)
   const [fade, setFade] = useState(true)
@@ -25,19 +27,14 @@ const Album = props => {
       : { backgroundColor: `#333333` }
   }
 
-  const handleClick = () => {
-    store.dispatch({ type: 'SHOWCASE', albumId: props.album.id })
-  }
+  const handleClick = () => dispatch(showcase(props.album.id))
 
   return (
     <li
       onClick={handleClick}
       onMouseOver={() => setActive(true)}
       onMouseOut={() => setActive(false)}
-      css={[
-        styles.base,
-        props.newest ? { order: props.album.time } : { order: -2 }
-      ]}
+      css={styles.base}
     >
       <div css={fade ? styles.fade : styles.nonfade}>
         <div
@@ -46,7 +43,7 @@ const Album = props => {
         />
       </div>
       <span css={[active ? styles.active : '']}>
-        {props.album.artist + ' - ' + props.album.title}
+        {`${props.album.artist} - ${props.album.title}`}
       </span>
     </li>
   )
