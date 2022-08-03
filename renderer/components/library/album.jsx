@@ -23,8 +23,8 @@ const Album = props => {
 
   const getCover = () => {
     return props.album.cover
-      ? { backgroundImage: 'url("' + props.album.cover + '")' }
-      : { backgroundColor: `#333333` }
+      ? { backgroundImage: `url('${props.album.cover}')` }
+      : { backgroundColor: '#333333' }
   }
 
   const handleClick = () => dispatch(showcase(props.album.id))

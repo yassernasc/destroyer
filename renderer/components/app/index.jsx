@@ -7,6 +7,7 @@ import Status from '../status'
 import Library from '../library'
 import Showcase from '../showcase'
 import Player from '../player'
+import averiaSerif from './averia-serif.woff2'
 
 const App = () => (
   <>
@@ -27,7 +28,11 @@ export default App
 const styles = {
   html: {
     textSizeAdjust: '100%',
-    WebkitFontSmoothing: 'antialiased'
+    WebkitFontSmoothing: 'antialiased',
+    '@font-face': {
+      'font-family': 'averia-serif',
+      src: `url('${averiaSerif}')`,
+    }
   },
   body: {
     margin: 0,

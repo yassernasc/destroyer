@@ -9,7 +9,7 @@
     "prebuild": "yarn run clean",
     "build": "webpack --progress --mode=development",
     "build:watch": "yarn run build -- --watch",
-    "start": "electron .",
+    "start": "electron bundle/main.js",
     "pack:osx": "rm -rf Destroyer-darwin-x64 && webpack --progress --mode=production && electron-packager ./ Destroyer --platform=darwin --arch=x64 --icon=icons.icns --prune",
     "pack:win": "webpack --progress --mode=production && electron-packager ./ Destroyer --out=dist/windows --platform=win32 --arch=x64 --overwrite --icon=icons.ico --prune"
   },
@@ -44,6 +44,7 @@
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-react": "^6.10.3",
     "eslint-plugin-standard": "^2.1.1",
+    "html-webpack-plugin": "^5.5.0",
     "webpack": "^5.73.0",
     "webpack-cli": "^4.10.0"
   },

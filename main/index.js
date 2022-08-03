@@ -28,7 +28,7 @@ const createWindow = () => {
     }
   })
   mainWindowState.manage(mainWindow)
-  mainWindow.loadFile('renderer/index.html')
+  mainWindow.loadFile('index.html')
   mainWindow.setTouchBar(createTouchBar())
   mainWindow.once('ready-to-show', () => mainWindow.show())
   mainWindow.on('closed', () => mainWindow = null)

@@ -33,8 +33,8 @@ const Showcase = () => {
 
   const getCover = () => {
     return album?.cover
-      ? { backgroundImage: 'url("' + album.cover + '")' }
-      : { backgroundColor: `#333333` }
+      ? { backgroundImage: `url('${album.cover}')` }
+      : { backgroundColor: '#333333' }
   }
 
   return (
@@ -93,7 +93,7 @@ const styles = {
   figure: {
     width: '100vw',
     transition: 'transform 1s',
-    cursor: 'url(' + close + ') 32 32, alias',
+    cursor: `url('${close}') 32 32, alias`,
     perspective: '100vw',
     position: 'absolute',
     margin: 0,
@@ -115,7 +115,7 @@ const styles = {
     backgroundSize: 'cover',
     backgroundPosition: 'center center',
     height: '66vh',
-    cursor: 'url(' + play + ') 32 32, pointer',
+    cursor: `url('${play}') 32 32, pointer`,
     perspective: 500,
     animation: 'x 5s infinite alternate ease-in-out',
     animationName: rotateKeyframes
