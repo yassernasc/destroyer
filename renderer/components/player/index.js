@@ -1,4 +1,3 @@
-import { remote } from 'electron'
 import { useRef, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useCurrentTrack } from '../library/useLibrary'

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { searchLocalMusic } from '../connection/local.js'
 import { useAdminDisplay } from './useAdmin.js'
 import { admin as adminAction, drop } from './reducer.js'
+import { connect } from '../library/reducer.js'
 
 const Admin = () => {
   const dispatch = useDispatch()
@@ -18,6 +18,7 @@ const Admin = () => {
     }
 
     window.addEventListener('dragenter', () => dispatch(adminAction()))
+    window.menu.addFiles(() => dispatch(adminAction()))
     window.addEventListener('dragleave', () => dispatch(drop()))
   }, [])
 
@@ -28,9 +29,15 @@ const Admin = () => {
     const { length, ...filesInfo } = event.dataTransfer.files
     if (length > 0) {
       const paths = Object.values(filesInfo).map(({ path }) => path)
+      localStorage.setItem('fileList', JSON.stringify(paths))
       searchLocalMusic(paths)
       dispatch(drop())
     }
+  }
+
+  const searchLocalMusic = async (pathList) => {
+    const newLibrary = await window.local.search(pathList)
+    dispatch(connect(newLibrary))
   }
 
   return (

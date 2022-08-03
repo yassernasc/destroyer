@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-const paper = require('paper/dist/paper-full')
+// const paper = require('paper/dist/paper-full')
 
 const Fuzz = () => {
   const canvasEl = useRef(null)
@@ -11,8 +11,8 @@ const Fuzz = () => {
   const dataArray = useRef(null)
 
   useEffect(() => {
-    paper.install(window)
-    paper.setup('oscilloscope')
+    // paper.install(window)
+    // paper.setup('oscilloscope')
     canvasEl.current.width = window.innerWidth
     canvasEl.current.height = window.innerHeight
     path.current = new Path()

@@ -1,20 +1,13 @@
-const {app, BrowserWindow, TouchBar} = require('electron')
-const {TouchBarLabel, TouchBarSpacer} = TouchBar
+const {app, BrowserWindow, ipcMain} = require('electron')
 const windowStateKeeper = require('electron-window-state')
 const {default: installExtensions, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS} = require('electron-devtools-installer');
+const path = require('path')
+
+const LocalDisk = require('./services/local');
+const createMenu = require('./services/menu');
+const createTouchBar = require('./services/touchBar');
+
 let mainWindow
-
-const artist = new TouchBarLabel({textColor: '#5c43e8'})
-const track = new TouchBarLabel({textColor: '#555555'})
-const time = new TouchBarLabel({textColor: '#5c43e8'})
-
-const touchBar = new TouchBar([
-  artist,
-  new TouchBarSpacer({size: 'small'}),
-  track,
-  new TouchBarSpacer({size: 'small'}),
-  time
-])
 
 const createWindow = () => {
   let mainWindowState = windowStateKeeper({
@@ -27,26 +20,21 @@ const createWindow = () => {
     width: mainWindowState.width,
     height: mainWindowState.height,
     titleBarStyle: 'hidden',
-    icon: 'assets/icon.ico',
     darkTheme: true,
     show: false,
     webPreferences: {
       backgroundThrottling: false,
-      contextIsolation: false,
-      enableRemoteModule: true,
-      nodeIntegration: true,
-      worldSafeExecuteJavaScript: false
+      preload: path.join(__dirname, 'preload.js')
     }
   })
   mainWindowState.manage(mainWindow)
   mainWindow.loadFile('renderer/index.html')
-  mainWindow.setTouchBar(touchBar)
-  mainWindow.once('ready-to-show', () => {
-    mainWindow.show()
-  })
-  mainWindow.on('closed', () => {
-    mainWindow = null
-  })
+  mainWindow.setTouchBar(createTouchBar())
+  mainWindow.once('ready-to-show', () => mainWindow.show())
+  mainWindow.on('closed', () => mainWindow = null)
+
+  createMenu(mainWindow)
+  ipcMain.handle('search', (event, pathList) => new LocalDisk(mainWindow).search(pathList))
 }
 
 app.whenReady().then(() => {
@@ -71,12 +59,3 @@ app.on('activate', () => {
     createWindow()
   }
 })
-
-app.updateTouchBar = metadata => {
-  artist.label = metadata.artist
-  track.label = metadata.track
-}
-
-app.updateTouchBarTime = duration => {
-  time.label = duration
-}

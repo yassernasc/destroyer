@@ -3,7 +3,6 @@ import { configureStore} from '@reduxjs/toolkit'
 import { Provider } from 'react-redux'
 
 import App from './components/app'
-import Menu from './components/menu'
 import adminReducer from './components/admin/reducer.js'
 import filterReducer from './components/keyboard/reducer.js'
 import libraryReducer from './components/library/reducer.js'
@@ -28,5 +27,3 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 )
-
-new Menu()

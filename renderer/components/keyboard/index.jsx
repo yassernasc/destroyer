@@ -4,6 +4,7 @@ import keycode from 'keycode'
 import { escape, filter as filterAction } from './reducer'
 import CloseButton from '../close-button'
 import { useAdminDisplay } from '../admin/useAdmin'
+import { escape as adminEscape } from '../admin/reducer'
 import { useFilter, useFilterActivated } from './useFilter'
 import { toggle } from '../player/reducer'
 
@@ -31,6 +32,7 @@ const FilterInput = () => {
       if (escapePressed(keyCode)) {
         event.preventDefault()
         dispatch(escape())
+        // dispatch(adminEscape())
       }
 
       if (spacePressed(keyCode) && !filterActivated) {

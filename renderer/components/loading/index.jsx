@@ -1,10 +1,16 @@
 import { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { scanning } from './reducer'
 import { useLoadingMessage } from './useLoading'
 
 const Loading = () => {
   const [display, setDisplay] = useState(false)
+  const dispatch = useDispatch()
   const loadingMessage = useLoadingMessage()
 
+  useEffect(() => {
+    window.local.onAlbumFound((event, scanningInfo) => dispatch(scanning(scanningInfo)))
+  }, [])
   useEffect(() => setDisplay(loadingMessage !== ''), [loadingMessage])
 
   return (

@@ -13,7 +13,7 @@ const librarySlice = createSlice({
 
 const { connected } = librarySlice.actions
 export const connect = library => dispatch => {
-  dispatch(connected(library))
   dispatch(reset())
+  dispatch(connected(library))
 }
 export default librarySlice.reducer
