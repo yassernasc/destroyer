@@ -1,7 +1,7 @@
 const path = require('path')
 
 const config = {
-  entry: './client.js',
+  entry: './renderer',
   output: {
     path: path.join(__dirname, 'bundle'),
     publicPath: '/bundle/',
@@ -32,7 +32,7 @@ const config = {
         }
       },
       {
-        test: /\.(woff|woff2)$/,
+        test: /\.woff2$/,
         type: 'asset/resource'
       },
       {

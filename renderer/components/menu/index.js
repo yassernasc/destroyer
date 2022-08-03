@@ -1,7 +1,7 @@
 const { remote } = require('electron')
 const { Menu, MenuItem } = remote
 import { admin } from '../admin/reducer.js'
-import { store } from '../../client.js'
+import { store } from '../..'
 
 export default class MainMenu {
   constructor() {

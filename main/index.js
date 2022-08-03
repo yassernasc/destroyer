@@ -27,6 +27,7 @@ const createWindow = () => {
     width: mainWindowState.width,
     height: mainWindowState.height,
     titleBarStyle: 'hidden',
+    icon: 'assets/icon.ico',
     darkTheme: true,
     show: false,
     webPreferences: {
@@ -38,7 +39,7 @@ const createWindow = () => {
     }
   })
   mainWindowState.manage(mainWindow)
-  mainWindow.loadFile(`${__dirname}/components/app/index.html`)
+  mainWindow.loadFile('renderer/index.html')
   mainWindow.setTouchBar(touchBar)
   mainWindow.once('ready-to-show', () => {
     mainWindow.show()

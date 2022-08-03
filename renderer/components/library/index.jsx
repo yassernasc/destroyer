@@ -24,7 +24,6 @@ const Library = () => {
           album={album}
           key={index}
           container={libraryEl.current}
-          newest={library.newest}
         />
       ))}
       <li css={styles.li} />

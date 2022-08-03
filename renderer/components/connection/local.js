@@ -1,4 +1,4 @@
-import { store } from '../../client.js'
+import { store } from '../..'
 import { sortTracks, sortAlbums } from '../utilities'
 import { walk } from "@root/walk"
 import { nanoid as id } from '@reduxjs/toolkit'
