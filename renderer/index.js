@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom'
-import { configureStore} from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit'
 import { Provider } from 'react-redux'
 
 import App from './components/app'
@@ -18,7 +18,7 @@ export const store = configureStore({
     loading: loadingReducer,
     player: playerReducer,
     showcase: showcaseReducer,
-  }
+  },
 })
 
 ReactDOM.render(

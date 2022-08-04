@@ -9,8 +9,8 @@ const loadingSlice = createSlice({
     },
     reset(state) {
       state.message = ''
-    }
-  }
+    },
+  },
 })
 
 export const { scanning, reset } = loadingSlice.actions

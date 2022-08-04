@@ -21,8 +21,8 @@ const selectCurrentTrack = createSelector(
     }
 
     return albums
-      .find(album => album.id === albumId).tracks
-      .find(track => track.trackNumber === trackNumber)
+      .find(album => album.id === albumId)
+      .tracks.find(track => track.trackNumber === trackNumber)
   }
 )
 
@@ -45,7 +45,7 @@ const selectShowcaseAlbum = createSelector(
   selectLibrary,
   selectShowcase,
   (albums, albumId) => {
-    return albumId === null ? null : albums.find((album) => albumId === album.id)
+    return albumId === null ? null : albums.find(album => albumId === album.id)
   }
 )
 

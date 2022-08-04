@@ -9,7 +9,9 @@
     "prebuild": "yarn run clean",
     "build": "webpack --progress --mode=development",
     "build:watch": "yarn run build -- --watch",
-    "start": "electron bundle/main.js"
+    "start": "electron bundle/main.js",
+    "lint": "eslint .",
+    "format": "prettier --write ."
   },
   "author": "omar mashaal",
   "license": "ISC",
@@ -17,6 +19,8 @@
     "@emotion/react": "^11.9.3",
     "@reduxjs/toolkit": "^1.8.3",
     "@root/walk": "^1.1.0",
+    "electron": "^20.0.0",
+    "electron-devtools-installer": "^3.2.0",
     "electron-window-state": "^4.1.0",
     "in-view": "^0.6.1",
     "keycode": "^2.2.1",
@@ -33,24 +37,13 @@
     "@babel/preset-react": "^7.17.12",
     "@emotion/babel-plugin": "^11.9.2",
     "babel-loader": "^8.2.5",
-    "electron": "^20.0.0",
-    "electron-devtools-installer": "^3.2.0",
-    "eslint": "^3.19.0",
-    "eslint-config-standard": "^7.1.0",
-    "eslint-config-standard-react": "^4.3.0",
-    "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-react": "^6.10.3",
-    "eslint-plugin-standard": "^2.1.1",
+    "eslint": "^8.21.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-react": "^7.30.1",
     "html-webpack-plugin": "^5.5.0",
+    "prettier": "2.7.1",
     "webpack": "^5.73.0",
     "webpack-cli": "^4.10.0"
-  },
-  "eslintConfig": {
-    "parser": "@babel/eslint-parser",
-    "extends": [
-      "standard",
-      "standard-react"
-    ]
   },
   "browserslist": [
     "electron 20.0.0"

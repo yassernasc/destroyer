@@ -25,7 +25,7 @@ const Admin = () => {
   const handleDrop = event => {
     event.preventDefault()
     setDragging(false)
-    
+
     const { length, ...filesInfo } = event.dataTransfer.files
     if (length > 0) {
       const paths = Object.values(filesInfo).map(({ path }) => path)
@@ -35,20 +35,17 @@ const Admin = () => {
     }
   }
 
-  const searchLocalMusic = async (pathList) => {
+  const searchLocalMusic = async pathList => {
     const newLibrary = await window.local.search(pathList)
     dispatch(connect(newLibrary))
   }
 
   return (
     <figure
-      css={[
-        styles.drop,
-        display || dragging ? styles.show : styles.hide
-      ]}
+      css={[styles.drop, display || dragging ? styles.show : styles.hide]}
       onDragEnter={() => setDragging(true)}
       onDragLeave={() => setDragging(false)}
-      onDragOver={(event) => event.preventDefault()}
+      onDragOver={event => event.preventDefault()}
       onDrop={handleDrop}
     >
       <span css={styles.span}>Drop music collection here</span>
@@ -71,20 +68,20 @@ const styles = {
     padding: 0,
     margin: 0,
     zIndex: 40,
-    transition: '.25s'
+    transition: '.25s',
   },
   span: {
     margin: 'auto',
     fontSize: '2em',
     borderBottom: '2px solid white',
-    pointerEvents: 'none'
+    pointerEvents: 'none',
   },
   show: {
     pointerEvents: 'auto',
-    opacity: 1
+    opacity: 1,
   },
   hide: {
     opacity: 0,
-    pointerEvents: 'none'
-  }
+    pointerEvents: 'none',
+  },
 }

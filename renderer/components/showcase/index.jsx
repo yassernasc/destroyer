@@ -40,24 +40,21 @@ const Showcase = () => {
   return (
     <section css={[styles.showcase, display ? styles.show : styles.hide]}>
       <figure
-        css={[
-          styles.figure,
-          display ? styles.top : styles.bottom
-        ]}
+        css={[styles.figure, display ? styles.top : styles.bottom]}
         onClick={handleFigureClick}
       >
         <article css={[styles.article, getCover()]} />
       </figure>
-      <ol
-        css={[styles.ol, display ? styles.slide : '']}
-      >
+      <ol css={[styles.ol, display ? styles.slide : '']}>
         {(album?.tracks ?? []).map((track, index) => (
-          <Track 
+          <Track
             key={index}
             title={track.title}
             number={track.trackNumber}
-            current={isShowcasePlaying && track.trackNumber === playerTrack.trackNumber}
-            onClick={handleTrackClick} 
+            current={
+              isShowcasePlaying && track.trackNumber === playerTrack.trackNumber
+            }
+            onClick={handleTrackClick}
           />
         ))}
       </ol>
@@ -69,11 +66,11 @@ export default Showcase
 
 const rotateKeyframes = keyframes({
   from: {
-    transform: 'rotateY(-20deg)'
+    transform: 'rotateY(-20deg)',
   },
   to: {
-    transform: 'rotateY(20deg)'
-  }
+    transform: 'rotateY(20deg)',
+  },
 })
 
 const styles = {
@@ -88,7 +85,7 @@ const styles = {
     zIndex: 5,
     transform: 'translate3d(0, 0, 0)',
     transition: 'opacity .666s',
-    background: 'rgba(33, 33, 33, .8)'
+    background: 'rgba(33, 33, 33, .8)',
   },
   figure: {
     width: '100vw',
@@ -100,13 +97,13 @@ const styles = {
     padding: 0,
     top: 0,
     transformStyle: 'preserve-3d',
-    height: '100vh'
+    height: '100vh',
   },
   bottom: {
-    transform: 'translateY(12.5vh)'
+    transform: 'translateY(12.5vh)',
   },
   top: {
-    transform: 'translateY(0)'
+    transform: 'translateY(0)',
   },
   article: {
     margin: '17vh auto',
@@ -118,7 +115,7 @@ const styles = {
     cursor: `url('${play}') 32 32, pointer`,
     perspective: 500,
     animation: 'x 5s infinite alternate ease-in-out',
-    animationName: rotateKeyframes
+    animationName: rotateKeyframes,
   },
   ol: {
     position: 'fixed',
@@ -133,18 +130,18 @@ const styles = {
     transitionDelay: '.5s',
     background: 'rgba(33, 33, 33, .75)',
     opacity: 0,
-    transform: 'translateY(12.5vh)'
+    transform: 'translateY(12.5vh)',
   },
   slide: {
     opacity: 1,
-    transform: 'translateY(0)'
+    transform: 'translateY(0)',
   },
   show: {
     opacity: 1,
-    pointerEvents: 'auto'
+    pointerEvents: 'auto',
   },
   hide: {
     opacity: 0,
-    pointerEvents: 'none'
-  }
+    pointerEvents: 'none',
+  },
 }

@@ -2,7 +2,7 @@ const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('local', {
   onAlbumFound: callback => ipcRenderer.on('new-album-found', callback),
-  search: (pathList) => ipcRenderer.invoke('search', pathList)
+  search: pathList => ipcRenderer.invoke('search', pathList),
 })
 
 contextBridge.exposeInMainWorld('menu', {

@@ -1,18 +1,22 @@
-const {app, BrowserWindow, ipcMain} = require('electron')
+const { app, BrowserWindow, ipcMain } = require('electron')
 const windowStateKeeper = require('electron-window-state')
-const {default: installExtensions, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS} = require('electron-devtools-installer');
+const {
+  default: installExtensions,
+  REACT_DEVELOPER_TOOLS,
+  REDUX_DEVTOOLS,
+} = require('electron-devtools-installer')
 const path = require('path')
 
-const LocalDisk = require('./services/local');
-const createMenu = require('./components/menu');
-const createTouchBar = require('./components/touchBar');
+const LocalDisk = require('./services/local')
+const createMenu = require('./components/menu')
+const createTouchBar = require('./components/touchBar')
 
 let mainWindow
 
 const createWindow = () => {
   let mainWindowState = windowStateKeeper({
     defaultWidth: 1200,
-    defaultHeight: 800
+    defaultHeight: 800,
   })
   mainWindow = new BrowserWindow({
     x: mainWindowState.x,
@@ -24,24 +28,26 @@ const createWindow = () => {
     show: false,
     webPreferences: {
       backgroundThrottling: false,
-      preload: path.join(__dirname, 'preload.js')
-    }
+      preload: path.join(__dirname, 'preload.js'),
+    },
   })
   mainWindowState.manage(mainWindow)
   mainWindow.loadFile('index.html')
   mainWindow.setTouchBar(createTouchBar())
   mainWindow.once('ready-to-show', () => mainWindow.show())
-  mainWindow.on('closed', () => mainWindow = null)
+  mainWindow.on('closed', () => (mainWindow = null))
 
   createMenu(mainWindow)
-  ipcMain.handle('search', (event, pathList) => new LocalDisk(mainWindow).search(pathList))
+  ipcMain.handle('search', (event, pathList) =>
+    new LocalDisk(mainWindow).search(pathList)
+  )
 }
 
 app.whenReady().then(() => {
   const isDev = !app.isPackaged
   if (isDev) {
     installExtensions([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS], {
-      loadExtensionOptions: { allowFileAccess: true }
+      loadExtensionOptions: { allowFileAccess: true },
     })
   }
 

@@ -9,8 +9,8 @@ const showcaseSlice = createSlice({
     },
     close(state) {
       state.albumId = null
-    }
-  }
+    },
+  },
 })
 
 export const { showcase, close } = showcaseSlice.actions

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import Album from './album.jsx'
 import { usePlayerStatus } from '../player/usePlayer.js'
 import { playerStatus } from '../player/reducer.js'
@@ -16,15 +16,11 @@ const Library = () => {
         styles.base,
         status !== playerStatus.stopped
           ? { padding: '12.5vh 0 33vh' }
-          : { padding: '2em 0 33vh' }
+          : { padding: '2em 0 33vh' },
       ]}
     >
       {library.map((album, index) => (
-        <Album
-          album={album}
-          key={index}
-          container={libraryEl.current}
-        />
+        <Album album={album} key={index} container={libraryEl.current} />
       ))}
       <li css={styles.li} />
       <li css={styles.li} />
@@ -56,11 +52,11 @@ const styles = {
     listStyle: 'none',
     overflow: 'scroll',
     transition: 'padding .5s',
-    transform: 'translate3d(0, 0, 0)'
+    transform: 'translate3d(0, 0, 0)',
   },
   li: {
     flex: '1 1 250px',
     padding: '1em 2em',
-    order: 10
-  }
+    order: 10,
+  },
 }

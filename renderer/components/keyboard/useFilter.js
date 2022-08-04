@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 export const selectFilter = state => state.filter.title
 const selectFilterActivated = createSelector(
   selectFilter,
-  (filter) => filter !== ''
+  filter => filter !== ''
 )
 
 export const useFilter = () => useSelector(selectFilter)

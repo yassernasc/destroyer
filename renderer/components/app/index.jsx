@@ -32,7 +32,7 @@ const styles = {
     '@font-face': {
       'font-family': 'averia-serif',
       src: `url('${averiaSerif}')`,
-    }
+    },
   },
   body: {
     margin: 0,
@@ -41,18 +41,18 @@ const styles = {
     fontFamily:
       'averia-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif',
     color: 'white',
-    backgroundColor: '#212121'
+    backgroundColor: '#212121',
   },
   input: {
     fontFamily:
-      'averia-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif'
+      'averia-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif',
   },
   button: {
     fontFamily:
-      'averia-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif'
+      'averia-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif',
   },
   '::selection': {
     backgroundColor: 'rgba(92, 67, 232, 1)',
-    opacity: 0
-  }
+    opacity: 0,
+  },
 }

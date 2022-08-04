@@ -30,13 +30,13 @@ const styles = {
     background: 'white',
     transition: 'background .25s, color .25s',
     ':hover': {
-      background: 'rgba(255, 255, 255, 0.8)'
-    }
+      background: 'rgba(255, 255, 255, 0.8)',
+    },
   },
   disabled: {
     cursor: 'not-allowed',
-    opacity: '.5'
-  }
+    opacity: '.5',
+  },
 }
 
 export default Button

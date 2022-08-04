@@ -13,7 +13,7 @@ const adminSlice = createSlice({
     drop(state) {
       state.display = false
     },
-  }
+  },
 })
 
 export const { admin, escape, drop } = adminSlice.actions

@@ -9,8 +9,8 @@ const filterSlice = createSlice({
     },
     escape(state) {
       state.title = ''
-    }
-  }
+    },
+  },
 })
 
 export const { filter, escape } = filterSlice.actions

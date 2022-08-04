@@ -13,7 +13,7 @@ const styles = {
     WebkitAppRegion: 'drag',
     transition: '.5s',
     ':hover': {
-      backgroundColor: 'rgba(92, 67, 232, .8)'
-    }
-  }
+      backgroundColor: 'rgba(92, 67, 232, .8)',
+    },
+  },
 }

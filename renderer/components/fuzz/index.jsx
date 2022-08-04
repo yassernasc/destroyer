@@ -39,17 +39,17 @@ const Fuzz = () => {
     requestAnimationFrame(draw)
     if (window.throttle) return
     window.throttle = true
-    setInterval(() => window.throttle = false, 250)
+    setInterval(() => (window.throttle = false), 250)
     path.current.removeSegments()
     analyser.current.getByteTimeDomainData(dataArray.current)
     path.current.add(new Point(0, canvasEl.current.height / 2))
 
-    var sliceWidth = canvasEl.current.width * 1.0 / bufferLength.current
+    var sliceWidth = (canvasEl.current.width * 1.0) / bufferLength.current
     var x = 0
 
     for (var i = 0; i < bufferLength.current; i++) {
       var v = dataArray.current[i] / 128.0
-      var y = v * canvasEl.current.height / 2
+      var y = (v * canvasEl.current.height) / 2
 
       if (i !== 0) {
         path.current.add(new Point(x, y))
@@ -74,7 +74,7 @@ const Fuzz = () => {
         position: 'absolute',
         top: 0,
         left: 0,
-        zIndex: 4
+        zIndex: 4,
       }}
     />
   )

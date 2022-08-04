@@ -4,19 +4,19 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const mainConfig = {
   entry: {
     main: './main',
-    preload: './main/preload.js'
+    preload: './main/preload.js',
   },
   output: {
     path: path.join(__dirname, 'bundle'),
   },
-  target: 'electron-main'
+  target: 'electron-main',
 }
 
 const rendererConfig = {
   entry: './renderer',
   output: {
     path: path.join(__dirname, 'bundle'),
-    filename: 'destroyer.js'
+    filename: 'destroyer.js',
   },
   target: 'electron-renderer',
   module: {
@@ -34,28 +34,28 @@ const rendererConfig = {
                 '@babel/preset-react',
                 {
                   runtime: 'automatic',
-                  importSource: '@emotion/react'
-                }
-              ]
+                  importSource: '@emotion/react',
+                },
+              ],
             ],
-            plugins: ["@emotion/babel-plugin"]
-          }
-        }
+            plugins: ['@emotion/babel-plugin'],
+          },
+        },
       },
       {
         test: /\.(png|woff2)$/,
-        type: 'asset/inline'
+        type: 'asset/inline',
       },
     ],
   },
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx'],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      templateContent: `<html><body><div id="root"></div></body></html>`
+      templateContent: `<html><body><div id="root"></div></body></html>`,
     }),
-  ]
+  ],
 }
 
 module.exports = [mainConfig, rendererConfig]

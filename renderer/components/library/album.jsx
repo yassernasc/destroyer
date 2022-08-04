@@ -56,7 +56,7 @@ const styles = {
     flex: '1 1 250px',
     padding: '1em 2em',
     lineHeight: '1.5em',
-    cursor: 'pointer'
+    cursor: 'pointer',
   },
   cover: {
     height: 0,
@@ -68,23 +68,23 @@ const styles = {
     transition: 'transform .25s, opacity .25s',
     border: '2px solid #181818',
     marginBottom: '.5em',
-    transform: 'scale(0.98)'
+    transform: 'scale(0.98)',
   },
   active: {
-    borderBottom: '2px solid rgba(92, 67, 232, .8)'
+    borderBottom: '2px solid rgba(92, 67, 232, .8)',
   },
   zoom: {
     transform: 'scale(1)',
-    border: '2px solid rgba(92, 67, 232, .8)'
+    border: '2px solid rgba(92, 67, 232, .8)',
   },
   nonfade: {
     transitionDuration: '.5s',
     transitionDelay: '.25s',
-    willChange: 'transform'
+    willChange: 'transform',
   },
   fade: {
     opacity: 0,
     transform: 'scale(.9)',
-    willChange: 'transform'
-  }
+    willChange: 'transform',
+  },
 }

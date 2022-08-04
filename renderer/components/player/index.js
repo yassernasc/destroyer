@@ -36,7 +36,7 @@ const Player = () => {
 
   const pause = () => audioEl.current.pause()
 
-  const updateCurrentTime = (newTime) => audioEl.current.currentTime = newTime
+  const updateCurrentTime = newTime => (audioEl.current.currentTime = newTime)
 
   return (
     <>

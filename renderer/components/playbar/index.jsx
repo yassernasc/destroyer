@@ -1,7 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { useCurrentTrack } from '../library/useLibrary'
-import { playerStatus, stop, previousTrack, nextTrack, toggle as toggleAction, tick } from '../player/reducer'
+import {
+  playerStatus,
+  previousTrack,
+  nextTrack,
+  toggle as toggleAction,
+} from '../player/reducer'
 import { usePlayerTime, usePlayerStatus } from '../player/usePlayer'
 
 const Playbar = ({ updateTime }) => {
@@ -20,7 +25,7 @@ const Playbar = ({ updateTime }) => {
     event.preventDefault()
     const percentage = event.clientX / window.innerWidth
     const newTime = currentTrack.duration * percentage
-    
+
     updateTime(newTime)
   }
 
@@ -35,20 +40,22 @@ const Playbar = ({ updateTime }) => {
 
   useEffect(() => {
     if (currentTrack && time > 0) {
-      elapsedBar.current.style.width = `${time / currentTrack.duration * 100}%`
+      elapsedBar.current.style.width = `${
+        (time / currentTrack.duration) * 100
+      }%`
     } else {
       elapsedBar.current.style.width = '0%'
     }
   }, [currentTrack, time])
 
   return (
-    <div css={[ styles.playbar, display ? styles.show : styles.hide]}>
+    <div css={[styles.playbar, display ? styles.show : styles.hide]}>
       <div
         css={{
           position: 'relative',
           height: 40,
           width: '100%',
-          cursor: 'none'
+          cursor: 'none',
         }}
         onMouseMove={handleMove}
         onMouseOver={() => setHover(true)}
@@ -61,7 +68,7 @@ const Playbar = ({ updateTime }) => {
           css={[
             styles.slider,
             hover ? { opacity: 1 } : { opacity: 0 },
-            { transform: `translateX(${left}px)` || 0 }
+            { transform: `translateX(${left}px)` || 0 },
           ]}
         />
       </div>
@@ -92,7 +99,7 @@ const styles = {
     zIndex: 10,
     WebkitUserSelect: 'none',
     width: '100%',
-    transition: '.666s'
+    transition: '.666s',
   },
   slider: {
     position: 'absolute',
@@ -101,7 +108,7 @@ const styles = {
     height: 40,
     background: 'white',
     top: 0,
-    zIndex: 69
+    zIndex: 69,
   },
   panel: {
     height: 45,
@@ -114,7 +121,7 @@ const styles = {
     lineHeight: '40px',
     fontSize: '1.5em',
     fontWeight: 200,
-    fontStyle: 'italic'
+    fontStyle: 'italic',
   },
   span: {
     display: 'inline-block',
@@ -123,8 +130,8 @@ const styles = {
     cursor: 'pointer',
     transition: '.5s',
     ':hover': {
-      background: 'rgba(92, 67, 232, .8)'
-    }
+      background: 'rgba(92, 67, 232, .8)',
+    },
   },
   range: {
     height: 40,
@@ -134,7 +141,7 @@ const styles = {
     background: 'rgba(92, 67, 232, 1)',
     transition: 'width .25s linear',
     width: 0,
-    position: 'absolute'
+    position: 'absolute',
   },
   buffer: {
     height: 40,
@@ -142,14 +149,14 @@ const styles = {
     top: 0,
     position: 'absolute',
     background: 'rgba(92, 67, 232, 0.666)',
-    zIndex: 20
+    zIndex: 20,
   },
   show: {
     transform: 'translateY(0em)',
     opacity: 1,
-    pointerEvents: 'auto'
+    pointerEvents: 'auto',
   },
   hide: {
-    transform: 'translateY(3em)'
-  }
+    transform: 'translateY(3em)',
+  },
 }

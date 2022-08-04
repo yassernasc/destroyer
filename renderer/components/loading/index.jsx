@@ -9,7 +9,9 @@ const Loading = () => {
   const loadingMessage = useLoadingMessage()
 
   useEffect(() => {
-    window.local.onAlbumFound((event, scanningInfo) => dispatch(scanning(scanningInfo)))
+    window.local.onAlbumFound((event, scanningInfo) =>
+      dispatch(scanning(scanningInfo))
+    )
   }, [])
   useEffect(() => setDisplay(loadingMessage !== ''), [loadingMessage])
 
@@ -34,17 +36,17 @@ const styles = {
     transition: '.5s',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: '120%'
+    fontSize: '120%',
   },
   span: {
-    margin: 'auto'
+    margin: 'auto',
   },
   show: {
     opacity: 1,
-    pointerEvents: 'auto'
+    pointerEvents: 'auto',
   },
   hide: {
     opacity: 0,
-    pointerEvents: 'none'
-  }
+    pointerEvents: 'none',
+  },
 }

@@ -21,14 +21,14 @@ const styles = {
     margin: 'auto',
     boxSizing: 'border-box',
     flex: '1 1 100%',
-    width: '100%'
+    width: '100%',
   },
   label: {
     textAlign: 'left',
     display: 'block',
     margin: '1em auto .5em',
     textTransform: 'capitalize',
-    fontSize: '90%'
+    fontSize: '90%',
   },
   input: {
     display: 'block',
@@ -44,6 +44,6 @@ const styles = {
     marginBottom: '1em',
     transition: 'border .666s',
     color: 'white',
-    background: 'rgba(92, 67, 232, .8)'
-  }
+    background: 'rgba(92, 67, 232, .8)',
+  },
 }

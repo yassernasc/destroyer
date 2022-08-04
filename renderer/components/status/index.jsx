@@ -17,12 +17,18 @@ const Status = () => {
 
     const remainingTime = currentTrack.duration - time
 
-    const hours = Math.floor(remainingTime / 60 / 60).toString().padStart(2, '0')
-    const minutes = Math.floor((remainingTime / 60) % 60).toString().padStart(2, '0')
-    const seconds = Math.round(Math.floor(remainingTime % 60)).toString().padStart(2, '0')
+    const hours = Math.floor(remainingTime / 60 / 60)
+      .toString()
+      .padStart(2, '0')
+    const minutes = Math.floor((remainingTime / 60) % 60)
+      .toString()
+      .padStart(2, '0')
+    const seconds = Math.round(Math.floor(remainingTime % 60))
+      .toString()
+      .padStart(2, '0')
     return `- ${hours}:${minutes}:${seconds}`
   }
-  
+
   useEffect(() => {
     status === playerStatus.stopped ? setDisplay(false) : setDisplay(true)
   }, [status])
@@ -61,7 +67,7 @@ const styles = {
     textAlign: 'center',
     overflow: 'hidden',
     zIndex: 10,
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   h1: {
     fontSize: '3em',
@@ -69,7 +75,7 @@ const styles = {
     lineHeight: '1em',
     fontWeight: 200,
     padding: 0,
-    flex: '1 1 100vw'
+    flex: '1 1 100vw',
   },
   h2: {
     fontSize: '2.5em',
@@ -77,7 +83,7 @@ const styles = {
     lineHeight: '1em',
     fontWeight: 200,
     padding: 0,
-    flex: '1 1 100vw'
+    flex: '1 1 100vw',
   },
   h3: {
     fontSize: '2em',
@@ -85,7 +91,7 @@ const styles = {
     lineHeight: '1.25em',
     fontWeight: 200,
     padding: 0,
-    flex: '1 1 100vw'
+    flex: '1 1 100vw',
   },
   h4: {
     fontSize: '2em',
@@ -93,14 +99,14 @@ const styles = {
     lineHeight: '1.25em',
     fontWeight: 200,
     padding: 0,
-    flex: '1 1 100vw'
+    flex: '1 1 100vw',
   },
   show: {
     opacity: 1,
-    transform: 'translateY(0em)'
+    transform: 'translateY(0em)',
   },
   hide: {
     opacity: 0,
-    transform: 'translateY(-3em)'
-  }
+    transform: 'translateY(-3em)',
+  },
 }

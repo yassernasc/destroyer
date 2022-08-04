@@ -4,7 +4,6 @@ import keycode from 'keycode'
 import { escape, filter as filterAction } from './reducer'
 import CloseButton from '../close-button'
 import { useAdminDisplay } from '../admin/useAdmin'
-import { escape as adminEscape } from '../admin/reducer'
 import { useFilter, useFilterActivated } from './useFilter'
 import { toggle } from '../player/reducer'
 
@@ -44,15 +43,13 @@ const FilterInput = () => {
 
   useEffect(() => setDisplay(filterActivated), [filterActivated])
 
-  const handleSearch = (event) => {
+  const handleSearch = event => {
     event.preventDefault()
     dispatch(filterAction(event.target.value))
   }
 
   return (
-    <form
-      css={[ styles.search, display ? styles.show : styles.hide]}
-    >
+    <form css={[styles.search, display ? styles.show : styles.hide]}>
       <CloseButton />
       <input
         ref={inputEl}
@@ -74,7 +71,7 @@ const styles = {
     zIndex: 30,
     width: '100vw',
     position: 'fixed',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   input: {
     display: 'block',
@@ -89,7 +86,7 @@ const styles = {
     marginBottom: '1em',
     transition: 'border .666s',
     color: 'white',
-    background: 'rgba(92, 67, 232, .8)'
+    background: 'rgba(92, 67, 232, .8)',
   },
   span: {
     position: 'absolute',
@@ -98,15 +95,14 @@ const styles = {
     padding: '1em',
     fontSize: '2em',
     cursor: 'pointer',
-    color: 'white'
+    color: 'white',
   },
   show: {
     opacity: 1,
-    transform: 'translateY(0em)'
+    transform: 'translateY(0em)',
   },
   hide: {
     opacity: 0,
-    transform: 'translateY(-5em)'
-  }
+    transform: 'translateY(-5em)',
+  },
 }
-

@@ -7,7 +7,12 @@ export const playerStatus = {
 }
 const { paused, playing, stopped } = playerStatus
 
-const initialState = { status: stopped, albumId: null, trackNumber: null, secondsPlayed: 0 }
+const initialState = {
+  status: stopped,
+  albumId: null,
+  trackNumber: null,
+  secondsPlayed: 0,
+}
 
 const playerSlice = createSlice({
   name: 'player',
@@ -41,10 +46,10 @@ const playerSlice = createSlice({
     tick(state, action) {
       state.secondsPlayed = action.payload
     },
-    stop(state) {
+    stop() {
       return initialState
     },
-  }
+  },
 })
 
 const previousTrack = () => (dispatch, getState) => {
@@ -63,6 +68,7 @@ const nextTrack = () => (dispatch, getState) => {
   dispatch(isPlayingLastTrack ? stop() : next())
 }
 
-const { playAlbum, playTrack, tick, toggle, next, previous, stop } = playerSlice.actions
+const { playAlbum, playTrack, tick, toggle, next, previous, stop } =
+  playerSlice.actions
 export { playAlbum, playTrack, tick, toggle, nextTrack, previousTrack, stop }
 export default playerSlice.reducer

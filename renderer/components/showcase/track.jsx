@@ -1,14 +1,9 @@
 const formatNumber = number => number.toString().padStart(2, '0')
 
-const Track = (props) => (
+const Track = props => (
   <li css={styles.li} onClick={() => props.onClick(props.number)}>
     <span css={styles.no}>{formatNumber(props.number)}</span>
-    <span
-      css={[
-        styles.span,
-        props.current ? styles.current : ''
-      ]}
-    >
+    <span css={[styles.span, props.current ? styles.current : '']}>
       {props.title}
     </span>
   </li>
@@ -24,17 +19,17 @@ const styles = {
     cursor: 'pointer',
     transition: 'background .25s',
     ':hover': {
-      background: 'rgba(92, 67, 232, .8)'
-    }
+      background: 'rgba(92, 67, 232, .8)',
+    },
   },
   no: {
-    padding: '0 .5em'
+    padding: '0 .5em',
   },
   span: {
     padding: '0 .25em',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   current: {
-    borderBottom: '2px solid white'
-  }
+    borderBottom: '2px solid white',
+  },
 }

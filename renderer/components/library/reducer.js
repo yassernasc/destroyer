@@ -7,8 +7,8 @@ const librarySlice = createSlice({
   reducers: {
     connected(state, action) {
       return action.payload
-    }
-  }
+    },
+  },
 })
 
 const { connected } = librarySlice.actions
