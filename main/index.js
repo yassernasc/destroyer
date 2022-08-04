@@ -4,8 +4,8 @@ const {default: installExtensions, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS} = requ
 const path = require('path')
 
 const LocalDisk = require('./services/local');
-const createMenu = require('./services/menu');
-const createTouchBar = require('./services/touchBar');
+const createMenu = require('./components/menu');
+const createTouchBar = require('./components/touchBar');
 
 let mainWindow
 

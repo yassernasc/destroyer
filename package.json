@@ -9,9 +9,7 @@
     "prebuild": "yarn run clean",
     "build": "webpack --progress --mode=development",
     "build:watch": "yarn run build -- --watch",
-    "start": "electron bundle/main.js",
-    "pack:osx": "rm -rf Destroyer-darwin-x64 && webpack --progress --mode=production && electron-packager ./ Destroyer --platform=darwin --arch=x64 --icon=icons.icns --prune",
-    "pack:win": "webpack --progress --mode=production && electron-packager ./ Destroyer --out=dist/windows --platform=win32 --arch=x64 --overwrite --icon=icons.ico --prune"
+    "start": "electron bundle/main.js"
   },
   "author": "omar mashaal",
   "license": "ISC",
@@ -35,9 +33,8 @@
     "@babel/preset-react": "^7.17.12",
     "@emotion/babel-plugin": "^11.9.2",
     "babel-loader": "^8.2.5",
-    "electron": "^12.2.3",
+    "electron": "^20.0.0",
     "electron-devtools-installer": "^3.2.0",
-    "electron-packager": "^8.6.0",
     "eslint": "^3.19.0",
     "eslint-config-standard": "^7.1.0",
     "eslint-config-standard-react": "^4.3.0",
@@ -56,6 +53,6 @@
     ]
   },
   "browserslist": [
-    "electron 12.2.3"
+    "electron 20.0.0"
   ]
 }
