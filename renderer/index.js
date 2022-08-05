@@ -2,13 +2,13 @@ import ReactDOM from 'react-dom'
 import { configureStore } from '@reduxjs/toolkit'
 import { Provider } from 'react-redux'
 
-import App from './components/app'
-import adminReducer from './components/admin/reducer.js'
-import filterReducer from './components/keyboard/reducer.js'
-import libraryReducer from './components/library/reducer.js'
-import loadingReducer from './components/loading/reducer.js'
-import playerReducer from './components/player/reducer.js'
-import showcaseReducer from './components/showcase/reducer.js'
+import { App } from './components/app'
+import adminReducer from './reducers/admin'
+import filterReducer from './reducers/keyboard'
+import libraryReducer from './reducers/library'
+import loadingReducer from './reducers/loading'
+import playerReducer from './reducers/player'
+import showcaseReducer from './reducers/showcase'
 
 export const store = configureStore({
   reducer: {

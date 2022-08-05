@@ -44,7 +44,7 @@ const rendererConfig = {
       },
       {
         test: /\.(png|woff2)$/,
-        type: 'asset/inline',
+        type: 'asset/resource',
       },
     ],
   },
