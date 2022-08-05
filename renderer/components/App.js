@@ -1,14 +1,14 @@
 import { Global } from '@emotion/react'
 
-import averiaSerif from '../assets/averia-serif.woff2'
-import { Loading } from './Loading'
 import { Admin } from './Admin'
 import { Bar } from './Bar'
 import { FilterInput } from './Keyboard'
-import { Status } from './Status'
 import { Library } from './Library'
-import { Showcase } from './Showcase'
+import { Loading } from './Loading'
 import { Player } from './Player'
+import { Showcase } from './Showcase'
+import { Status } from './Status'
+import averiaSerif from '../assets/averia-serif.woff2'
 
 export const App = () => (
   <>
@@ -25,33 +25,33 @@ export const App = () => (
 )
 
 const styles = {
-  html: {
-    textSizeAdjust: '100%',
-    WebkitFontSmoothing: 'antialiased',
-    '@font-face': {
-      fontFamily: 'averia-serif',
-      src: `url('${averiaSerif}')`,
-    },
+  '::selection': {
+    backgroundColor: 'rgba(92, 67, 232, 1)',
+    opacity: 0,
   },
   body: {
+    backgroundColor: '#212121',
+    color: 'white',
+    fontFamily:
+      'averia-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif',
+    lineHeight: 1.5,
     margin: 0,
     padding: 0,
-    lineHeight: 1.5,
-    fontFamily:
-      'averia-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif',
-    color: 'white',
-    backgroundColor: '#212121',
-  },
-  input: {
-    fontFamily:
-      'averia-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif',
   },
   button: {
     fontFamily:
       'averia-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif',
   },
-  '::selection': {
-    backgroundColor: 'rgba(92, 67, 232, 1)',
-    opacity: 0,
+  html: {
+    '@font-face': {
+      fontFamily: 'averia-serif',
+      src: `url('${averiaSerif}')`,
+    },
+    textSizeAdjust: '100%',
+    WebkitFontSmoothing: 'antialiased',
+  },
+  input: {
+    fontFamily:
+      'averia-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif',
   },
 }

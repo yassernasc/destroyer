@@ -10,14 +10,14 @@ const createMenu = window => {
             label: 'Destroyer',
             submenu: [
               {
-                label: 'Add Files...',
                 accelerator: 'Command+,',
                 click: () => window.webContents.send('add-files'),
+                label: 'Add Files...',
               },
               {
-                label: 'Quit',
                 accelerator: 'Command+Q',
                 click: () => app.quit(),
+                label: 'Quit',
               },
             ],
           },
@@ -27,27 +27,32 @@ const createMenu = window => {
       label: 'View',
       submenu: [
         {
-          label: 'Reload',
           accelerator: 'CmdOrCtrl+R',
           click(item, focusedWindow) {
-            if (focusedWindow) focusedWindow.reload()
+            if (focusedWindow) {
+              focusedWindow.reload()
+            }
           },
+          label: 'Reload',
         },
         {
-          label: 'Toggle Full Screen',
           accelerator: process.platform === 'darwin' ? 'Ctrl+Command+F' : 'F11',
           click(item, focusedWindow) {
-            if (focusedWindow)
+            if (focusedWindow) {
               focusedWindow.setFullScreen(!focusedWindow.isFullScreen())
+            }
           },
+          label: 'Toggle Full Screen',
         },
         {
-          label: 'Toggle Developer Tools',
           accelerator:
             process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
           click(item, focusedWindow) {
-            if (focusedWindow) focusedWindow.webContents.toggleDevTools()
+            if (focusedWindow) {
+              focusedWindow.webContents.toggleDevTools()
+            }
           },
+          label: 'Toggle Developer Tools',
         },
       ],
     },
@@ -56,13 +61,13 @@ const createMenu = window => {
       role: 'window',
       submenu: [
         {
-          label: 'Minimize',
           accelerator: 'CmdOrCtrl+M',
+          label: 'Minimize',
           role: 'minimize',
         },
         {
-          label: 'Close',
           accelerator: 'CmdOrCtrl+W',
+          label: 'Close',
           role: 'close',
         },
         ...(isMac

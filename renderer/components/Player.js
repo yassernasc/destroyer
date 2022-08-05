@@ -1,10 +1,9 @@
-import { useRef, useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 
-import { Playbar } from './Playbar'
-import { usePlayingTrack } from '../hooks/usePlayingTrack'
-import { usePlayerStatus } from '../hooks/usePlayerStatus'
 import { nextTrack, playerStatus, tick } from '../reducers/player'
+import { usePlayerStatus, usePlayingTrack } from '../hooks'
+import { Playbar } from './Playbar'
 
 export const Player = () => {
   const dispatch = useDispatch()
@@ -26,12 +25,18 @@ export const Player = () => {
   }, [track])
 
   useEffect(() => {
-    if (status === playerStatus.playing) play()
-    if (status === playerStatus.paused) pause()
+    if (status === playerStatus.playing) {
+      play()
+    }
+    if (status === playerStatus.paused) {
+      pause()
+    }
   }, [status])
 
   const play = () => {
-    if (audioEl.current.src) audioEl.current.play()
+    if (audioEl.current.src) {
+      audioEl.current.play()
+    }
   }
 
   const pause = () => audioEl.current.pause()

@@ -1,16 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const adminSlice = createSlice({
-  name: 'admin',
   initialState: { display: false },
+  name: 'admin',
   reducers: {
     admin(state) {
       state.display = !state.display
     },
-    escape(state) {
+    drop(state) {
       state.display = false
     },
-    drop(state) {
+    escape(state) {
       state.display = false
     },
   },

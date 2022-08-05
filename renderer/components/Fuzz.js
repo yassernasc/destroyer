@@ -37,7 +37,9 @@ export const Fuzz = () => {
 
   const draw = () => {
     requestAnimationFrame(draw)
-    if (window.throttle) return
+    if (window.throttle) {
+      return
+    }
     window.throttle = true
     setInterval(() => (window.throttle = false), 250)
     path.current.removeSegments()
@@ -67,13 +69,13 @@ export const Fuzz = () => {
       height="100%"
       width="100%"
       css={{
-        opacity: 0.8,
-        width: '100%',
-        pointerEvents: 'none',
         height: '100%',
+        left: 0,
+        opacity: 0.8,
+        pointerEvents: 'none',
         position: 'absolute',
         top: 0,
-        left: 0,
+        width: '100%',
         zIndex: 4,
       }}
     />

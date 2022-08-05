@@ -1,15 +1,13 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import { usePlayingTrack } from '../hooks/usePlayingTrack'
-import { usePlayerTime } from '../hooks/usePlayerTime'
-import { usePlayerStatus } from '../hooks/usePlayerStatus'
 import {
+  nextTrack,
   playerStatus,
   previousTrack,
-  nextTrack,
   toggle as toggleAction,
 } from '../reducers/player'
+import { usePlayerStatus, usePlayerTime, usePlayingTrack } from '../hooks'
 
 export const Playbar = ({ updateTime }) => {
   const dispatch = useDispatch()
@@ -53,10 +51,10 @@ export const Playbar = ({ updateTime }) => {
     <div css={[styles.playbar, display ? styles.show : styles.hide]}>
       <div
         css={{
-          position: 'relative',
-          height: 40,
-          width: '100%',
           cursor: 'none',
+          height: 40,
+          position: 'relative',
+          width: '100%',
         }}
         onMouseMove={handleMove}
         onMouseOver={() => setHover(true)}
@@ -89,73 +87,73 @@ export const Playbar = ({ updateTime }) => {
 }
 
 const styles = {
-  playbar: {
-    position: 'fixed',
-    pointerEvents: 'none',
-    opacity: 0,
-    bottom: 0,
-    height: 85,
-    zIndex: 10,
-    WebkitUserSelect: 'none',
-    width: '100%',
-    transition: '.666s',
-  },
-  slider: {
-    position: 'absolute',
-    width: 4,
-    transition: 'opacity .666s',
-    height: 40,
-    background: 'white',
-    top: 0,
-    zIndex: 69,
-  },
-  panel: {
-    height: 45,
-    width: '100%',
-    position: 'absolute',
-    textAlign: 'center',
-    top: 40,
-    borderTop: '2px solid #212121',
-    background: 'rgba(33,33,33,.666)',
-    lineHeight: '40px',
-    fontSize: '1.5em',
-    fontWeight: 200,
-    fontStyle: 'italic',
-  },
-  span: {
-    display: 'inline-block',
-    padding: '0 0em 1em',
-    width: '200px',
-    cursor: 'pointer',
-    transition: '.5s',
-    ':hover': {
-      background: 'rgba(92, 67, 232, .8)',
-    },
-  },
-  range: {
-    height: 40,
-    top: 0,
-    left: 0,
-    pointerEvents: 'none',
-    background: 'rgba(92, 67, 232, 1)',
-    transition: 'width .25s linear',
-    width: 0,
-    position: 'absolute',
-  },
   buffer: {
-    height: 40,
-    width: '100vw',
-    top: 0,
-    position: 'absolute',
     background: 'rgba(92, 67, 232, 0.666)',
+    height: 40,
+    position: 'absolute',
+    top: 0,
+    width: '100vw',
     zIndex: 20,
-  },
-  show: {
-    transform: 'translateY(0em)',
-    opacity: 1,
-    pointerEvents: 'auto',
   },
   hide: {
     transform: 'translateY(3em)',
+  },
+  panel: {
+    background: 'rgba(33,33,33,.666)',
+    borderTop: '2px solid #212121',
+    fontSize: '1.5em',
+    fontStyle: 'italic',
+    fontWeight: 200,
+    height: 45,
+    lineHeight: '40px',
+    position: 'absolute',
+    textAlign: 'center',
+    top: 40,
+    width: '100%',
+  },
+  playbar: {
+    bottom: 0,
+    height: 85,
+    opacity: 0,
+    pointerEvents: 'none',
+    position: 'fixed',
+    transition: '.666s',
+    WebkitUserSelect: 'none',
+    width: '100%',
+    zIndex: 10,
+  },
+  range: {
+    background: 'rgba(92, 67, 232, 1)',
+    height: 40,
+    left: 0,
+    pointerEvents: 'none',
+    position: 'absolute',
+    top: 0,
+    transition: 'width .25s linear',
+    width: 0,
+  },
+  show: {
+    opacity: 1,
+    pointerEvents: 'auto',
+    transform: 'translateY(0em)',
+  },
+  slider: {
+    background: 'white',
+    height: 40,
+    position: 'absolute',
+    top: 0,
+    transition: 'opacity .666s',
+    width: 4,
+    zIndex: 69,
+  },
+  span: {
+    ':hover': {
+      background: 'rgba(92, 67, 232, .8)',
+    },
+    cursor: 'pointer',
+    display: 'inline-block',
+    padding: '0 0em 1em',
+    transition: '.5s',
+    width: '200px',
   },
 }

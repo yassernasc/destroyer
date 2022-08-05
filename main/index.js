@@ -15,21 +15,21 @@ let mainWindow
 
 const createWindow = () => {
   let mainWindowState = windowStateKeeper({
-    defaultWidth: 1200,
     defaultHeight: 800,
+    defaultWidth: 1200,
   })
   mainWindow = new BrowserWindow({
-    x: mainWindowState.x,
-    y: mainWindowState.y,
-    width: mainWindowState.width,
-    height: mainWindowState.height,
-    titleBarStyle: 'hidden',
     darkTheme: true,
+    height: mainWindowState.height,
     show: false,
+    titleBarStyle: 'hidden',
     webPreferences: {
       backgroundThrottling: false,
       preload: path.join(__dirname, 'preload.js'),
     },
+    width: mainWindowState.width,
+    x: mainWindowState.x,
+    y: mainWindowState.y,
   })
   mainWindowState.manage(mainWindow)
   mainWindow.loadFile('index.html')

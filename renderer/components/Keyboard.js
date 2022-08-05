@@ -1,12 +1,10 @@
 import { useEffect, useRef } from 'react'
-import { useDispatch } from 'react-redux'
 import keycode from 'keycode'
+import { useDispatch } from 'react-redux'
 
-import { CloseButton } from './Close-Button'
-import { useAdminDisplay } from '../hooks/useAdminDisplay'
-import { useFilter } from '../hooks/useFilter'
-import { useIsFilterActive } from '../hooks/useIsFilterActive'
 import { escape, filter as filterAction } from '../reducers/keyboard'
+import { useAdminDisplay, useFilter, useIsFilterActive } from '../hooks'
+import { CloseButton } from './Close-Button'
 import { toggle } from '../reducers/player'
 
 const isAlphanumeric = keyCode => keyCode >= 48 && keyCode <= 90
@@ -62,44 +60,44 @@ export const FilterInput = () => {
 }
 
 const styles = {
-  search: {
-    display: 'block',
-    transition: '.25s',
-    zIndex: 30,
-    width: '100vw',
-    position: 'fixed',
-    textAlign: 'left',
+  hide: {
+    opacity: 0,
+    transform: 'translateY(-5em)',
   },
   input: {
-    display: 'block',
-    width: '100%',
     appearance: 'none',
+    background: 'rgba(92, 67, 232, .8)',
     border: 'none',
     boxShadow: 'none',
-    outline: 'none',
+    color: 'white',
+    display: 'block',
     fontFamily: 'AveriaSerif-Light',
-    padding: '1em',
     fontSize: '2em',
     marginBottom: '1em',
-    transition: 'border .666s',
-    color: 'white',
-    background: 'rgba(92, 67, 232, .8)',
-  },
-  span: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
+    outline: 'none',
     padding: '1em',
-    fontSize: '2em',
-    cursor: 'pointer',
-    color: 'white',
+    transition: 'border .666s',
+    width: '100%',
+  },
+  search: {
+    display: 'block',
+    position: 'fixed',
+    textAlign: 'left',
+    transition: '.25s',
+    width: '100vw',
+    zIndex: 30,
   },
   show: {
     opacity: 1,
     transform: 'translateY(0em)',
   },
-  hide: {
-    opacity: 0,
-    transform: 'translateY(-5em)',
+  span: {
+    color: 'white',
+    cursor: 'pointer',
+    fontSize: '2em',
+    padding: '1em',
+    position: 'absolute',
+    right: 0,
+    top: 0,
   },
 }

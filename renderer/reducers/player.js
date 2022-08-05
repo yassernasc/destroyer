@@ -8,16 +8,22 @@ export const playerStatus = {
 const { paused, playing, stopped } = playerStatus
 
 const initialState = {
-  status: stopped,
   albumId: null,
-  trackNumber: null,
   secondsPlayed: 0,
+  status: stopped,
+  trackNumber: null,
 }
 
 const playerSlice = createSlice({
-  name: 'player',
   initialState,
+  name: 'player',
   reducers: {
+    next(state) {
+      state.trackNumber++
+      if (state.status !== playing) {
+        state.status = playing
+      }
+    },
     playAlbum(state, action) {
       state.albumId = action.payload
       state.trackNumber = 1
@@ -28,28 +34,22 @@ const playerSlice = createSlice({
       state.trackNumber = action.payload.trackNumber
       state.status = playing
     },
-    toggle(state) {
-      state.status = state.status === playing ? paused : playing
-    },
-    next(state) {
-      state.trackNumber++
-      if (state.status !== playing) {
-        state.status = playing
-      }
-    },
     previous(state) {
       state.trackNumber--
       if (state.status !== playing) {
         state.status = playing
       }
     },
+    stop() {
+      return initialState
+    },
     tick(state, action) {
       if (state.status === playing) {
         state.secondsPlayed = action.payload
       }
     },
-    stop() {
-      return initialState
+    toggle(state) {
+      state.status = state.status === playing ? paused : playing
     },
   },
 })

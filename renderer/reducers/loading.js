@@ -1,14 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const loadingSlice = createSlice({
-  name: 'loading',
   initialState: { message: '' },
+  name: 'loading',
   reducers: {
-    scanning(state, action) {
-      state.message = action.payload
-    },
     reset(state) {
       state.message = ''
+    },
+    scanning(state, action) {
+      state.message = action.payload
     },
   },
 })

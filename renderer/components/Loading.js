@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { scanning } from '../reducers/loading'
-import { useLoadingMessage } from '../hooks/useLoadingMessage'
+import { useLoadingMessage } from '../hooks'
 
 export const Loading = () => {
   const [display, setDisplay] = useState(false)
@@ -25,27 +25,27 @@ export const Loading = () => {
 
 const styles = {
   base: {
-    display: 'flex',
-    height: '100vh',
-    width: '100vw',
-    backgroundColor: 'rgba(92, 67, 232, .8)',
-    position: 'fixed',
-    pointerEvents: 'none',
-    zIndex: 60,
-    transition: '.5s',
     alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: 'rgba(92, 67, 232, .8)',
+    display: 'flex',
     fontSize: '120%',
+    height: '100vh',
+    justifyContent: 'center',
+    pointerEvents: 'none',
+    position: 'fixed',
+    transition: '.5s',
+    width: '100vw',
+    zIndex: 60,
   },
-  span: {
-    margin: 'auto',
+  hide: {
+    opacity: 0,
+    pointerEvents: 'none',
   },
   show: {
     opacity: 1,
     pointerEvents: 'auto',
   },
-  hide: {
-    opacity: 0,
-    pointerEvents: 'none',
+  span: {
+    margin: 'auto',
   },
 }

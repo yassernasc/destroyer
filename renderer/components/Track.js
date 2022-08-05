@@ -10,24 +10,24 @@ export const Track = props => (
 )
 
 const styles = {
+  current: {
+    borderBottom: '2px solid white',
+  },
   li: {
-    display: 'block',
-    margin: 0,
-    padding: '.5em 1em',
-    cursor: 'pointer',
-    transition: 'background .25s',
     ':hover': {
       background: 'rgba(92, 67, 232, .8)',
     },
+    cursor: 'pointer',
+    display: 'block',
+    margin: 0,
+    padding: '.5em 1em',
+    transition: 'background .25s',
   },
   no: {
     padding: '0 .5em',
   },
   span: {
-    padding: '0 .25em',
     fontWeight: 'bold',
-  },
-  current: {
-    borderBottom: '2px solid white',
+    padding: '0 .25em',
   },
 }

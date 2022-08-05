@@ -14,31 +14,26 @@ const mainConfig = {
 
 const rendererConfig = {
   entry: './renderer',
-  output: {
-    path: path.join(__dirname, 'bundle'),
-    filename: 'destroyer.js',
-  },
-  target: 'electron-renderer',
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
+        test: /\.(js|jsx)$/,
         use: {
           loader: 'babel-loader',
           options: {
             cacheDirectory: true,
+            plugins: ['@emotion/babel-plugin'],
             presets: [
               '@babel/preset-env',
               [
                 '@babel/preset-react',
                 {
-                  runtime: 'automatic',
                   importSource: '@emotion/react',
+                  runtime: 'automatic',
                 },
               ],
             ],
-            plugins: ['@emotion/babel-plugin'],
           },
         },
       },
@@ -48,14 +43,19 @@ const rendererConfig = {
       },
     ],
   },
-  resolve: {
-    extensions: ['.js', '.jsx'],
+  output: {
+    filename: 'destroyer.js',
+    path: path.join(__dirname, 'bundle'),
   },
   plugins: [
     new HtmlWebpackPlugin({
       templateContent: `<html><body><div id="root"></div></body></html>`,
     }),
   ],
+  resolve: {
+    extensions: ['.js', '.jsx'],
+  },
+  target: 'electron-renderer',
 }
 
 module.exports = [mainConfig, rendererConfig]

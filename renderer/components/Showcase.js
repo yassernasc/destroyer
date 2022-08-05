@@ -1,14 +1,16 @@
-import { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useEffect, useState } from 'react'
 import { keyframes } from '@emotion/react'
+import { useDispatch } from 'react-redux'
 
-import { Track } from './Track'
-import { useIsShowcasePlaying } from '../hooks/useIsShowcasePlaying'
-import { usePlayingTrack } from '../hooks/usePlayingTrack'
-import { useAlbumAtShowcase } from '../hooks/useAlbumAtShowcase'
 import { playAlbum, playTrack } from '../reducers/player'
-import { close as closeAction } from '../reducers/showcase'
+import {
+  useAlbumAtShowcase,
+  useIsShowcasePlaying,
+  usePlayingTrack,
+} from '../hooks'
+import { Track } from './Track'
 import close from '../assets/close.png'
+import { close as closeAction } from '../reducers/showcase'
 import play from '../assets/play.png'
 
 export const Showcase = () => {
@@ -74,74 +76,74 @@ const rotateKeyframes = keyframes({
 })
 
 const styles = {
-  showcase: {
-    display: 'block',
-    position: 'fixed',
-    WebkitUserSelect: 'none',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    zIndex: 5,
-    transform: 'translate3d(0, 0, 0)',
-    transition: 'opacity .666s',
-    background: 'rgba(33, 33, 33, .8)',
-  },
-  figure: {
-    width: '100vw',
-    transition: 'transform 1s',
-    cursor: `url('${close}') 32 32, alias`,
-    perspective: '100vw',
-    position: 'absolute',
-    margin: 0,
-    padding: 0,
-    top: 0,
-    transformStyle: 'preserve-3d',
-    height: '100vh',
+  article: {
+    animation: 'x 5s infinite alternate ease-in-out',
+    animationName: rotateKeyframes,
+    backfaceVisibility: 'hidden',
+    backgroundPosition: 'center center',
+    backgroundSize: 'cover',
+    cursor: `url('${play}') 32 32, pointer`,
+    height: '66vh',
+    margin: '17vh auto',
+    perspective: 500,
+    width: '66vh',
   },
   bottom: {
     transform: 'translateY(12.5vh)',
   },
-  top: {
-    transform: 'translateY(0)',
+  figure: {
+    cursor: `url('${close}') 32 32, alias`,
+    height: '100vh',
+    margin: 0,
+    padding: 0,
+    perspective: '100vw',
+    position: 'absolute',
+    top: 0,
+    transformStyle: 'preserve-3d',
+    transition: 'transform 1s',
+    width: '100vw',
   },
-  article: {
-    margin: '17vh auto',
-    width: '66vh',
-    backfaceVisibility: 'hidden',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center center',
-    height: '66vh',
-    cursor: `url('${play}') 32 32, pointer`,
-    perspective: 500,
-    animation: 'x 5s infinite alternate ease-in-out',
-    animationName: rotateKeyframes,
+  hide: {
+    opacity: 0,
+    pointerEvents: 'none',
   },
   ol: {
-    position: 'fixed',
-    bottom: 0,
-    overflow: 'auto',
-    listStyle: 'none',
-    width: '100vw',
-    height: 'calc(50vh - 100px)',
-    margin: 0,
-    padding: '0 0 100px',
-    transitionDuration: '1s',
-    transitionDelay: '.5s',
     background: 'rgba(33, 33, 33, .75)',
+    bottom: 0,
+    height: 'calc(50vh - 100px)',
+    listStyle: 'none',
+    margin: 0,
     opacity: 0,
+    overflow: 'auto',
+    padding: '0 0 100px',
+    position: 'fixed',
     transform: 'translateY(12.5vh)',
-  },
-  slide: {
-    opacity: 1,
-    transform: 'translateY(0)',
+    transitionDelay: '.5s',
+    transitionDuration: '1s',
+    width: '100vw',
   },
   show: {
     opacity: 1,
     pointerEvents: 'auto',
   },
-  hide: {
-    opacity: 0,
-    pointerEvents: 'none',
+  showcase: {
+    background: 'rgba(33, 33, 33, .8)',
+    bottom: 0,
+    display: 'block',
+    left: 0,
+    position: 'fixed',
+    right: 0,
+    top: 0,
+    transform: 'translate3d(0, 0, 0)',
+    transition: 'opacity .666s',
+    WebkitUserSelect: 'none',
+    zIndex: 5,
+  },
+  slide: {
+    opacity: 1,
+    transform: 'translateY(0)',
+  },
+  top: {
+    transform: 'translateY(0)',
   },
 }

@@ -17,24 +17,24 @@ export const CloseButton = () => {
 
 const styles = {
   base: {
-    width: '1em',
-    height: '1em',
-    fontSize: '200%',
-    position: 'fixed',
-    fontWeight: '200',
-    top: '1em',
-    cursor: 'pointer',
-    right: '1em',
-    zIndex: 80,
     color: 'white',
+    cursor: 'pointer',
+    fontSize: '200%',
+    fontWeight: '200',
+    height: '1em',
+    position: 'fixed',
+    right: '1em',
+    top: '1em',
+    width: '1em',
+    zIndex: 80,
   },
   svg: {
-    width: '1em',
-    height: '1em',
-    fill: 'white',
-    transition: '.5s',
     ':hover': {
       fill: 'red',
     },
+    fill: 'white',
+    height: '1em',
+    transition: '.5s',
+    width: '1em',
   },
 }

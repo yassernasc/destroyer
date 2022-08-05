@@ -1,28 +1,33 @@
 module.exports = {
-  root: true,
-  parserOptions: { ecmaVersion: 'latest' },
+  ignorePatterns: ['bundle/'],
   overrides: [
     {
-      files: ['renderer/**/*.js', 'renderer/**/*.jsx'],
-      parser: '@babel/eslint-parser',
-      parserOptions: {
-        requireConfigFile: false,
-        babelOptions: { presets: ['@babel/preset-env', '@babel/preset-react'] },
-      },
       env: { browser: true },
       extends: [
         'eslint:recommended',
         'plugin:react/recommended',
         'plugin:react/jsx-runtime',
       ],
+      files: ['renderer/**/*.js', 'renderer/**/*.jsx'],
+      parser: '@babel/eslint-parser',
+      parserOptions: {
+        babelOptions: { presets: ['@babel/preset-env', '@babel/preset-react'] },
+        requireConfigFile: false,
+      },
       settings: { react: { version: 'detect' } },
     },
     {
-      files: ['main/**/*.js'],
       env: { node: true },
       extends: ['eslint:recommended', 'plugin:node/recommended'],
+      files: ['main/**/*.js'],
       parserOptions: { ecmaVersion: 2022 },
     },
   ],
-  ignorePatterns: ['bundle/'],
+  parserOptions: { ecmaVersion: 'latest' },
+  root: true,
+  rules: {
+    curly: 'warn',
+    'sort-imports': ['warn', { allowSeparatedGroups: true }],
+    'sort-keys': ['warn', 'asc', { caseSensitive: false }],
+  },
 }

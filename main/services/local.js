@@ -30,7 +30,9 @@ class LocalDisk {
         trackNumber: metadata.common.track.no,
       })
 
-      if (err) throw err
+      if (err) {
+        throw err
+      }
 
       if (dirent.isDirectory() && dirent.name.startsWith('.')) {
         return false
@@ -80,11 +82,11 @@ class LocalDisk {
         `SCANNING: ${trackInfo.artist} - ${trackInfo.album}`
       )
       return {
+        artist: trackInfo.artist,
+        cover: null,
         id: nanoid(),
         title: trackInfo.album,
-        artist: trackInfo.artist,
         tracks: [track],
-        cover: null,
       }
     }
 

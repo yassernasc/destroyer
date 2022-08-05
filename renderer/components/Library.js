@@ -1,8 +1,7 @@
 import { useRef } from 'react'
 
+import { useFilteredLibrary, usePlayerStatus } from '../hooks'
 import { Album } from './Album'
-import { usePlayerStatus } from '../hooks/usePlayerStatus'
-import { useFilteredLibrary } from '../hooks/useFilteredLibrary'
 import { playerStatus } from '../reducers/player'
 
 export const Library = () => {
@@ -39,23 +38,23 @@ export const Library = () => {
 
 const styles = {
   base: {
+    bottom: 0,
+    boxSizing: 'border-box',
     display: 'flex',
     flexWrap: 'wrap',
-    boxSizing: 'border-box',
-    position: 'fixed',
-    bottom: 0,
-    width: '100vw',
     height: '100vh',
-    margin: 0,
-    WebkitUserSelect: 'none',
     listStyle: 'none',
+    margin: 0,
     overflow: 'scroll',
-    transition: 'padding .5s',
+    position: 'fixed',
     transform: 'translate3d(0, 0, 0)',
+    transition: 'padding .5s',
+    WebkitUserSelect: 'none',
+    width: '100vw',
   },
   li: {
     flex: '1 1 250px',
-    padding: '1em 2em',
     order: 10,
+    padding: '1em 2em',
   },
 }

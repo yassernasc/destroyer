@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import { useAdminDisplay } from '../hooks/useAdminDisplay'
 import { admin as adminAction, drop } from '../reducers/admin'
 import { connect } from '../reducers/library'
+import { useAdminDisplay } from '../hooks'
 
 export const Admin = () => {
   const dispatch = useDispatch()
@@ -56,31 +56,31 @@ export const Admin = () => {
 
 const styles = {
   drop: {
-    display: 'flex',
-    position: 'fixed',
-    boxSizing: 'border-box',
     backgroundColor: 'rgba(92, 67, 232, .8)',
-    top: '0vh',
-    left: '0vw',
-    width: '100vw',
+    boxSizing: 'border-box',
+    display: 'flex',
     height: '100vh',
-    padding: 0,
+    left: '0vw',
     margin: 0,
-    zIndex: 40,
+    padding: 0,
+    position: 'fixed',
+    top: '0vh',
     transition: '.25s',
-  },
-  span: {
-    margin: 'auto',
-    fontSize: '2em',
-    borderBottom: '2px solid white',
-    pointerEvents: 'none',
-  },
-  show: {
-    pointerEvents: 'auto',
-    opacity: 1,
+    width: '100vw',
+    zIndex: 40,
   },
   hide: {
     opacity: 0,
+    pointerEvents: 'none',
+  },
+  show: {
+    opacity: 1,
+    pointerEvents: 'auto',
+  },
+  span: {
+    borderBottom: '2px solid white',
+    fontSize: '2em',
+    margin: 'auto',
     pointerEvents: 'none',
   },
 }

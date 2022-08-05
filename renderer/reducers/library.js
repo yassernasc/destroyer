@@ -2,8 +2,8 @@ import { createSlice } from '@reduxjs/toolkit'
 import { reset } from './loading'
 
 const librarySlice = createSlice({
-  name: 'library',
   initialState: [],
+  name: 'library',
   reducers: {
     connected(state, action) {
       return action.payload

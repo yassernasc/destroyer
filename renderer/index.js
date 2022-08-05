@@ -1,6 +1,6 @@
+import { Provider } from 'react-redux'
 import ReactDOM from 'react-dom'
 import { configureStore } from '@reduxjs/toolkit'
-import { Provider } from 'react-redux'
 
 import { App } from './components/app'
 import adminReducer from './reducers/admin'

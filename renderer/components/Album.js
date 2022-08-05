@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from 'react'
-import { useDispatch } from 'react-redux'
+import { useEffect, useRef, useState } from 'react'
 import inView from 'in-view'
+import { useDispatch } from 'react-redux'
 
 import { showcase } from '../reducers/showcase'
 
@@ -11,7 +11,9 @@ const rafThrottle = callback => {
     callback(...args)
   }
   const throttled = (...args) => {
-    if (requestId == null) requestId = window.requestAnimationFrame(later(args))
+    if (requestId == null) {
+      requestId = window.requestAnimationFrame(later(args))
+    }
   }
   throttled.cancel = () => window.cancelAnimationFrame(requestId)
   return throttled
@@ -63,39 +65,39 @@ export const Album = props => {
 }
 
 const styles = {
-  base: {
-    flex: '1 1 250px',
-    padding: '1em 2em',
-    lineHeight: '1.5em',
-    cursor: 'pointer',
-  },
-  cover: {
-    height: 0,
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center center',
-    backgroundColor: '#2b2b2b',
-    paddingTop: '100%',
-    transition: 'transform .25s, opacity .25s',
-    border: '2px solid #181818',
-    marginBottom: '.5em',
-    transform: 'scale(0.98)',
-  },
   active: {
     borderBottom: '2px solid rgba(92, 67, 232, .8)',
   },
-  zoom: {
-    transform: 'scale(1)',
-    border: '2px solid rgba(92, 67, 232, .8)',
+  base: {
+    cursor: 'pointer',
+    flex: '1 1 250px',
+    lineHeight: '1.5em',
+    padding: '1em 2em',
   },
-  nonfade: {
-    transitionDuration: '.5s',
-    transitionDelay: '.25s',
-    willChange: 'transform',
+  cover: {
+    backgroundColor: '#2b2b2b',
+    backgroundPosition: 'center center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    border: '2px solid #181818',
+    height: 0,
+    marginBottom: '.5em',
+    paddingTop: '100%',
+    transform: 'scale(0.98)',
+    transition: 'transform .25s, opacity .25s',
   },
   fade: {
     opacity: 0,
     transform: 'scale(.9)',
     willChange: 'transform',
+  },
+  nonfade: {
+    transitionDelay: '.25s',
+    transitionDuration: '.5s',
+    willChange: 'transform',
+  },
+  zoom: {
+    border: '2px solid rgba(92, 67, 232, .8)',
+    transform: 'scale(1)',
   },
 }

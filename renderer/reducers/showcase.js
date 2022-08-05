@@ -1,14 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const showcaseSlice = createSlice({
-  name: 'showcase',
   initialState: { albumId: null },
+  name: 'showcase',
   reducers: {
-    showcase(state, action) {
-      state.albumId = action.payload
-    },
     close(state) {
       state.albumId = null
+    },
+    showcase(state, action) {
+      state.albumId = action.payload
     },
   },
 })
