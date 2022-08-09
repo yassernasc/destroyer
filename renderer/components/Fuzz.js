@@ -65,9 +65,6 @@ export const Fuzz = () => {
 
   return (
     <canvas
-      ref={canvasEl}
-      height="100%"
-      width="100%"
       css={{
         height: '100%',
         left: 0,
@@ -78,6 +75,9 @@ export const Fuzz = () => {
         width: '100%',
         zIndex: 4,
       }}
+      height="100%"
+      ref={canvasEl}
+      width="100%"
     />
   )
 }

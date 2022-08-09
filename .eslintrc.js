@@ -14,6 +14,10 @@ module.exports = {
         babelOptions: { presets: ['@babel/preset-env', '@babel/preset-react'] },
         requireConfigFile: false,
       },
+      rules: {
+        'react/jsx-sort-props': 'warn',
+        'react/prop-types': 'warn',
+      },
       settings: { react: { version: 'detect' } },
     },
     {

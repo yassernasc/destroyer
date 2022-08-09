@@ -1,14 +1,14 @@
 export const Input = props => (
   <div css={styles.base}>
-    <div css={{ padding: '0 .5em' }}>
+    <div css={styles.inputContainer}>
       {props.label && <label css={styles.label}>{props.label}</label>}
       <input
-        type={props.type || 'text'}
         css={styles.input}
-        required={props.required}
-        value={props.value}
-        onChange={props.onChange}
         data-label={props.label}
+        onChange={props.onChange}
+        required={props.required}
+        type={props.type || 'text'}
+        value={props.value}
       />
     </div>
   </div>
@@ -36,6 +36,9 @@ const styles = {
     padding: '.5em',
     transition: 'border .666s',
     width: '100%',
+  },
+  inputContainer: {
+    padding: '0 .5em',
   },
   label: {
     display: 'block',

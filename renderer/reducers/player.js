@@ -8,10 +8,10 @@ export const playerStatus = {
 const { paused, playing, stopped } = playerStatus
 
 const initialState = {
-  albumId: null,
+  queue: [],
+  queueIndex: null,
   secondsPlayed: 0,
   status: stopped,
-  trackNumber: null,
 }
 
 const playerSlice = createSlice({
@@ -19,34 +19,37 @@ const playerSlice = createSlice({
   name: 'player',
   reducers: {
     next(state) {
-      state.trackNumber++
+      state.queueIndex++
       if (state.status !== playing) {
         state.status = playing
       }
     },
-    playAlbum(state, action) {
-      state.albumId = action.payload
-      state.trackNumber = 1
-      state.status = playing
+    playIndex(state, action) {
+      state.queueIndex = action.payload
+      if (state.status !== playing) {
+        state.status = playing
+      }
     },
-    playTrack(state, action) {
-      state.albumId = action.payload.albumId
-      state.trackNumber = action.payload.trackNumber
-      state.status = playing
+    playQueue(state, action) {
+      state.queue = action.payload.queue
+      state.queueIndex = action.payload.queueIndex
+      if (state.status !== playing) {
+        state.status = playing
+      }
     },
     previous(state) {
-      state.trackNumber--
+      state.queueIndex--
       if (state.status !== playing) {
         state.status = playing
       }
     },
-    stop() {
-      return initialState
+    stop(state) {
+      state.queue = []
+      state.queueIndex = null
+      state.status = stopped
     },
     tick(state, action) {
-      if (state.status === playing) {
-        state.secondsPlayed = action.payload
-      }
+      state.secondsPlayed = action.payload
     },
     toggle(state) {
       state.status = state.status === playing ? paused : playing
@@ -55,22 +58,43 @@ const playerSlice = createSlice({
 })
 
 const previousTrack = () => (dispatch, getState) => {
-  const { trackNumber } = getState().player
-  const isFirstTrack = trackNumber === 1
+  const { queueIndex } = getState().player
+  const isFirstTrack = queueIndex === 0
+
   dispatch(isFirstTrack ? stop() : previous())
 }
 
 const nextTrack = () => (dispatch, getState) => {
-  const state = getState()
-  const playingAlbumId = state.player.albumId
-  const album = state.library.find(album => album.id === playingAlbumId)
-  const lastTrack = [...album.tracks].pop()
-  const isPlayingLastTrack = lastTrack.trackNumber === state.player.trackNumber
+  const { queue, queueIndex } = getState().player
+  const isLastTrack = queueIndex === queue.length - 1
 
-  dispatch(isPlayingLastTrack ? stop() : next())
+  dispatch(isLastTrack ? stop() : next())
 }
 
-const { playAlbum, playTrack, tick, toggle, next, previous, stop } =
+const playTrack = trackId => (dispatch, getState) => {
+  const { queue } = getState().player
+  const indexInQueue = queue.indexOf(trackId)
+
+  if (indexInQueue !== -1) {
+    dispatch(playIndex(indexInQueue))
+  } else {
+    // not in the current queue, so, play album
+    const { albums, tracks } = getState().library
+    const album = albums[tracks[trackId].albumId]
+    const trackIndex = album.tracks.indexOf(trackId)
+
+    dispatch(playAlbum(album.id, trackIndex))
+  }
+}
+
+const playAlbum =
+  (albumId, index = 0) =>
+  (dispatch, getState) => {
+    const { tracks } = getState().library.albums[albumId]
+    dispatch(playQueue({ queue: tracks, queueIndex: index }))
+  }
+
+const { playIndex, playQueue, tick, toggle, next, previous, stop } =
   playerSlice.actions
-export { playAlbum, playTrack, tick, toggle, nextTrack, previousTrack, stop }
+export { playAlbum, playTrack, nextTrack, previousTrack, stop, tick, toggle }
 export default playerSlice.reducer

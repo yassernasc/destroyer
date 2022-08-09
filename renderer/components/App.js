@@ -2,7 +2,7 @@ import { Global } from '@emotion/react'
 
 import { Admin } from './Admin'
 import { Bar } from './Bar'
-import { FilterInput } from './Keyboard'
+import { FilterInput } from './FilterInput'
 import { Library } from './Library'
 import { Loading } from './Loading'
 import { Player } from './Player'
@@ -45,7 +45,7 @@ const styles = {
   html: {
     '@font-face': {
       fontFamily: 'averia-serif',
-      src: `url('${averiaSerif}')`,
+      src: `url(${averiaSerif})`,
     },
     textSizeAdjust: '100%',
     WebkitFontSmoothing: 'antialiased',

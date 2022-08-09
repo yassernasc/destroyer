@@ -11,16 +11,16 @@ export const Library = () => {
 
   return (
     <ul
-      ref={libraryEl}
       css={[
         styles.base,
         status !== playerStatus.stopped
-          ? { padding: '12.5vh 0 33vh' }
-          : { padding: '2em 0 33vh' },
+          ? styles.largerPadding
+          : styles.normalPadding,
       ]}
+      ref={libraryEl}
     >
-      {library.map((album, index) => (
-        <Album album={album} key={index} container={libraryEl.current} />
+      {library.map(album => (
+        <Album album={album} container={libraryEl.current} key={album.id} />
       ))}
       <li css={styles.li} />
       <li css={styles.li} />
@@ -52,9 +52,11 @@ const styles = {
     WebkitUserSelect: 'none',
     width: '100vw',
   },
+  largerPadding: { padding: '12.5vh 0 33vh' },
   li: {
     flex: '1 1 250px',
     order: 10,
     padding: '1em 2em',
   },
+  normalPadding: { padding: '2em 0 33vh' },
 }

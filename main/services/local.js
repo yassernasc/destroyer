@@ -1,12 +1,13 @@
 const Walk = require('@root/walk')
 const path = require('path')
 const musicMetadata = require('music-metadata')
-const { nanoid } = require('@reduxjs/toolkit')
+const { normalize, schema } = require('normalizr')
+const { nanoid: id } = require('@reduxjs/toolkit')
 
-const musicFormats = ['flac', 'm4a', 'mp3', 'mp4', 'aac']
-const imageFormats = ['jpg', 'png']
+const musicFormats = ['.flac', '.m4a', '.mp3', '.mp4', '.aac']
+const imageFormats = ['.jpg', '.png']
 const matchFormat = (formats, fileName) =>
-  formats.some(format => fileName.endsWith(`.${format}`))
+  formats.includes(path.extname(fileName))
 const isMusic = fileName => matchFormat(musicFormats, fileName)
 const isImage = fileName => matchFormat(imageFormats, fileName)
 
@@ -19,17 +20,8 @@ class LocalDisk {
     this.#window = window
   }
 
-  async search(fileList) {
+  async search(pathList) {
     const walkFunc = async (err, pathname, dirent) => {
-      const getTrackInfo = metadata => ({
-        album: metadata.common.album,
-        artist: metadata.common.artists[0],
-        duration: metadata.format.duration,
-        path: pathname,
-        title: metadata.common.title,
-        trackNumber: metadata.common.track.no,
-      })
-
       if (err) {
         throw err
       }
@@ -44,59 +36,97 @@ class LocalDisk {
 
       if (dirent.isFile()) {
         if (isMusic(dirent.name)) {
-          const metadata = await musicMetadata.parseFile(pathname)
-          this.#addTrack(getTrackInfo(metadata))
+          try {
+            const getTrackInfo = metadata => ({
+              album: metadata.common.album,
+              artist: metadata.common.artists[0],
+              duration: metadata.format.duration,
+              path: pathname,
+              title: metadata.common.title,
+              trackNumber: metadata.common.track.no,
+            })
+
+            const metadata = await musicMetadata.parseFile(pathname)
+            this.#addTrack(getTrackInfo(metadata))
+          } catch (err) {
+            return false
+          }
         }
 
         if (isImage(dirent.name)) {
+          // ignore resource fork files
+          if (dirent.name.startsWith('._')) {
+            return false
+          }
+
           this.#tempImages.push(pathname)
         }
       }
     }
 
-    const findCover = album => {
-      const albumFolder = path.dirname(album.tracks[0].path)
-      return this.#tempImages.find(cover => path.dirname(cover) === albumFolder)
-    }
-
-    for (const path of fileList) {
+    for (const path of pathList) {
       await Walk.walk(path, walkFunc)
     }
 
-    this.#library.forEach(album => (album.cover = findCover(album)))
-    return this.#library
+    this.#library.forEach(album => (album.cover = this.#findCover(album)))
+    return this.#getNormalizedLibrary()
   }
 
   #addTrack(trackInfo) {
-    const getTrack = trackInfo => ({
-      duration: trackInfo.duration,
-      path: trackInfo.path,
-      title: trackInfo.title,
-      trackNumber: trackInfo.trackNumber,
-    })
-
-    const track = getTrack(trackInfo)
     const createAlbum = () => {
       this.#window.webContents.send(
         'new-album-found',
         `SCANNING: ${trackInfo.artist} - ${trackInfo.album}`
       )
+
       return {
         artist: trackInfo.artist,
         cover: null,
-        id: nanoid(),
+        id: id(),
         title: trackInfo.album,
-        tracks: [track],
       }
     }
+
+    const createTrack = trackInfo => ({
+      albumId: trackInfo.albumId,
+      duration: trackInfo.duration,
+      id: id(),
+      path: trackInfo.path,
+      title: trackInfo.title,
+      trackNumber: trackInfo.trackNumber,
+    })
 
     const targetAlbum = this.#library.find(
       album =>
         album.title === trackInfo.album && album.artist === trackInfo.artist
     )
-    targetAlbum
-      ? targetAlbum.tracks.push(track)
-      : this.#library.push(createAlbum())
+
+    if (targetAlbum) {
+      let track = createTrack({ ...trackInfo, albumId: targetAlbum.id })
+      targetAlbum.tracks.push(track)
+    } else {
+      const album = createAlbum()
+      let track = createTrack({ ...trackInfo, albumId: album.id })
+      album.tracks = [track]
+
+      this.#library.push(album)
+    }
+  }
+
+  #findCover(album) {
+    const albumFolder = path.dirname(album.tracks[0].path)
+    return this.#tempImages.find(cover => path.dirname(cover) === albumFolder)
+  }
+
+  #getNormalizedLibrary() {
+    const trackEntity = new schema.Entity('tracks')
+    const albumEntity = new schema.Entity('albums', { tracks: [trackEntity] })
+    const librarySchema = { albums: [albumEntity] }
+    const normalizedLibrary = normalize(
+      { albums: this.#library },
+      librarySchema
+    )
+    return normalizedLibrary.entities
   }
 }
 

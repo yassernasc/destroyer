@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react'
 import { keyframes } from '@emotion/react'
 import { useDispatch } from 'react-redux'
 
 import { playAlbum, playTrack } from '../reducers/player'
 import {
-  useAlbumAtShowcase,
   useIsShowcasePlaying,
-  usePlayingTrack,
+  usePlayingTrackId,
+  useShowcaseAlbum,
+  useShowcaseTracks,
 } from '../hooks'
 import { Track } from './Track'
 import close from '../assets/close.png'
@@ -15,12 +15,12 @@ import play from '../assets/play.png'
 
 export const Showcase = () => {
   const dispatch = useDispatch()
-  const [display, setDisplay] = useState(false)
-  const playingTrack = usePlayingTrack()
-  const album = useAlbumAtShowcase()
+  const playingTrackId = usePlayingTrackId()
+  const album = useShowcaseAlbum()
   const isShowcasePlaying = useIsShowcasePlaying()
+  const tracks = useShowcaseTracks()
 
-  useEffect(() => setDisplay(album !== null), [album])
+  const display = album !== null
 
   const handleFigureClick = event => {
     if (event.target.tagName === 'ARTICLE') {
@@ -28,10 +28,6 @@ export const Showcase = () => {
     } else {
       dispatch(closeAction())
     }
-  }
-
-  const handleTrackClick = trackNumber => {
-    dispatch(playTrack({ albumId: album.id, trackNumber }))
   }
 
   const getCover = () => {
@@ -46,19 +42,16 @@ export const Showcase = () => {
         css={[styles.figure, display ? styles.top : styles.bottom]}
         onClick={handleFigureClick}
       >
-        <article css={[styles.article, getCover()]} />
+        <article css={styles.article} style={getCover()} />
       </figure>
-      <ol css={[styles.ol, display ? styles.slide : '']}>
-        {(album?.tracks ?? []).map((track, index) => (
+      <ol css={[styles.ol, display ? styles.slide : {}]}>
+        {tracks.map(track => (
           <Track
-            key={index}
-            title={track.title}
+            isPlaying={isShowcasePlaying && track.id === playingTrackId}
+            key={track.id}
             number={track.trackNumber}
-            current={
-              isShowcasePlaying &&
-              track.trackNumber === playingTrack.trackNumber
-            }
-            onClick={handleTrackClick}
+            onClick={() => dispatch(playTrack(track.id))}
+            title={track.title}
           />
         ))}
       </ol>

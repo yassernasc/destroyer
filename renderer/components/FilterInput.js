@@ -2,15 +2,12 @@ import { useEffect, useRef } from 'react'
 import keycode from 'keycode'
 import { useDispatch } from 'react-redux'
 
-import { escape, filter as filterAction } from '../reducers/keyboard'
+import { clearFilter, filter as filterAction } from '../reducers/library'
 import { useAdminDisplay, useFilter, useIsFilterActive } from '../hooks'
 import { CloseButton } from './Close-Button'
-import { toggle } from '../reducers/player'
 
 const isAlphanumeric = keyCode => keyCode >= 48 && keyCode <= 90
 const deletePressed = keyCode => keyCode === keycode('del')
-const escapePressed = keyCode => keyCode === keycode('esc')
-const spacePressed = keyCode => keyCode === keycode('space')
 
 export const FilterInput = () => {
   const dispatch = useDispatch()
@@ -20,40 +17,43 @@ export const FilterInput = () => {
   const isFilterActive = useIsFilterActive()
 
   useEffect(() => {
-    window.addEventListener('keydown', ({ keyCode }) => {
-      if (!adminDisplay) {
-        if (isAlphanumeric(keyCode) || deletePressed(keyCode)) {
-          inputEl.current.focus()
-        }
+    const handleKeydown = event => {
+      const isKeyOfInterest =
+        isAlphanumeric(event.keyCode) || deletePressed(event.keyCode)
+      if (!adminDisplay && isKeyOfInterest) {
+        inputEl.current.focus()
       }
+    }
 
-      if (escapePressed(keyCode)) {
-        event.preventDefault()
-        dispatch(escape())
-        // dispatch(adminEscape())
+    window.addEventListener('keydown', handleKeydown)
+    return () => window.removeEventListener('keydown', handleKeydown)
+  }, [adminDisplay])
+
+  useEffect(() => {
+    const handleKeydown = event => {
+      if (isFilterActive && event.keyCode === keycode('esc')) {
+        dispatch(clearFilter())
       }
+    }
 
-      if (spacePressed(keyCode) && !isFilterActive) {
-        event.preventDefault()
-        dispatch(toggle())
-      }
-    })
-  }, [])
+    window.addEventListener('keydown', handleKeydown)
+    return () => window.removeEventListener('keydown', handleKeydown)
+  }, [isFilterActive])
 
-  const handleSearch = event => {
+  const handleChange = event => {
     event.preventDefault()
     dispatch(filterAction(event.target.value))
   }
 
   return (
     <form css={[styles.search, isFilterActive ? styles.show : styles.hide]}>
-      <CloseButton />
+      <CloseButton onClick={() => dispatch(clearFilter())} />
       <input
+        css={styles.input}
+        onChange={handleChange}
         ref={inputEl}
         type="text"
         value={filter}
-        css={styles.input}
-        onChange={handleSearch}
       />
     </form>
   )

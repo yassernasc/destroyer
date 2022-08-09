@@ -1,9 +1,9 @@
 const formatNumber = number => number.toString().padStart(2, '0')
 
 export const Track = props => (
-  <li css={styles.li} onClick={() => props.onClick(props.number)}>
+  <li css={styles.li} onClick={props.onClick}>
     <span css={styles.no}>{formatNumber(props.number)}</span>
-    <span css={[styles.span, props.current ? styles.current : '']}>
+    <span css={[styles.span, props.isPlaying ? styles.current : {}]}>
       {props.title}
     </span>
   </li>

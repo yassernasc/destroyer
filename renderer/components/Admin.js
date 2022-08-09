@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
+import keycode from 'keycode'
 import { useDispatch } from 'react-redux'
 
-import { admin as adminAction, drop } from '../reducers/admin'
-import { connect } from '../reducers/library'
+import { admin as adminAction, drop, escape } from '../reducers/admin'
+import { search } from '../reducers/library'
 import { useAdminDisplay } from '../hooks'
 
 export const Admin = () => {
@@ -11,17 +12,29 @@ export const Admin = () => {
   const display = useAdminDisplay()
 
   useEffect(() => {
-    if (localStorage.getItem('fileList')) {
-      const fileList = JSON.parse(localStorage.getItem('fileList'))
-      searchLocalMusic(fileList)
+    if (localStorage.getItem('pathList')) {
+      const pathList = JSON.parse(localStorage.getItem('pathList'))
+      searchLocalMusic(pathList)
     } else {
       dispatch(adminAction())
     }
-
-    window.addEventListener('dragenter', () => dispatch(adminAction()))
-    window.menu.addFiles(() => dispatch(adminAction()))
-    window.addEventListener('dragleave', () => dispatch(drop()))
   }, [])
+
+  useEffect(() => {
+    window.menu.addFiles(() => dispatch(adminAction()))
+    window.addEventListener('dragenter', () => dispatch(adminAction()))
+  }, [])
+
+  useEffect(() => {
+    const handleKeydown = event => {
+      if (display && event.keyCode === keycode('esc')) {
+        dispatch(escape())
+      }
+    }
+
+    window.addEventListener('keydown', handleKeydown)
+    return () => window.removeEventListener('keydown', handleKeydown)
+  }, [display])
 
   const handleDrop = event => {
     event.preventDefault()
@@ -30,16 +43,13 @@ export const Admin = () => {
     const { length, ...filesInfo } = event.dataTransfer.files
     if (length > 0) {
       const paths = Object.values(filesInfo).map(({ path }) => path)
-      localStorage.setItem('fileList', JSON.stringify(paths))
+      localStorage.setItem('pathList', JSON.stringify(paths))
       searchLocalMusic(paths)
       dispatch(drop())
     }
   }
 
-  const searchLocalMusic = async pathList => {
-    const newLibrary = await window.local.search(pathList)
-    dispatch(connect(newLibrary))
-  }
+  const searchLocalMusic = pathList => dispatch(search(pathList))
 
   return (
     <figure

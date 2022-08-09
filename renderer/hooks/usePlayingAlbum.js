@@ -1,10 +1,9 @@
-import { createSelector } from '@reduxjs/toolkit'
-import { useSelector } from 'react-redux'
+import { useAlbums } from './useAlbums'
+import { usePlayingAlbumId } from './usePlayingAlbumId'
 
-const selectCurrentAlbum = createSelector(
-  state => state.library,
-  state => state.player.albumId,
-  (albums, albumId) => albums.find(album => album.id === albumId)
-)
+export const usePlayingAlbum = () => {
+  const albums = useAlbums()
+  const albumId = usePlayingAlbumId()
 
-export const usePlayingAlbum = () => useSelector(selectCurrentAlbum)
+  return albums[albumId]
+}

@@ -4,6 +4,9 @@
   "description": "Lossless Audio Player",
   "main": "main",
   "private": true,
+  "engines": {
+    "node": ">=16.15.0"
+  },
   "scripts": {
     "clean": "rm -r bundle || true",
     "prebuild": "yarn run clean",
@@ -25,6 +28,7 @@
     "in-view": "^0.6.1",
     "keycode": "^2.2.1",
     "music-metadata": "^7.12.4",
+    "normalizr": "^3.6.2",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-redux": "^8.0.2",

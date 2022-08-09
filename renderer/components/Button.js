@@ -1,9 +1,9 @@
 export const Button = props => (
   <button
-    css={[styles.base, props.disabled && styles.disabled]}
-    type={props.type}
-    onClick={props.callback}
+    css={[styles.base, props.disabled ? styles.disabled : {}]}
     disabled={props.disabled}
+    onClick={props.callback}
+    type={props.type}
   >
     {props.value}
   </button>

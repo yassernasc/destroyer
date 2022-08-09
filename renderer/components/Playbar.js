@@ -14,12 +14,20 @@ export const Playbar = ({ updateTime }) => {
   const elapsedBar = useRef(null)
   const [hover, setHover] = useState(false)
   const [left, setLeft] = useState(false)
-  const [display, setDisplay] = useState(false)
   const status = usePlayerStatus()
   const track = usePlayingTrack()
   const time = usePlayerTime()
 
-  useEffect(() => setDisplay(status !== playerStatus.stopped), [status])
+  const display = status !== playerStatus.stopped
+
+  useEffect(() => {
+    if (track && time > 0) {
+      const percentage = (time / track.duration) * 100
+      elapsedBar.current.style.width = `${percentage}%`
+    } else {
+      elapsedBar.current.style.width = '0%'
+    }
+  }, [track, time])
 
   const scan = event => {
     event.preventDefault()
@@ -38,37 +46,23 @@ export const Playbar = ({ updateTime }) => {
     setLeft(event.clientX - 4)
   }
 
-  useEffect(() => {
-    if (track && time > 0) {
-      const percentage = (time / track.duration) * 100
-      elapsedBar.current.style.width = `${percentage}%`
-    } else {
-      elapsedBar.current.style.width = '0%'
-    }
-  }, [track, time])
-
   return (
     <div css={[styles.playbar, display ? styles.show : styles.hide]}>
       <div
-        css={{
-          cursor: 'none',
-          height: 40,
-          position: 'relative',
-          width: '100%',
-        }}
+        css={styles.timeBars}
+        onClick={scan}
+        onMouseLeave={() => setHover(false)}
         onMouseMove={handleMove}
         onMouseOver={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
-        onClick={scan}
       >
-        <div ref={elapsedBar} css={styles.range} />
+        <div css={styles.range} ref={elapsedBar} />
         <div css={styles.buffer} />
         <div
-          css={[
-            styles.slider,
-            hover ? { opacity: 1 } : { opacity: 0 },
-            { transform: `translateX(${left}px)` || 0 },
-          ]}
+          css={styles.slider}
+          style={{
+            opacity: hover ? 1 : 0,
+            transform: left ? `translateX(${left}px)` : 0,
+          }}
         />
       </div>
       <div css={styles.panel}>
@@ -129,7 +123,7 @@ const styles = {
     pointerEvents: 'none',
     position: 'absolute',
     top: 0,
-    transition: 'width .25s linear',
+    transition: 'width .15s linear',
     width: 0,
   },
   show: {
@@ -155,5 +149,11 @@ const styles = {
     padding: '0 0em 1em',
     transition: '.5s',
     width: '200px',
+  },
+  timeBars: {
+    cursor: 'none',
+    height: 40,
+    position: 'relative',
+    width: '100%',
   },
 }

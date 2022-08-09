@@ -2,17 +2,18 @@ import { createSelector } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux'
 
 const selectFilteredLibrary = createSelector(
-  state => state.library,
-  state => state.filter.title,
+  state => state.library.albums,
+  state => state.library.filter,
   (albums, filter) => {
+    const albumList = Object.values(albums)
     const filterAlbums = () => {
-      return albums.filter(album => {
+      return albumList.filter(album => {
         const match = (a, b) => a.toLowerCase().includes(b.toLowerCase())
         return match(album.title, filter) || match(album.artist, filter)
       })
     }
 
-    return filter === '' ? albums : filterAlbums()
+    return filter === '' ? albumList : filterAlbums()
   }
 )
 

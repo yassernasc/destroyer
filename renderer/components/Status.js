@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react'
-
 import {
   usePlayerStatus,
   usePlayerTime,
@@ -9,15 +7,16 @@ import {
 import { playerStatus } from '../reducers/player'
 
 export const Status = () => {
-  const [display, setDisplay] = useState(false)
   const status = usePlayerStatus()
   const time = usePlayerTime()
   const track = usePlayingTrack()
   const album = usePlayingAlbum()
 
+  const display = status !== playerStatus.stopped
+
   const getTime = () => {
-    if (time === 0) {
-      return '- 00:00:00'
+    if (status === playerStatus.stopped) {
+      return ''
     }
 
     const remainingTime = track.duration - time
@@ -33,10 +32,6 @@ export const Status = () => {
       .padStart(2, '0')
     return `- ${hours}:${minutes}:${seconds}`
   }
-
-  useEffect(() => {
-    status === playerStatus.stopped ? setDisplay(false) : setDisplay(true)
-  }, [status])
 
   return (
     <figure css={[styles.status, display ? styles.show : styles.hide]}>

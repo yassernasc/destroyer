@@ -32,13 +32,11 @@ export const Album = props => {
     return () => props.container.removeEventListener('scroll', coverEvent)
   }, [])
 
-  const coverHandler = () => {
-    inView.is(albumEl.current) ? setFade(false) : setFade(true)
-  }
+  const coverHandler = () => setFade(!inView.is(albumEl.current))
 
   const getCover = () => {
     return props.album.cover
-      ? { backgroundImage: `url('${props.album.cover}')` }
+      ? { backgroundImage: `url("${props.album.cover}")` }
       : { backgroundColor: '#333333' }
   }
 
@@ -46,18 +44,19 @@ export const Album = props => {
 
   return (
     <li
-      onClick={handleClick}
-      onMouseOver={() => setActive(true)}
-      onMouseOut={() => setActive(false)}
       css={styles.base}
+      onClick={handleClick}
+      onMouseOut={() => setActive(false)}
+      onMouseOver={() => setActive(true)}
     >
-      <div css={fade ? styles.fade : styles.nonfade}>
+      <div style={fade ? styles.fade : styles.nonfade}>
         <div
+          css={[styles.cover, active ? styles.zoom : {}]}
           ref={albumEl}
-          css={[styles.cover, getCover(), active ? styles.zoom : '']}
+          style={getCover()}
         />
       </div>
-      <span css={[active ? styles.active : '']}>
+      <span style={active ? styles.active : {}}>
         {`${props.album.artist} - ${props.album.title}`}
       </span>
     </li>
@@ -75,7 +74,6 @@ const styles = {
     padding: '1em 2em',
   },
   cover: {
-    backgroundColor: '#2b2b2b',
     backgroundPosition: 'center center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
