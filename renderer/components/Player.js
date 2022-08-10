@@ -1,9 +1,13 @@
 import { useEffect, useRef } from 'react'
-import keycode from 'keycode'
 import { useDispatch } from 'react-redux'
 
-import { nextTrack, playerStatus, tick, toggle } from '../reducers/player'
-import { useIsFilterActive, usePlayerStatus, usePlayingTrack } from '../hooks'
+import { nextTrack, playerStatus, tick } from '../reducers/player'
+import {
+  useMediaSession,
+  usePlayerStatus,
+  usePlayerToggle,
+  usePlayingTrack,
+} from '../hooks'
 import { Playbar } from './Playbar'
 
 export const Player = () => {
@@ -11,7 +15,15 @@ export const Player = () => {
   const audioEl = useRef(null)
   const track = usePlayingTrack()
   const status = usePlayerStatus()
-  const isFilterActive = useIsFilterActive()
+  usePlayerToggle()
+
+  const updateCurrentTime = time => {
+    const newTime = Math.floor(time)
+    audioEl.current.currentTime = newTime
+    dispatch(tick(newTime))
+  }
+
+  useMediaSession(updateCurrentTime)
 
   useEffect(() => (audioEl.current.onended = () => dispatch(nextTrack())), [])
 
@@ -52,29 +64,8 @@ export const Player = () => {
     }
   }, [status])
 
-  useEffect(() => {
-    const handleKeydown = event => {
-      if (
-        status !== playerStatus.stopped &&
-        !isFilterActive &&
-        event.keyCode === keycode('space')
-      ) {
-        event.preventDefault()
-        dispatch(toggle())
-      }
-    }
-
-    window.addEventListener('keydown', handleKeydown)
-    return () => window.removeEventListener('keydown', handleKeydown)
-  }, [status, isFilterActive])
-
   const play = () => audioEl.current.play()
   const pause = () => audioEl.current.pause()
-  const updateCurrentTime = time => {
-    const newTime = Math.floor(time)
-    audioEl.current.currentTime = newTime
-    dispatch(tick(newTime))
-  }
 
   return (
     <>

@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react'
-import keycode from 'keycode'
 import { useDispatch } from 'react-redux'
 
-import { admin as adminAction, drop, escape } from '../reducers/admin'
+import { admin as adminAction, drop } from '../reducers/admin'
+import { useAdminDisplay, useCloseAdmin } from '../hooks'
 import { search } from '../reducers/library'
-import { useAdminDisplay } from '../hooks'
 
 export const Admin = () => {
   const dispatch = useDispatch()
   const [dragging, setDragging] = useState(false)
   const display = useAdminDisplay()
+  useCloseAdmin()
 
   useEffect(() => {
     if (localStorage.getItem('pathList')) {
@@ -24,17 +24,6 @@ export const Admin = () => {
     window.menu.addFiles(() => dispatch(adminAction()))
     window.addEventListener('dragenter', () => dispatch(adminAction()))
   }, [])
-
-  useEffect(() => {
-    const handleKeydown = event => {
-      if (display && event.keyCode === keycode('esc')) {
-        dispatch(escape())
-      }
-    }
-
-    window.addEventListener('keydown', handleKeydown)
-    return () => window.removeEventListener('keydown', handleKeydown)
-  }, [display])
 
   const handleDrop = event => {
     event.preventDefault()

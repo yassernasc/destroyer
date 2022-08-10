@@ -1,11 +1,8 @@
-import { useRef } from 'react'
-
 import { useFilteredLibrary, usePlayerStatus } from '../hooks'
 import { Album } from './Album'
 import { playerStatus } from '../reducers/player'
 
 export const Library = () => {
-  const libraryEl = useRef(null)
   const library = useFilteredLibrary()
   const status = usePlayerStatus()
 
@@ -17,10 +14,9 @@ export const Library = () => {
           ? styles.largerPadding
           : styles.normalPadding,
       ]}
-      ref={libraryEl}
     >
       {library.map(album => (
-        <Album album={album} container={libraryEl.current} key={album.id} />
+        <Album album={album} key={album.id} />
       ))}
       <li css={styles.li} />
       <li css={styles.li} />

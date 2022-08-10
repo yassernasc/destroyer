@@ -1,63 +1,36 @@
-import { useEffect, useRef, useState } from 'react'
-import inView from 'in-view'
 import { useDispatch } from 'react-redux'
+import { useInView } from 'react-hook-inview'
+import { useState } from 'react'
 
 import { showcase } from '../reducers/showcase'
 
-const rafThrottle = callback => {
-  let requestId
-  const later = args => () => {
-    requestId = null
-    callback(...args)
-  }
-  const throttled = (...args) => {
-    if (requestId == null) {
-      requestId = window.requestAnimationFrame(later(args))
-    }
-  }
-  throttled.cancel = () => window.cancelAnimationFrame(requestId)
-  return throttled
-}
-
-export const Album = props => {
+export const Album = ({ album }) => {
   const dispatch = useDispatch()
-  const albumEl = useRef(null)
   const [active, setActive] = useState(false)
-  const [fade, setFade] = useState(true)
-
-  useEffect(() => {
-    const coverEvent = rafThrottle(coverHandler)
-    props.container.addEventListener('scroll', coverEvent)
-    coverHandler()
-    return () => props.container.removeEventListener('scroll', coverEvent)
-  }, [])
-
-  const coverHandler = () => setFade(!inView.is(albumEl.current))
+  const [ref, isVisible] = useInView()
 
   const getCover = () => {
-    return props.album.cover
-      ? { backgroundImage: `url("${props.album.cover}")` }
+    return album.cover
+      ? { backgroundImage: `url("${album.cover}")` }
       : { backgroundColor: '#333333' }
   }
-
-  const handleClick = () => dispatch(showcase(props.album.id))
 
   return (
     <li
       css={styles.base}
-      onClick={handleClick}
+      onClick={() => dispatch(showcase(album.id))}
       onMouseOut={() => setActive(false)}
       onMouseOver={() => setActive(true)}
+      ref={ref}
     >
-      <div style={fade ? styles.fade : styles.nonfade}>
+      <div style={!isVisible ? styles.fade : styles.nonfade}>
         <div
           css={[styles.cover, active ? styles.zoom : {}]}
-          ref={albumEl}
           style={getCover()}
         />
       </div>
       <span style={active ? styles.active : {}}>
-        {`${props.album.artist} - ${props.album.title}`}
+        {`${album.artist} - ${album.title}`}
       </span>
     </li>
   )

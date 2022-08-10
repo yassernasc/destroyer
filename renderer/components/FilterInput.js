@@ -3,7 +3,12 @@ import keycode from 'keycode'
 import { useDispatch } from 'react-redux'
 
 import { clearFilter, filter as filterAction } from '../reducers/library'
-import { useAdminDisplay, useFilter, useIsFilterActive } from '../hooks'
+import {
+  useAdminDisplay,
+  useCloseFilter,
+  useFilter,
+  useIsFilterActive,
+} from '../hooks'
 import { CloseButton } from './Close-Button'
 
 const isAlphanumeric = keyCode => keyCode >= 48 && keyCode <= 90
@@ -15,6 +20,7 @@ export const FilterInput = () => {
   const adminDisplay = useAdminDisplay()
   const filter = useFilter()
   const isFilterActive = useIsFilterActive()
+  useCloseFilter()
 
   useEffect(() => {
     const handleKeydown = event => {
@@ -28,17 +34,6 @@ export const FilterInput = () => {
     window.addEventListener('keydown', handleKeydown)
     return () => window.removeEventListener('keydown', handleKeydown)
   }, [adminDisplay])
-
-  useEffect(() => {
-    const handleKeydown = event => {
-      if (isFilterActive && event.keyCode === keycode('esc')) {
-        dispatch(clearFilter())
-      }
-    }
-
-    window.addEventListener('keydown', handleKeydown)
-    return () => window.removeEventListener('keydown', handleKeydown)
-  }, [isFilterActive])
 
   const handleChange = event => {
     event.preventDefault()

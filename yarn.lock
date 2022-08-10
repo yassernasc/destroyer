@@ -2479,14 +2479,6 @@ get-intrinsic@^1.0.2, get-intrinsic@^1.1.0, get-intrinsic@^1.1.1:
     has "^1.0.3"
     has-symbols "^1.0.3"
 
-get-scrollmax-x@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/get-scrollmax-x/-/get-scrollmax-x-0.2.0.tgz#968b1b2102d8ddc9976bca5d3bf33bc09b56f541"
-
-get-scrollmax-y@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/get-scrollmax-y/-/get-scrollmax-y-1.0.0.tgz#1e3bfd74ae375abc3b905cd4dd7456ed00abe8f4"
-
 get-stream@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/get-stream/-/get-stream-4.1.0.tgz#c1b255575f3dc21d59bfc79cd3d2b46b1c3a54b5"
@@ -2756,12 +2748,6 @@ imurmurhash@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/imurmurhash/-/imurmurhash-0.1.4.tgz#9218b9b2b928a238b13dc4fb6b6d576f231453ea"
   integrity sha512-JmXMZ6wuvDmLiHEml9ykzqO6lwFbof0GG4IkcGaENdCRDDmMVnny7s5HsIgHCbaq0w2MyPhDqkhTUgS2LU2PHA==
-
-in-view@^0.6.1:
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/in-view/-/in-view-0.6.1.tgz#f9f99b5d5a6fe01359d9e19c570302a3121baf42"
-  dependencies:
-    lodash "^4.15.0"
 
 inflight@^1.0.4:
   version "1.0.6"
@@ -3092,10 +3078,6 @@ lodash.merge@^4.6.2:
   version "4.6.2"
   resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
   integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
-
-lodash@^4.15.0:
-  version "4.17.15"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
 
 lodash@^4.17.10, lodash@^4.17.20, lodash@^4.17.21:
   version "4.17.21"
@@ -3569,6 +3551,11 @@ react-dom@^16.14.0:
     prop-types "^15.6.2"
     scheduler "^0.19.1"
 
+react-hook-inview@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/react-hook-inview/-/react-hook-inview-4.5.0.tgz#f4ac4117a46f1368599538c36dba96429db934ca"
+  integrity sha512-Hm61BK32/K2Cc3bjBe2bQkndHbQP6NhHvWVX7zYitaitB6T28uUV+wlgxbXU9twxUt7+17HyHq6aezpMUCijQQ==
+
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
@@ -3848,13 +3835,6 @@ schema-utils@^3.1.0, schema-utils@^3.1.1:
     "@types/json-schema" "^7.0.8"
     ajv "^6.12.5"
     ajv-keywords "^3.5.2"
-
-scroll-animator@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/scroll-animator/-/scroll-animator-1.1.0.tgz#10df1e0420534ff147c409495e4e46825c23aa0b"
-  dependencies:
-    get-scrollmax-x "^0.2.0"
-    get-scrollmax-y "^1.0.0"
 
 semver-compare@^1.0.0:
   version "1.0.0"

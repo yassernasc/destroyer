@@ -36,7 +36,7 @@ const createMenu = window => {
           label: 'Reload',
         },
         {
-          accelerator: process.platform === 'darwin' ? 'Ctrl+Command+F' : 'F11',
+          accelerator: isMac ? 'Ctrl+Command+F' : 'F11',
           click(item, focusedWindow) {
             if (focusedWindow) {
               focusedWindow.setFullScreen(!focusedWindow.isFullScreen())
@@ -45,8 +45,7 @@ const createMenu = window => {
           label: 'Toggle Full Screen',
         },
         {
-          accelerator:
-            process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
+          accelerator: isMac ? 'Alt+Command+I' : 'Ctrl+Shift+I',
           click(item, focusedWindow) {
             if (focusedWindow) {
               focusedWindow.webContents.toggleDevTools()
