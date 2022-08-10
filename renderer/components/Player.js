@@ -8,6 +8,7 @@ import {
   usePlayerToggle,
   usePlayingTrack,
   useTouchBar,
+  useUpdateTick
 } from '../hooks'
 import { Playbar } from './Playbar'
 
@@ -18,6 +19,7 @@ export const Player = () => {
   const status = usePlayerStatus()
   usePlayerToggle()
   useTouchBar()
+  useUpdateTick(audioEl.current)
 
   const updateCurrentTime = time => {
     const newTime = Math.floor(time)
@@ -42,27 +44,6 @@ export const Player = () => {
     }
     if (status === playerStatus.paused) {
       pause()
-    }
-  }, [status])
-
-  useEffect(() => {
-    let intervalId
-    let lastTick
-
-    if (status === playerStatus.playing) {
-      intervalId = setInterval(() => {
-        const currentSeconds = Math.floor(audioEl.current.currentTime)
-        if (currentSeconds !== lastTick) {
-          dispatch(tick(currentSeconds))
-          lastTick = currentSeconds
-        }
-      }, 100)
-    }
-
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId)
-      }
     }
   }, [status])
 
