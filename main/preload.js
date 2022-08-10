@@ -8,3 +8,8 @@ contextBridge.exposeInMainWorld('local', {
 contextBridge.exposeInMainWorld('menu', {
   addFiles: callback => ipcRenderer.on('add-files', callback),
 })
+
+contextBridge.exposeInMainWorld('touchBar', {
+  updateMetadata: metadata =>
+    ipcRenderer.send('update-touch-bar-metadata', metadata),
+})

@@ -1,37 +1,18 @@
 import {
   usePlayerStatus,
-  usePlayerTime,
   usePlayingAlbum,
   usePlayingTrack,
+  useRemainingTime,
 } from '../hooks'
 import { playerStatus } from '../reducers/player'
 
 export const Status = () => {
   const status = usePlayerStatus()
-  const time = usePlayerTime()
   const track = usePlayingTrack()
   const album = usePlayingAlbum()
+  const remainingTime = useRemainingTime()
 
   const display = status !== playerStatus.stopped
-
-  const getTime = () => {
-    if (status === playerStatus.stopped) {
-      return ''
-    }
-
-    const remainingTime = track.duration - time
-
-    const hours = Math.floor(remainingTime / 60 / 60)
-      .toString()
-      .padStart(2, '0')
-    const minutes = Math.floor((remainingTime / 60) % 60)
-      .toString()
-      .padStart(2, '0')
-    const seconds = Math.round(Math.floor(remainingTime % 60))
-      .toString()
-      .padStart(2, '0')
-    return `- ${hours}:${minutes}:${seconds}`
-  }
 
   return (
     <figure css={[styles.status, display ? styles.show : styles.hide]}>
@@ -39,7 +20,7 @@ export const Status = () => {
         <h1 css={styles.h1}>{album?.artist ?? ''}</h1>
         <h2 css={styles.h2}>{track?.title ?? ''}</h2>
         <h3 css={styles.h3}>{album?.title ?? ''}</h3>
-        <h4 css={styles.h4}>{getTime()}</h4>
+        <h4 css={styles.h4}>{remainingTime}</h4>
       </div>
     </figure>
   )

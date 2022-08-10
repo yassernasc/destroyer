@@ -9,7 +9,7 @@ const path = require('path')
 
 const LocalDisk = require('./services/local')
 const createMenu = require('./components/menu')
-const createTouchBar = require('./components/touchBar')
+const { createTouchBar, updateMetadata } = require('./components/touchBar')
 
 let mainWindow
 
@@ -38,8 +38,12 @@ const createWindow = () => {
   mainWindow.on('closed', () => (mainWindow = null))
 
   createMenu(mainWindow)
+
   ipcMain.handle('search', (event, pathList) =>
     new LocalDisk(mainWindow).search(pathList)
+  )
+  ipcMain.on('update-touch-bar-metadata', (event, metadata) =>
+    updateMetadata(metadata)
   )
 }
 

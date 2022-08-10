@@ -7,6 +7,7 @@ import {
   usePlayerStatus,
   usePlayerToggle,
   usePlayingTrack,
+  useTouchBar,
 } from '../hooks'
 import { Playbar } from './Playbar'
 
@@ -16,6 +17,7 @@ export const Player = () => {
   const track = usePlayingTrack()
   const status = usePlayerStatus()
   usePlayerToggle()
+  useTouchBar()
 
   const updateCurrentTime = time => {
     const newTime = Math.floor(time)
