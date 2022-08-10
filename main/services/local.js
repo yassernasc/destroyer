@@ -37,7 +37,7 @@ class LocalDisk {
       if (dirent.isFile()) {
         if (isMusic(dirent.name)) {
           try {
-            const getTrackInfo = metadata => ({
+            const formatMetadata = metadata => ({
               album: metadata.common.album,
               artist: metadata.common.artists[0],
               duration: metadata.format.duration,
@@ -47,7 +47,7 @@ class LocalDisk {
             })
 
             const metadata = await musicMetadata.parseFile(pathname)
-            this.#addTrack(getTrackInfo(metadata))
+            this.#addTrack(formatMetadata(metadata))
           } catch (err) {
             return false
           }
@@ -68,22 +68,21 @@ class LocalDisk {
       await Walk.walk(path, walkFunc)
     }
 
-    this.#library.forEach(album => (album.cover = this.#findCover(album)))
-    return this.#getNormalizedLibrary()
+    return this.#refineLibrary()
   }
 
-  #addTrack(trackInfo) {
+  #addTrack(metadata) {
     const createAlbum = () => {
       this.#window.webContents.send(
         'new-album-found',
-        `SCANNING: ${trackInfo.artist} - ${trackInfo.album}`
+        `SCANNING: ${metadata.artist} - ${metadata.album}`
       )
 
       return {
-        artist: trackInfo.artist,
+        artist: metadata.artist,
         cover: null,
         id: id(),
-        title: trackInfo.album,
+        title: metadata.album,
       }
     }
 
@@ -98,24 +97,51 @@ class LocalDisk {
 
     const targetAlbum = this.#library.find(
       album =>
-        album.title === trackInfo.album && album.artist === trackInfo.artist
+        album.title === metadata.album && album.artist === metadata.artist
     )
 
     if (targetAlbum) {
-      let track = createTrack({ ...trackInfo, albumId: targetAlbum.id })
+      let track = createTrack({ ...metadata, albumId: targetAlbum.id })
       targetAlbum.tracks.push(track)
     } else {
       const album = createAlbum()
-      let track = createTrack({ ...trackInfo, albumId: album.id })
+      let track = createTrack({ ...metadata, albumId: album.id })
       album.tracks = [track]
 
       this.#library.push(album)
     }
   }
 
-  #findCover(album) {
-    const albumFolder = path.dirname(album.tracks[0].path)
-    return this.#tempImages.find(cover => path.dirname(cover) === albumFolder)
+  #findCovers() {
+    const matchCoverByPath = (album) => {
+      const albumFolder = path.dirname(album.tracks[0].path)
+      return this.#tempImages.find(cover => path.dirname(cover) === albumFolder)
+    }
+
+    this.#library.forEach(album => (album.cover = matchCoverByPath(album)))
+  }
+
+  #sort() {
+    const sortTracksFn = (a, b) => a.trackNumber < b.trackNumber ? -1 : 1
+    const sortAlbumsFn = (a, b) => {
+      if (a.artist < b.artist) {
+        return -1
+      }
+      if (a.artist > b.artist) {
+        return 1
+      }
+      if (a.title < b.title) {
+        return -1
+      }
+      if (a.title > b.title) {
+        return 1
+      }
+
+      return 0
+    }
+
+    this.#library.forEach(album => album.tracks.sort(sortTracksFn))
+    this.#library.sort(sortAlbumsFn)
   }
 
   #getNormalizedLibrary() {
@@ -127,6 +153,12 @@ class LocalDisk {
       librarySchema
     )
     return normalizedLibrary.entities
+  }
+
+  #refineLibrary() {
+    this.#findCovers()
+    this.#sort()
+    return this.#getNormalizedLibrary()
   }
 }
 

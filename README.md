@@ -10,16 +10,17 @@
 ## Getting Started:
 
 ![start](https://www.dropbox.com/s/ddtbw9jt640zand/start.gif?raw=1)
-[Watch demo video on YouTube](https://www.youtube.com/watch?v=mJwW7uwNY4s)
 
 * Download and open **Destroyer**.
 * Drop your music collection onto **Destroyer**.
 * **Destroyer** will recursively scan your collection and build library based on metadata. Please ensure your collection is properly formatted (tagged).
 
+> [Watch demo video on YouTube](https://www.youtube.com/watch?v=mJwW7uwNY4s)
+
 ## On Artwork:
 
 * **Destroyer** works best when all the tracks for an album are in one flat directory.
-* **Destroyer** will look to any `jpg` or `png` in directory.
+* **Destroyer** will look for any `jpg` or `png` in directory.
 
 ## On Search:
 

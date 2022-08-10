@@ -9,7 +9,7 @@ import {
   useFilter,
   useIsFilterActive,
 } from '../hooks'
-import { CloseButton } from './Close-Button'
+import { CloseButton } from './CloseButton'
 
 const isAlphanumeric = keyCode => keyCode >= 48 && keyCode <= 90
 const deletePressed = keyCode => keyCode === keycode('del')
