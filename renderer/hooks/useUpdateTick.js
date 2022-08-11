@@ -11,7 +11,7 @@ export const useUpdateTick = audioRef => {
   useEffect(() => {
     let intervalId
     let lastTick
-  
+
     if (status === playerStatus.playing) {
       intervalId = setInterval(() => {
         const currentSeconds = Math.floor(audioRef.currentTime)
@@ -21,7 +21,7 @@ export const useUpdateTick = audioRef => {
         }
       }, 100)
     }
-  
+
     return () => {
       if (intervalId) {
         clearInterval(intervalId)
@@ -29,4 +29,3 @@ export const useUpdateTick = audioRef => {
     }
   }, [status])
 }
-

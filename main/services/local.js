@@ -113,7 +113,7 @@ class LocalDisk {
   }
 
   #findCovers() {
-    const matchCoverByPath = (album) => {
+    const matchCoverByPath = album => {
       const albumFolder = path.dirname(album.tracks[0].path)
       return this.#tempImages.find(cover => path.dirname(cover) === albumFolder)
     }
@@ -122,7 +122,7 @@ class LocalDisk {
   }
 
   #sort() {
-    const sortTracksFn = (a, b) => a.trackNumber < b.trackNumber ? -1 : 1
+    const sortTracksFn = (a, b) => (a.trackNumber < b.trackNumber ? -1 : 1)
     const sortAlbumsFn = (a, b) => {
       if (a.artist < b.artist) {
         return -1

@@ -8,7 +8,7 @@ import {
   usePlayerToggle,
   usePlayingTrack,
   useTouchBar,
-  useUpdateTick
+  useUpdateTick,
 } from '../hooks'
 import { Playbar } from './Playbar'
 
