@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 
 import { nextTrack, playerStatus, tick } from '../reducers/player'
 import {
+  useLastfm,
   useMediaSession,
   usePlayerStatus,
   usePlayerToggle,
@@ -11,6 +12,7 @@ import {
   useUpdateTick,
 } from '../hooks'
 import { Playbar } from './Playbar'
+import { formatSecondsTime } from '../utils/seconds'
 
 export const Player = () => {
   const dispatch = useDispatch()
@@ -19,6 +21,7 @@ export const Player = () => {
   const status = usePlayerStatus()
   usePlayerToggle()
   useTouchBar()
+  useLastfm()
   useUpdateTick(audioEl.current)
 
   const updateCurrentTime = time => {
@@ -29,7 +32,10 @@ export const Player = () => {
 
   useMediaSession(updateCurrentTime)
 
-  useEffect(() => (audioEl.current.onended = () => dispatch(nextTrack())), [])
+  useEffect(() => (audioEl.current.onended = () => {
+    dispatch(tick(formatSecondsTime(audioEl.current.duration)))
+    dispatch(nextTrack())
+  }), [])
 
   useEffect(() => {
     if (track) {

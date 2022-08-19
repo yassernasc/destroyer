@@ -17,6 +17,12 @@
 
 > [Watch demo video on YouTube](https://www.youtube.com/watch?v=mJwW7uwNY4s)
 
+## v3.0 Comming Soon:
+
+* Last.fm Scrobbling :fire:
+* Native media controls integration (only tested on MacOS)
+* Massive packages upgrades
+
 ## On Artwork:
 
 * **Destroyer** works best when all the tracks for an album are in one flat directory.

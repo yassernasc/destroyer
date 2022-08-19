@@ -1,5 +1,5 @@
 module.exports = {
-  ignorePatterns: ['bundle/'],
+  ignorePatterns: ['bundle/', 'Destroyer-darwin-x64/'],
   overrides: [
     {
       env: { browser: true },
