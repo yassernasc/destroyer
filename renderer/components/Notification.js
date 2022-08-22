@@ -1,20 +1,29 @@
 import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
 
-import { scanning } from '../reducers/library'
-import { useMessage } from '../hooks'
+import { clear, scanUpdate } from '../reducers/notification'
+import { useIsScanningLibrary, useNotificationMessage } from '../hooks'
 
-export const Loading = () => {
+export const Notification = () => {
   const dispatch = useDispatch()
-  const message = useMessage()
-
+  const message = useNotificationMessage()
+  const isScanning = useIsScanningLibrary()
   const display = message !== ''
 
+  useEffect(
+    () =>
+      window.local.onScanUpdate((event, metadata) =>
+        dispatch(scanUpdate(metadata))
+      ),
+    []
+  )
+
+  // Close Notification after scanning is complete
   useEffect(() => {
-    window.local.onAlbumFound((event, scanningInfo) =>
-      dispatch(scanning(scanningInfo))
-    )
-  }, [])
+    if (display && !isScanning && message.includes('SCANNING:')) {
+      dispatch(clear())
+    }
+  }, [isScanning])
 
   return (
     <section css={[styles.base, display ? styles.show : styles.hide]}>

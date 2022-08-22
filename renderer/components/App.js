@@ -4,7 +4,7 @@ import { Admin } from './Admin'
 import { Bar } from './Bar'
 import { FilterInput } from './FilterInput'
 import { Library } from './Library'
-import { Loading } from './Loading'
+import { Notification } from './Notification'
 import { Player } from './Player'
 import { Showcase } from './Showcase'
 import { Status } from './Status'
@@ -18,7 +18,7 @@ export const App = () => (
     <Library />
     <Showcase />
     <Status />
-    <Loading />
+    <Notification />
     <Player />
     <FilterInput />
   </>

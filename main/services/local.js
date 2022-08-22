@@ -73,10 +73,10 @@ class LocalDisk {
 
   #addTrack(metadata) {
     const createAlbum = () => {
-      this.#window.webContents.send(
-        'new-album-found',
-        `SCANNING: ${metadata.artist} - ${metadata.album}`
-      )
+      this.#window.webContents.send('new-album-found', {
+        album: metadata.album,
+        artist: metadata.artist,
+      })
 
       return {
         artist: metadata.artist,

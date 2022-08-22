@@ -5,16 +5,13 @@ const adminSlice = createSlice({
   name: 'admin',
   reducers: {
     admin(state) {
-      state.display = !state.display
+      state.display = true
     },
-    drop(state) {
-      state.display = false
-    },
-    escape(state) {
+    close(state) {
       state.display = false
     },
   },
 })
 
-export const { admin, escape, drop } = adminSlice.actions
+export const { admin, close } = adminSlice.actions
 export default adminSlice.reducer

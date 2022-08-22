@@ -47,11 +47,10 @@ const playerSlice = createSlice({
       state.queue = []
       state.queueIndex = null
       state.status = stopped
+      state.secondsPlayed = 0
     },
     tick(state, action) {
-      if (state.secondsPlayed !== action.payload) {
-        state.secondsPlayed = action.payload
-      }
+      state.secondsPlayed = action.payload
     },
     toggle(state) {
       state.status = state.status === playing ? paused : playing

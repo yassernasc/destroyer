@@ -5,7 +5,7 @@ const lastfmSlice = createSlice({
   name: 'lastfm',
   reducers: {
     signIn(state, action) {
-      state.key = action.payload.key
+      state.key = action.payload
       state.scrobble = true
     },
     signOut(state) {

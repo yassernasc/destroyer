@@ -4,22 +4,19 @@ const librarySlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(search.pending, state => {
-        state.searching = true
+        state.scanning = true
       })
       .addCase(search.fulfilled, (state, action) => {
-        state.searching = false
-        state.scanningInfo = ''
-
         const { albums, tracks } = action.payload
         state.albums = albums
         state.tracks = tracks
+        state.scanning = false
       })
   },
   initialState: {
     albums: {},
     filter: '',
-    scanningInfo: '',
-    searching: false,
+    scanning: false,
     tracks: {},
   },
   name: 'library',
@@ -30,18 +27,11 @@ const librarySlice = createSlice({
     filter(state, action) {
       state.filter = action.payload
     },
-    scanning(state, action) {
-      if (state.searching) {
-        state.scanningInfo = action.payload
-      }
-    },
   },
 })
 
-const search = createAsyncThunk('library/search', pathList =>
-  window.local.search(pathList)
-)
+const search = createAsyncThunk('library/search', window.local.search)
 
 export { search }
-export const { clearFilter, filter, scanning } = librarySlice.actions
+export const { clearFilter, filter } = librarySlice.actions
 export default librarySlice.reducer

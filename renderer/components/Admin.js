@@ -1,24 +1,19 @@
-import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { useEffect } from 'react'
 
-import { admin as adminAction, drop } from '../reducers/admin'
-import { useAdminDisplay, useCloseAdmin } from '../hooks'
+import { admin as adminAction, close } from '../reducers/admin'
+import {
+  useAdminDisplay,
+  useCloseAdmin,
+  useShowAdminOnEmptyLibrary,
+} from '../hooks'
 import { search } from '../reducers/library'
 
 export const Admin = () => {
   const dispatch = useDispatch()
-  const [dragging, setDragging] = useState(false)
   const display = useAdminDisplay()
   useCloseAdmin()
-
-  useEffect(() => {
-    if (localStorage.getItem('pathList')) {
-      const pathList = JSON.parse(localStorage.getItem('pathList'))
-      searchLocalMusic(pathList)
-    } else {
-      dispatch(adminAction())
-    }
-  }, [])
+  useShowAdminOnEmptyLibrary()
 
   useEffect(() => {
     window.menu.addFiles(() => dispatch(adminAction()))
@@ -27,24 +22,19 @@ export const Admin = () => {
 
   const handleDrop = event => {
     event.preventDefault()
-    setDragging(false)
 
     const { length, ...filesInfo } = event.dataTransfer.files
     if (length > 0) {
       const paths = Object.values(filesInfo).map(({ path }) => path)
-      localStorage.setItem('pathList', JSON.stringify(paths))
-      searchLocalMusic(paths)
-      dispatch(drop())
+      dispatch(search(paths))
+      dispatch(close())
     }
   }
 
-  const searchLocalMusic = pathList => dispatch(search(pathList))
-
   return (
     <figure
-      css={[styles.drop, display || dragging ? styles.show : styles.hide]}
-      onDragEnter={() => setDragging(true)}
-      onDragLeave={() => setDragging(false)}
+      css={[styles.drop, display ? styles.show : styles.hide]}
+      onDragLeave={() => dispatch(close())}
       onDragOver={event => event.preventDefault()}
       onDrop={handleDrop}
     >

@@ -2,7 +2,7 @@ import keycode from 'keycode'
 import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
 
-import { escape } from '../reducers/admin'
+import { close } from '../reducers/admin'
 import { useAdminDisplay } from '.'
 
 export const useCloseAdmin = () => {
@@ -12,7 +12,7 @@ export const useCloseAdmin = () => {
   useEffect(() => {
     const handleKeydown = event => {
       if (display && event.keyCode === keycode('esc')) {
-        dispatch(escape())
+        dispatch(close())
       }
     }
 

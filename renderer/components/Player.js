@@ -6,6 +6,7 @@ import {
   useLastfm,
   useMediaSession,
   usePlayerStatus,
+  usePlayerTime,
   usePlayerToggle,
   usePlayingTrack,
   useTouchBar,
@@ -19,23 +20,36 @@ export const Player = () => {
   const audioEl = useRef(null)
   const track = usePlayingTrack()
   const status = usePlayerStatus()
+  const time = usePlayerTime()
+
   usePlayerToggle()
   useTouchBar()
   useLastfm()
-  useUpdateTick(audioEl.current)
+  useUpdateTick(audioEl)
 
   const updateCurrentTime = time => {
-    const newTime = Math.floor(time)
+    const newTime = formatSecondsTime(time)
     audioEl.current.currentTime = newTime
     dispatch(tick(newTime))
   }
 
   useMediaSession(updateCurrentTime)
 
-  useEffect(() => (audioEl.current.onended = () => {
-    dispatch(tick(formatSecondsTime(audioEl.current.duration)))
-    dispatch(nextTrack())
-  }), [])
+  useEffect(() => {
+    if (time !== 0) {
+      updateCurrentTime(time)
+    }
+  }, [])
+
+  useEffect(
+    () =>
+      (audioEl.current.onended = () => {
+        // ensure to send the last tick
+        dispatch(tick(formatSecondsTime(audioEl.current.duration)))
+        dispatch(nextTrack())
+      }),
+    []
+  )
 
   useEffect(() => {
     if (track) {
