@@ -31,8 +31,8 @@
     "keycode": "^2.2.1",
     "music-metadata": "^7.12.4",
     "normalizr": "^3.6.2",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-hook-inview": "^4.5.0",
     "react-redux": "^8.0.2",
     "redux-persist": "^6.0.0"
