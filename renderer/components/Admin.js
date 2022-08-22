@@ -7,7 +7,7 @@ import {
   useCloseAdmin,
   useShowAdminOnEmptyLibrary,
 } from '../hooks'
-import { search } from '../reducers/library'
+import { scan } from '../reducers/library'
 
 export const Admin = () => {
   const dispatch = useDispatch()
@@ -16,6 +16,7 @@ export const Admin = () => {
   useShowAdminOnEmptyLibrary()
 
   useEffect(() => {
+    window.local.rescan(() => dispatch(scan()))
     window.menu.addFiles(() => dispatch(adminAction()))
     window.addEventListener('dragenter', () => dispatch(adminAction()))
   }, [])
@@ -26,7 +27,7 @@ export const Admin = () => {
     const { length, ...filesInfo } = event.dataTransfer.files
     if (length > 0) {
       const paths = Object.values(filesInfo).map(({ path }) => path)
-      dispatch(search(paths))
+      dispatch(scan(paths))
       dispatch(close())
     }
   }

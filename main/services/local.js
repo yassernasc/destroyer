@@ -5,7 +5,7 @@ const { normalize, schema } = require('normalizr')
 const { nanoid: id } = require('@reduxjs/toolkit')
 
 const musicFormats = ['.flac', '.m4a', '.mp3', '.mp4', '.aac']
-const imageFormats = ['.jpg', '.png']
+const imageFormats = ['.jpg', '.png', '.webp']
 const matchFormat = (formats, fileName) =>
   formats.includes(path.extname(fileName))
 const isMusic = fileName => matchFormat(musicFormats, fileName)
@@ -20,7 +20,7 @@ class LocalDisk {
     this.#window = window
   }
 
-  async search(pathList) {
+  async scan(paths) {
     const walkFunc = async (err, pathname, dirent) => {
       if (err) {
         throw err
@@ -64,7 +64,7 @@ class LocalDisk {
       }
     }
 
-    for (const path of pathList) {
+    for (const path of paths) {
       await Walk.walk(path, walkFunc)
     }
 

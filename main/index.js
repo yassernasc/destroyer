@@ -95,14 +95,17 @@ lastfm.events.on('new-scrobble-status', status =>
 )
 
 // Events from renderer
-ipcMain.handle('search', (event, pathList) =>
-  new LocalDisk(mainWindow).search(pathList)
+ipcMain.handle('local:scan', (event, pathList) =>
+  new LocalDisk(mainWindow).scan(pathList)
 )
 ipcMain.on('touch-bar:update-metadata', (event, metadata) =>
   updateMetadata(metadata)
 )
 ipcMain.on('lastfm:now-playing', (event, metadata) =>
   lastfm.nowPlaying(metadata)
+)
+ipcMain.on('lastfm:connected-start', (event, isConnected) =>
+  lastfm.setInitialStatus(isConnected ? 'connected' : 'disconnected')
 )
 ipcMain.on('lastfm:scrobble', (event, metadata) => lastfm.scrobble(metadata))
 

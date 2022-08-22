@@ -1,1 +1,1 @@
-export const formatSecondsTime = seconds => +seconds.toFixed(1)
+export const floor = Math.floor

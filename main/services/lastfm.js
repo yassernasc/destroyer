@@ -10,19 +10,24 @@ module.exports = class {
 
   constructor() {
     this.events = new EventEmitter()
-    this.status = 'disconnected'
+    this.status = 'initial'
 
     this.events.on('token-authenticated', this.#getSessionToken)
     // this.events.on('update_status_from_store', status => (this.status = status))
   }
 
   get status() {
-    return this._status
+    return this.#_status
   }
 
   set status(newStatus) {
     this.events.emit('new-status', newStatus)
-    this._status = newStatus
+    this.#_status = newStatus
+  }
+
+  setInitialStatus(status) {
+    this.events.emit('initial-status', status)
+    this.#_status = status
   }
 
   startConnection = async () => {

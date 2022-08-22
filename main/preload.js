@@ -2,7 +2,8 @@ const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('local', {
   onScanUpdate: callback => ipcRenderer.on('new-album-found', callback),
-  search: pathList => ipcRenderer.invoke('search', pathList),
+  rescan: callback => ipcRenderer.on('local:rescan', callback),
+  scan: pathList => ipcRenderer.invoke('local:scan', pathList),
 })
 
 contextBridge.exposeInMainWorld('menu', {
@@ -11,6 +12,7 @@ contextBridge.exposeInMainWorld('menu', {
 
 contextBridge.exposeInMainWorld('lastfm', {
   connected: callback => ipcRenderer.on('lastfm:connected', callback),
+  connectedStart: flag => ipcRenderer.send('lastfm:connected-start', flag),
   disconnected: callback => ipcRenderer.on('lastfm:disconnected', callback),
   nowPlaying: metadata => ipcRenderer.send('lastfm:now-playing', metadata),
   onScrobblingToogleUpdate: callback =>

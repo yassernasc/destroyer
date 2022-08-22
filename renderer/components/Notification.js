@@ -10,13 +10,11 @@ export const Notification = () => {
   const isScanning = useIsScanningLibrary()
   const display = message !== ''
 
-  useEffect(
-    () =>
-      window.local.onScanUpdate((event, metadata) =>
-        dispatch(scanUpdate(metadata))
-      ),
-    []
-  )
+  useEffect(() => {
+    window.local.onScanUpdate((event, metadata) =>
+      dispatch(scanUpdate(metadata))
+    )
+  }, [])
 
   // Close Notification after scanning is complete
   useEffect(() => {

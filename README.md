@@ -13,20 +13,21 @@
 
 * Download and open **Destroyer**.
 * Drop your music collection onto **Destroyer**.
-* **Destroyer** will recursively scan your collection and build library based on metadata. Please ensure your collection is properly formatted (tagged).
+* **Destroyer** will recursively scan your collection and build library based on metadata. Please ensure your collection is properly tagged.
 
 > [Watch demo video on YouTube](https://www.youtube.com/watch?v=mJwW7uwNY4s)
 
 ## v3.0 Comming Soon:
 
 * Last.fm Scrobbling :fire:
-* Native media controls integration (only tested on MacOS)
+* Native media controls integration
+* Restore all state from previous session
 * Massive packages upgrades
 
 ## On Artwork:
 
 * **Destroyer** works best when all the tracks for an album are in one flat directory.
-* **Destroyer** will look for any `jpg` or `png` in directory.
+* **Destroyer** will look for any `jpg`, `png` or `webp` in directory.
 
 ## On Search:
 

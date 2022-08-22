@@ -32,7 +32,7 @@ export const Showcase = () => {
 
   const getCover = () => {
     return album?.cover
-      ? { backgroundImage: `url('${album.cover}')` }
+      ? { backgroundImage: `url("${album.cover}")` }
       : { backgroundColor: '#333333' }
   }
 

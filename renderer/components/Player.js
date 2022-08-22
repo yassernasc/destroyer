@@ -13,7 +13,7 @@ import {
   useUpdateTick,
 } from '../hooks'
 import { Playbar } from './Playbar'
-import { formatSecondsTime } from '../utils/seconds'
+import { floor } from '../utils/seconds'
 
 export const Player = () => {
   const dispatch = useDispatch()
@@ -28,7 +28,7 @@ export const Player = () => {
   useUpdateTick(audioEl)
 
   const updateCurrentTime = time => {
-    const newTime = formatSecondsTime(time)
+    const newTime = floor(time)
     audioEl.current.currentTime = newTime
     dispatch(tick(newTime))
   }
@@ -41,15 +41,7 @@ export const Player = () => {
     }
   }, [])
 
-  useEffect(
-    () =>
-      (audioEl.current.onended = () => {
-        // ensure to send the last tick
-        dispatch(tick(formatSecondsTime(audioEl.current.duration)))
-        dispatch(nextTrack())
-      }),
-    []
-  )
+  useEffect(() => (audioEl.current.onended = () => dispatch(nextTrack())), [])
 
   useEffect(() => {
     if (track) {

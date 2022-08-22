@@ -1,5 +1,5 @@
 import { usePlayerStatus, usePlayerTime, usePlayingTrack } from '.'
-import { formatSecondsTime } from '../utils/seconds'
+import { floor } from '../utils/seconds'
 import { playerStatus } from '../reducers/player'
 
 export const useRemainingTime = () => {
@@ -11,19 +11,19 @@ export const useRemainingTime = () => {
     return ''
   }
 
-  const remainingTime = formatSecondsTime(track.duration) - time
+  const remainingTime = floor(track.duration) - floor(time)
 
   if (remainingTime === 0) {
     return '- 00:00:00'
   }
 
-  const hours = Math.floor(remainingTime / 60 / 60)
+  const hours = floor(remainingTime / 60 / 60)
     .toString()
     .padStart(2, '0')
-  const minutes = Math.floor((remainingTime / 60) % 60)
+  const minutes = floor((remainingTime / 60) % 60)
     .toString()
     .padStart(2, '0')
-  const seconds = Math.round(Math.floor(remainingTime % 60))
+  const seconds = floor(floor(remainingTime % 60))
     .toString()
     .padStart(2, '0')
 

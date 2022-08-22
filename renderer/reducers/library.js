@@ -1,12 +1,18 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
+import { close } from './showcase'
+import { stop } from './player'
+
 const librarySlice = createSlice({
   extraReducers: builder => {
     builder
-      .addCase(search.pending, state => {
+      .addCase(scan.pending, (state, action) => {
+        if (action.meta.arg) {
+          state.paths = action.meta.arg
+        }
         state.scanning = true
       })
-      .addCase(search.fulfilled, (state, action) => {
+      .addCase(scan.fulfilled, (state, action) => {
         const { albums, tracks } = action.payload
         state.albums = albums
         state.tracks = tracks
@@ -16,6 +22,7 @@ const librarySlice = createSlice({
   initialState: {
     albums: {},
     filter: '',
+    paths: [],
     scanning: false,
     tracks: {},
   },
@@ -30,8 +37,17 @@ const librarySlice = createSlice({
   },
 })
 
-const search = createAsyncThunk('library/search', window.local.search)
+const scan = createAsyncThunk('library/scan', (paths, { dispatch, getState }) => {
+  dispatch(stop())
+  dispatch(close())
 
-export { search }
+  if (!paths) {
+    paths = getState().library.paths
+  }
+
+  return window.local.scan(paths)
+})
+
+export { scan }
 export const { clearFilter, filter } = librarySlice.actions
 export default librarySlice.reducer

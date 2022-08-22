@@ -8,7 +8,7 @@ import {
   toggle as toggleAction,
 } from '../reducers/player'
 import { usePlayerStatus, usePlayerTime, usePlayingTrack } from '../hooks'
-import { formatSecondsTime } from '../utils/seconds'
+import { floor } from '../utils/seconds'
 
 export const Playbar = ({ updateTime }) => {
   const dispatch = useDispatch()
@@ -33,7 +33,7 @@ export const Playbar = ({ updateTime }) => {
   const scan = event => {
     event.preventDefault()
     const percentage = event.clientX / window.innerWidth
-    const newTime = formatSecondsTime(track.duration * percentage)
+    const newTime = floor(track.duration * percentage)
 
     updateTime(newTime)
   }

@@ -24,34 +24,11 @@ const createMenu = (window, lastfm) => {
         ]
       : []),
     {
-      label: 'View',
+      label: 'Library',
       submenu: [
         {
-          accelerator: 'CmdOrCtrl+R',
-          click: (item, focusedWindow) => {
-            if (focusedWindow) {
-              focusedWindow.reload()
-            }
-          },
-          label: 'Reload',
-        },
-        {
-          accelerator: isMac ? 'Ctrl+Command+F' : 'F11',
-          click: (item, focusedWindow) => {
-            if (focusedWindow) {
-              focusedWindow.setFullScreen(!focusedWindow.isFullScreen())
-            }
-          },
-          label: 'Toggle Full Screen',
-        },
-        {
-          accelerator: isMac ? 'Alt+Command+I' : 'Ctrl+Shift+I',
-          click: (item, focusedWindow) => {
-            if (focusedWindow) {
-              focusedWindow.webContents.toggleDevTools()
-            }
-          },
-          label: 'Toggle Developer Tools',
+          click: () => window.webContents.send('local:rescan'),
+          label: 'Rescan',
         },
       ],
     },
@@ -94,6 +71,38 @@ const createMenu = (window, lastfm) => {
               visible: false,
             },
           ],
+        },
+      ],
+    },
+    {
+      label: 'View',
+      submenu: [
+        {
+          accelerator: 'CmdOrCtrl+R',
+          click: (item, focusedWindow) => {
+            if (focusedWindow) {
+              focusedWindow.reload()
+            }
+          },
+          label: 'Reload',
+        },
+        {
+          accelerator: isMac ? 'Ctrl+Command+F' : 'F11',
+          click: (item, focusedWindow) => {
+            if (focusedWindow) {
+              focusedWindow.setFullScreen(!focusedWindow.isFullScreen())
+            }
+          },
+          label: 'Toggle Full Screen',
+        },
+        {
+          accelerator: isMac ? 'Alt+Command+I' : 'Ctrl+Shift+I',
+          click: (item, focusedWindow) => {
+            if (focusedWindow) {
+              focusedWindow.webContents.toggleDevTools()
+            }
+          },
+          label: 'Toggle Developer Tools',
         },
       ],
     },
@@ -164,6 +173,7 @@ const createMenu = (window, lastfm) => {
 
   updateLastfmMenus(lastfm.status)
   lastfm.events.on('new-status', updateLastfmMenus)
+  lastfm.events.on('initial-status', updateLastfmMenus)
 
   return menu
 }
