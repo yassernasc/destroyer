@@ -40,6 +40,7 @@ class LocalDisk {
             const formatMetadata = metadata => ({
               album: metadata.common.album,
               artist: metadata.common.artists[0],
+              disk: metadata.common.disk.no,
               duration: metadata.format.duration,
               path: pathname,
               title: metadata.common.title,
@@ -88,6 +89,7 @@ class LocalDisk {
 
     const createTrack = trackInfo => ({
       albumId: trackInfo.albumId,
+      disk: trackInfo.disk,
       duration: trackInfo.duration,
       id: id(),
       path: trackInfo.path,
@@ -122,7 +124,23 @@ class LocalDisk {
   }
 
   #sort() {
-    const sortTracksFn = (a, b) => (a.trackNumber < b.trackNumber ? -1 : 1)
+    const sortTracksFn = (a, b) => {
+      if (a.disk < b.disk) {
+        return -1
+      }
+      if (a.disk > b.disk) {
+        return 1
+      }
+      if (a.trackNumber < b.trackNumber) {
+        return -1
+      }
+      if (a.trackNumber > b.trackNumber) {
+        return 1
+      }
+      
+      return 0
+    }
+
     const sortAlbumsFn = (a, b) => {
       if (a.artist < b.artist) {
         return -1
