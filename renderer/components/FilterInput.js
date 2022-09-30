@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import keycode from 'keycode'
 import { useDispatch } from 'react-redux'
+import { useTheme } from '@emotion/react'
 
 import { clearFilter, filter as filterAction } from '../reducers/library'
 import {
@@ -21,6 +22,8 @@ export const FilterInput = () => {
   const filter = useFilter()
   const isFilterActive = useIsFilterActive()
   useCloseFilter()
+  const theme = useTheme()
+  const styles = getStyles(theme)
 
   useEffect(() => {
     const handleKeydown = event => {
@@ -54,17 +57,17 @@ export const FilterInput = () => {
   )
 }
 
-const styles = {
+const getStyles = ({ colors }) => ({
   hide: {
     opacity: 0,
     transform: 'translateY(-5em)',
   },
   input: {
     appearance: 'none',
-    background: 'rgba(92, 67, 232, .8)',
+    background: colors.main.opaque,
     border: 'none',
     boxShadow: 'none',
-    color: 'white',
+    color: colors.text,
     display: 'block',
     fontFamily: 'AveriaSerif-Light',
     fontSize: '2em',
@@ -87,7 +90,7 @@ const styles = {
     transform: 'translateY(0em)',
   },
   span: {
-    color: 'white',
+    color: colors.text,
     cursor: 'pointer',
     fontSize: '2em',
     padding: '1em',
@@ -95,4 +98,4 @@ const styles = {
     right: 0,
     top: 0,
   },
-}
+})

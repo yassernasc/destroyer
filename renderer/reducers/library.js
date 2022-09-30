@@ -37,16 +37,19 @@ const librarySlice = createSlice({
   },
 })
 
-const scan = createAsyncThunk('library/scan', (paths, { dispatch, getState }) => {
-  dispatch(stop())
-  dispatch(close())
+const scan = createAsyncThunk(
+  'library/scan',
+  (paths, { dispatch, getState }) => {
+    dispatch(stop())
+    dispatch(close())
 
-  if (!paths) {
-    paths = getState().library.paths
+    if (!paths) {
+      paths = getState().library.paths
+    }
+
+    return window.local.scan(paths)
   }
-
-  return window.local.scan(paths)
-})
+)
 
 export { scan }
 export const { clearFilter, filter } = librarySlice.actions

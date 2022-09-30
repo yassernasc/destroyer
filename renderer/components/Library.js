@@ -48,11 +48,15 @@ const styles = {
     WebkitUserSelect: 'none',
     width: '100vw',
   },
-  largerPadding: { padding: '12.5vh 0 33vh' },
+  largerPadding: {
+    padding: '12.5vh 0 33vh',
+  },
   li: {
     flex: '1 1 250px',
     order: 10,
     padding: '1em 2em',
   },
-  normalPadding: { padding: '2em 0 33vh' },
+  normalPadding: {
+    padding: '2em 0 33vh',
+  },
 }

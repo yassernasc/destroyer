@@ -1,9 +1,16 @@
-export const Bar = () => <nav css={styles.base} />
+import { useTheme } from '@emotion/react'
 
-const styles = {
+export const Bar = () => {
+  const theme = useTheme()
+  const styles = getStyles(theme)
+
+  return <nav css={styles.base} />
+}
+
+const getStyles = ({ colors }) => ({
   base: {
     ':hover': {
-      backgroundColor: 'rgba(92, 67, 232, .8)',
+      backgroundColor: colors.main.opaque,
     },
     height: '1.5em',
     left: 0,
@@ -14,4 +21,4 @@ const styles = {
     width: '100vw',
     zIndex: 100,
   },
-}
+})

@@ -28,6 +28,7 @@
     "electron-devtools-installer": "^3.2.0",
     "electron-fetch": "^1.7.4",
     "electron-window-state": "^4.1.0",
+    "fast-average-color": "^9.1.1",
     "keycode": "^2.2.1",
     "music-metadata": "^7.12.4",
     "normalizr": "^3.6.2",
@@ -35,7 +36,8 @@
     "react-dom": "^18.2.0",
     "react-hook-inview": "^4.5.0",
     "react-redux": "^8.0.2",
-    "redux-persist": "^6.0.0"
+    "redux-persist": "^6.0.0",
+    "tinycolor2": "^1.4.2"
   },
   "devDependencies": {
     "@babel/core": "^7.18.5",

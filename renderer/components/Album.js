@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux'
 import { useInView } from 'react-hook-inview'
 import { useState } from 'react'
+import { useTheme } from '@emotion/react'
 
 import { showcase } from '../reducers/showcase'
 
@@ -8,6 +9,8 @@ export const Album = ({ album }) => {
   const dispatch = useDispatch()
   const [active, setActive] = useState(false)
   const [ref, isVisible] = useInView()
+  const theme = useTheme()
+  const styles = getStyles(theme)
 
   const getCover = () => {
     return album.cover
@@ -36,9 +39,9 @@ export const Album = ({ album }) => {
   )
 }
 
-const styles = {
+const getStyles = ({ colors }) => ({
   active: {
-    borderBottom: '2px solid rgba(92, 67, 232, .8)',
+    borderBottom: `2px solid ${colors.main.opaque}`,
   },
   base: {
     cursor: 'pointer',
@@ -68,7 +71,7 @@ const styles = {
     willChange: 'transform',
   },
   zoom: {
-    border: '2px solid rgba(92, 67, 232, .8)',
+    border: `2px solid ${colors.main.opaque}`,
     transform: 'scale(1)',
   },
-}
+})

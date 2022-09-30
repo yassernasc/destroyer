@@ -1,4 +1,4 @@
-import { Global } from '@emotion/react'
+import { Global, ThemeProvider } from '@emotion/react'
 
 import { Admin } from './Admin'
 import { Bar } from './Bar'
@@ -9,38 +9,41 @@ import { Player } from './Player'
 import { Showcase } from './Showcase'
 import { Status } from './Status'
 import averiaSerif from '../assets/averia-serif.woff2'
+import { useTheme } from '../hooks'
 
-export const App = () => (
-  <>
-    <Global styles={styles} />
-    <Bar />
-    <Admin />
-    <Library />
-    <Showcase />
-    <Status />
-    <Notification />
-    <Player />
-    <FilterInput />
-  </>
-)
+export const App = () => {
+  const theme = useTheme()
 
-const styles = {
+  return (
+    <ThemeProvider theme={theme}>
+      <Global styles={styles} />
+      <Bar />
+      <Admin />
+      <Library />
+      <Showcase />
+      <Status />
+      <Notification />
+      <Player />
+      <FilterInput />
+    </ThemeProvider>
+  )
+}
+
+const styles = ({ colors, font }) => ({
   '::selection': {
-    backgroundColor: 'rgba(92, 67, 232, 1)',
+    backgroundColor: colors.main.base,
     opacity: 0,
   },
   body: {
-    backgroundColor: '#212121',
-    color: 'white',
-    fontFamily:
-      'averia-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif',
+    backgroundColor: colors.base,
+    color: colors.text,
+    fontFamily: font,
     lineHeight: 1.5,
     margin: 0,
     padding: 0,
   },
   button: {
-    fontFamily:
-      'averia-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif',
+    fontFamily: font,
   },
   html: {
     '@font-face': {
@@ -51,7 +54,6 @@ const styles = {
     WebkitFontSmoothing: 'antialiased',
   },
   input: {
-    fontFamily:
-      'averia-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif',
+    fontFamily: font,
   },
-}
+})

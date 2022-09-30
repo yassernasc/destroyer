@@ -1,5 +1,6 @@
 import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
+import { useTheme } from '@emotion/react'
 
 import { admin as adminAction, close } from '../reducers/admin'
 import {
@@ -14,6 +15,8 @@ export const Admin = () => {
   const display = useAdminDisplay()
   useCloseAdmin()
   useShowAdminOnEmptyLibrary()
+  const theme = useTheme()
+  const styles = getStyles(theme)
 
   useEffect(() => {
     window.local.rescan(() => dispatch(scan()))
@@ -44,9 +47,9 @@ export const Admin = () => {
   )
 }
 
-const styles = {
+const getStyles = ({ colors }) => ({
   drop: {
-    backgroundColor: 'rgba(92, 67, 232, .8)',
+    backgroundColor: colors.main.opaque,
     boxSizing: 'border-box',
     display: 'flex',
     height: '100vh',
@@ -68,9 +71,9 @@ const styles = {
     pointerEvents: 'auto',
   },
   span: {
-    borderBottom: '2px solid white',
+    borderBottom: `2px solid ${colors.text}`,
     fontSize: '2em',
     margin: 'auto',
     pointerEvents: 'none',
   },
-}
+})

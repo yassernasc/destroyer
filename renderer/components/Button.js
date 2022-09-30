@@ -1,15 +1,22 @@
-export const Button = props => (
-  <button
-    css={[styles.base, props.disabled ? styles.disabled : {}]}
-    disabled={props.disabled}
-    onClick={props.callback}
-    type={props.type}
-  >
-    {props.value}
-  </button>
-)
+import { useTheme } from '@emotion/react'
 
-const styles = {
+export const Button = props => {
+  const theme = useTheme()
+  const styles = getStyles(theme)
+
+  return (
+    <button
+      css={[styles.base, props.disabled ? styles.disabled : {}]}
+      disabled={props.disabled}
+      onClick={props.callback}
+      type={props.type}
+    >
+      {props.value}
+    </button>
+  )
+}
+
+const getStyles = ({ colors }) => ({
   base: {
     ':hover': {
       background: 'rgba(255, 255, 255, 0.8)',
@@ -20,7 +27,7 @@ const styles = {
     borderRadius: '.2em',
     boxShadow: '.2em .2em 0px rgba(0, 0, 0, .1)',
     boxSizing: 'border-box',
-    color: 'rgba(92, 67, 232, .8)',
+    color: colors.main.opaque,
     cursor: 'pointer',
     display: 'block',
     fontSize: '100%',
@@ -37,4 +44,4 @@ const styles = {
     cursor: 'not-allowed',
     opacity: '.5',
   },
-}
+})

@@ -1,20 +1,27 @@
-export const Input = props => (
-  <div css={styles.base}>
-    <div css={styles.inputContainer}>
-      {props.label && <label css={styles.label}>{props.label}</label>}
-      <input
-        css={styles.input}
-        data-label={props.label}
-        onChange={props.onChange}
-        required={props.required}
-        type={props.type || 'text'}
-        value={props.value}
-      />
-    </div>
-  </div>
-)
+import { useTheme } from '@emotion/react'
 
-const styles = {
+export const Input = props => {
+  const theme = useTheme
+  const styles = getStyles(theme)
+
+  return (
+    <div css={styles.base}>
+      <div css={styles.inputContainer}>
+        {props.label && <label css={styles.label}>{props.label}</label>}
+        <input
+          css={styles.input}
+          data-label={props.label}
+          onChange={props.onChange}
+          required={props.required}
+          type={props.type || 'text'}
+          value={props.value}
+        />
+      </div>
+    </div>
+  )
+}
+
+const getStyles = ({ colors }) => ({
   base: {
     boxSizing: 'border-box',
     flex: '1 1 100%',
@@ -23,11 +30,11 @@ const styles = {
   },
   input: {
     appearance: 'none',
-    background: 'rgba(92, 67, 232, .8)',
+    background: colors.main.opaque,
     border: 'none',
     boxShadow: 'none',
     boxSizing: 'border-box',
-    color: 'white',
+    color: colors.text,
     display: 'block',
     fontFamily: 'AveriaSerif-Light',
     fontSize: '150%',
@@ -47,4 +54,4 @@ const styles = {
     textAlign: 'left',
     textTransform: 'capitalize',
   },
-}
+})

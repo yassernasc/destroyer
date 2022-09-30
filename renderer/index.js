@@ -5,13 +5,14 @@ import { Provider } from 'react-redux'
 import { createRoot } from 'react-dom/client'
 import storage from 'redux-persist/lib/storage'
 
-import { App } from './components/app'
+import { App } from './components/App'
 import adminReducer from './reducers/admin'
 import lastfmReducer from './reducers/lastfm'
 import libraryReducer from './reducers/library'
 import notificationReducer from './reducers/notification'
 import playerReducer from './reducers/player'
 import showcaseReducer from './reducers/showcase'
+import themeReducer from './reducers/theme'
 
 const reducer = combineReducers({
   admin: adminReducer,
@@ -20,6 +21,7 @@ const reducer = combineReducers({
   notification: notificationReducer,
   player: playerReducer,
   showcase: showcaseReducer,
+  theme: themeReducer,
 })
 
 const persistConfig = { key: 'store', storage }

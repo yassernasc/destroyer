@@ -137,7 +137,7 @@ class LocalDisk {
       if (a.trackNumber > b.trackNumber) {
         return 1
       }
-      
+
       return 0
     }
 

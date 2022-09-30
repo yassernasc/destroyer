@@ -1,21 +1,28 @@
+import { useTheme } from '@emotion/react'
+
 const formatNumber = number => number.toString().padStart(2, '0')
 
-export const Track = props => (
-  <li css={styles.li} onClick={props.onClick}>
-    <span css={styles.no}>{formatNumber(props.number)}</span>
-    <span css={[styles.span, props.isPlaying ? styles.current : {}]}>
-      {props.title}
-    </span>
-  </li>
-)
+export const Track = props => {
+  const theme = useTheme()
+  const styles = getStyles(theme)
 
-const styles = {
+  return (
+    <li css={styles.li} onClick={props.onClick}>
+      <span css={styles.no}>{formatNumber(props.number)}</span>
+      <span css={[styles.span, props.isPlaying ? styles.current : {}]}>
+        {props.title}
+      </span>
+    </li>
+  )
+}
+
+const getStyles = ({ colors }) => ({
   current: {
     borderBottom: '2px solid white',
   },
   li: {
     ':hover': {
-      background: 'rgba(92, 67, 232, .8)',
+      background: colors.main.opaque,
     },
     cursor: 'pointer',
     display: 'block',
@@ -30,4 +37,4 @@ const styles = {
     fontWeight: 'bold',
     padding: '0 .25em',
   },
-}
+})

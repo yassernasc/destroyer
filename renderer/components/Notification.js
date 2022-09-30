@@ -1,5 +1,6 @@
 import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
+import { useTheme } from '@emotion/react'
 
 import { clear, scanUpdate } from '../reducers/notification'
 import { useIsScanningLibrary, useNotificationMessage } from '../hooks'
@@ -8,6 +9,8 @@ export const Notification = () => {
   const dispatch = useDispatch()
   const message = useNotificationMessage()
   const isScanning = useIsScanningLibrary()
+  const theme = useTheme()
+  const styles = getStyles(theme)
   const display = message !== ''
 
   useEffect(() => {
@@ -30,10 +33,10 @@ export const Notification = () => {
   )
 }
 
-const styles = {
+const getStyles = ({ colors }) => ({
   base: {
     alignItems: 'center',
-    backgroundColor: 'rgba(92, 67, 232, .8)',
+    backgroundColor: colors.main.opaque,
     display: 'flex',
     fontSize: '120%',
     height: '100vh',
@@ -55,4 +58,4 @@ const styles = {
   span: {
     margin: 'auto',
   },
-}
+})

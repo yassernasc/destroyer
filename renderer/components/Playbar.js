@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { useTheme } from '@emotion/react'
 
 import {
   nextTrack,
@@ -18,6 +19,8 @@ export const Playbar = ({ updateTime }) => {
   const status = usePlayerStatus()
   const track = usePlayingTrack()
   const time = usePlayerTime()
+  const theme = useTheme()
+  const styles = getStyles(theme)
 
   const display = status !== playerStatus.stopped
 
@@ -81,9 +84,9 @@ export const Playbar = ({ updateTime }) => {
   )
 }
 
-const styles = {
+const getStyles = ({ colors }) => ({
   buffer: {
-    background: 'rgba(92, 67, 232, 0.666)',
+    background: colors.main.opaquest,
     height: 40,
     position: 'absolute',
     top: 0,
@@ -94,8 +97,8 @@ const styles = {
     transform: 'translateY(3em)',
   },
   panel: {
-    background: 'rgba(33,33,33,.666)',
-    borderTop: '2px solid #212121',
+    background: 'rgba(33, 33, 33, .666)',
+    borderTop: `2px solid ${colors.base}`,
     fontSize: '1.5em',
     fontStyle: 'italic',
     fontWeight: 200,
@@ -118,7 +121,7 @@ const styles = {
     zIndex: 10,
   },
   range: {
-    background: 'rgba(92, 67, 232, 1)',
+    background: colors.main.base,
     height: 40,
     left: 0,
     pointerEvents: 'none',
@@ -143,7 +146,7 @@ const styles = {
   },
   span: {
     ':hover': {
-      background: 'rgba(92, 67, 232, .8)',
+      background: colors.main.opaque,
     },
     cursor: 'pointer',
     display: 'inline-block',
@@ -157,4 +160,4 @@ const styles = {
     position: 'relative',
     width: '100%',
   },
-}
+})

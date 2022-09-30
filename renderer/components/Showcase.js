@@ -3,15 +3,14 @@ import { useDispatch } from 'react-redux'
 
 import { playAlbum, playTrack } from '../reducers/player'
 import {
+  useCursors,
   useIsShowcasePlaying,
   usePlayingTrackId,
   useShowcaseAlbum,
   useShowcaseTracks,
 } from '../hooks'
 import { Track } from './Track'
-import close from '../assets/close.png'
 import { close as closeAction } from '../reducers/showcase'
-import play from '../assets/play.png'
 
 export const Showcase = () => {
   const dispatch = useDispatch()
@@ -19,6 +18,7 @@ export const Showcase = () => {
   const album = useShowcaseAlbum()
   const isShowcasePlaying = useIsShowcasePlaying()
   const tracks = useShowcaseTracks()
+  const { close, play } = useCursors()
 
   const display = album !== null
 
@@ -41,8 +41,17 @@ export const Showcase = () => {
       <figure
         css={[styles.figure, display ? styles.top : styles.bottom]}
         onClick={handleFigureClick}
+        style={{
+          cursor: `url('${close}') 32 32, alias`,
+        }}
       >
-        <article css={styles.article} style={getCover()} />
+        <article
+          css={styles.article}
+          style={{
+            ...getCover(),
+            cursor: `url('${play}') 32 32, alias`,
+          }}
+        />
       </figure>
       <ol css={[styles.ol, display ? styles.slide : {}]}>
         {tracks.map(track => (
@@ -75,7 +84,6 @@ const styles = {
     backfaceVisibility: 'hidden',
     backgroundPosition: 'center center',
     backgroundSize: 'cover',
-    cursor: `url('${play}') 32 32, pointer`,
     height: '66vh',
     margin: '17vh auto',
     perspective: 500,
@@ -85,7 +93,6 @@ const styles = {
     transform: 'translateY(12.5vh)',
   },
   figure: {
-    cursor: `url('${close}') 32 32, alias`,
     height: '100vh',
     margin: 0,
     padding: 0,
