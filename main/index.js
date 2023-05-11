@@ -29,6 +29,8 @@ const createWindow = () => {
     height: mainWindowState.height,
     show: false,
     titleBarStyle: 'hidden',
+    transparent: true,
+    vibrancy: 'ultra-dark',
     webPreferences: {
       backgroundThrottling: false,
       preload: path.join(__dirname, 'preload.js'),

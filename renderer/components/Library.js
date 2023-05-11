@@ -1,10 +1,13 @@
-import { useFilteredLibrary, usePlayerStatus } from '../hooks'
+import { useFilteredLibrary, usePlayerStatus, useShowcaseAlbum } from '../hooks'
 import { Album } from './Album'
 import { playerStatus } from '../reducers/player'
 
 export const Library = () => {
   const library = useFilteredLibrary()
   const status = usePlayerStatus()
+
+  const showcaseAlbum = useShowcaseAlbum()
+  const showcaseOpen = showcaseAlbum !== null
 
   return (
     <ul
@@ -13,6 +16,7 @@ export const Library = () => {
         status !== playerStatus.stopped
           ? styles.largerPadding
           : styles.normalPadding,
+        showcaseOpen ? styles.opacity : {},
       ]}
     >
       {library.map(album => (
@@ -58,5 +62,8 @@ const styles = {
   },
   normalPadding: {
     padding: '2em 0 33vh',
+  },
+  opacity: {
+    opacity: 0.15,
   },
 }

@@ -17,10 +17,10 @@ export const Status = () => {
   return (
     <figure css={[styles.status, display ? styles.show : styles.hide]}>
       <div>
-        <h1 css={styles.h1}>{album?.artist ?? ''}</h1>
-        <h2 css={styles.h2}>{track?.title ?? ''}</h2>
-        <h3 css={styles.h3}>{album?.title ?? ''}</h3>
-        <h4 css={styles.h4}>{remainingTime}</h4>
+        <h1 css={[styles.h1, styles.shadow]}>{album?.artist ?? ''}</h1>
+        <h2 css={[styles.h2, styles.shadow]}>{track?.title ?? ''}</h2>
+        <h3 css={[styles.h3, styles.shadow]}>{album?.title ?? ''}</h3>
+        <h4 css={[styles.h4, styles.shadow]}>{remainingTime}</h4>
       </div>
     </figure>
   )
@@ -62,6 +62,9 @@ const styles = {
   hide: {
     opacity: 0,
     transform: 'translateY(-3em)',
+  },
+  shadow: {
+    textShadow: '#000 1px 2px 4px',
   },
   show: {
     opacity: 1,

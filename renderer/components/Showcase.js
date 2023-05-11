@@ -127,7 +127,6 @@ const styles = {
     pointerEvents: 'auto',
   },
   showcase: {
-    background: 'rgba(33, 33, 33, .8)',
     bottom: 0,
     display: 'block',
     left: 0,
