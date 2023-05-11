@@ -36,6 +36,7 @@
     "react-dom": "^18.2.0",
     "react-hook-inview": "^4.5.0",
     "react-redux": "^8.0.2",
+    "react-use": "^17.4.0",
     "redux-persist": "^6.0.0",
     "tinycolor2": "^1.4.2"
   },

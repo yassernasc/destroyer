@@ -1,16 +1,15 @@
 import { useDispatch } from 'react-redux'
 import { useInView } from 'react-hook-inview'
 import { useState } from 'react'
-import { useTheme } from '@emotion/react'
 
 import { showcase } from '../reducers/showcase'
+import { useAccentColor } from '../hooks'
 
 export const Album = ({ album }) => {
   const dispatch = useDispatch()
   const [active, setActive] = useState(false)
   const [ref, isVisible] = useInView()
-  const theme = useTheme()
-  const styles = getStyles(theme)
+  const accent = useAccentColor()
 
   const getCover = () => {
     return album.cover
@@ -29,20 +28,22 @@ export const Album = ({ album }) => {
       <div style={!isVisible ? styles.fade : styles.nonfade}>
         <div
           css={[styles.cover, active ? styles.zoom : {}]}
-          style={getCover()}
+          style={{
+            ...getCover(),
+            ...(active ? { border: `2px solid ${accent.opaque}` } : {}),
+          }}
         />
       </div>
-      <span style={active ? styles.active : {}}>
+      <span
+        style={active ? { borderBottom: `2px solid ${accent.opaque}` } : {}}
+      >
         {`${album.artist} - ${album.title}`}
       </span>
     </li>
   )
 }
 
-const getStyles = ({ colors }) => ({
-  active: {
-    borderBottom: `2px solid ${colors.main.opaque}`,
-  },
+const styles = {
   base: {
     cursor: 'pointer',
     flex: '1 1 250px',
@@ -71,7 +72,6 @@ const getStyles = ({ colors }) => ({
     willChange: 'transform',
   },
   zoom: {
-    border: `2px solid ${colors.main.opaque}`,
     transform: 'scale(1)',
   },
-})
+}

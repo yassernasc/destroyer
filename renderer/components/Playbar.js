@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useTheme } from '@emotion/react'
 
 import {
   nextTrack,
@@ -8,8 +7,15 @@ import {
   previousTrack,
   toggle as toggleAction,
 } from '../reducers/player'
-import { usePlayerStatus, usePlayerTime, usePlayingTrack } from '../hooks'
+import {
+  useAccentColor,
+  usePlayerStatus,
+  usePlayerTime,
+  usePlayingTrack,
+} from '../hooks'
+import { PlaybarButton } from './PlaybarButton'
 import { floor } from '../utils/seconds'
+import theme from '../utils/theme'
 
 export const Playbar = ({ updateTime }) => {
   const dispatch = useDispatch()
@@ -19,8 +25,7 @@ export const Playbar = ({ updateTime }) => {
   const status = usePlayerStatus()
   const track = usePlayingTrack()
   const time = usePlayerTime()
-  const theme = useTheme()
-  const styles = getStyles(theme)
+  const accent = useAccentColor()
 
   const display = status !== playerStatus.stopped
 
@@ -59,8 +64,12 @@ export const Playbar = ({ updateTime }) => {
         onMouseMove={handleMove}
         onMouseOver={() => setHover(true)}
       >
-        <div css={styles.range} ref={elapsedBar} />
-        <div css={styles.buffer} />
+        <div
+          css={styles.range}
+          ref={elapsedBar}
+          style={{ background: accent.base }}
+        />
+        <div css={styles.buffer} style={{ background: accent.opaquest }} />
         <div
           css={styles.slider}
           style={{
@@ -70,23 +79,18 @@ export const Playbar = ({ updateTime }) => {
         />
       </div>
       <div css={styles.panel}>
-        <span css={styles.span} key="previous" onClick={previous}>
-          previous
-        </span>
-        <span css={styles.span} key="toggle" onClick={toggle}>
+        <PlaybarButton onClick={previous}>previous</PlaybarButton>
+        <PlaybarButton onClick={toggle}>
           {status === playerStatus.playing ? 'pause' : 'play'}
-        </span>
-        <span css={styles.span} key="next" onClick={next}>
-          next
-        </span>
+        </PlaybarButton>
+        <PlaybarButton onClick={next}>next</PlaybarButton>
       </div>
     </div>
   )
 }
 
-const getStyles = ({ colors }) => ({
+const styles = {
   buffer: {
-    background: colors.main.opaquest,
     height: 40,
     position: 'absolute',
     top: 0,
@@ -98,7 +102,7 @@ const getStyles = ({ colors }) => ({
   },
   panel: {
     background: 'rgba(33, 33, 33, .666)',
-    borderTop: `2px solid ${colors.base}`,
+    borderTop: `2px solid ${theme.baseColor}`,
     fontSize: '1.5em',
     fontStyle: 'italic',
     fontWeight: 200,
@@ -121,7 +125,6 @@ const getStyles = ({ colors }) => ({
     zIndex: 10,
   },
   range: {
-    background: colors.main.base,
     height: 40,
     left: 0,
     pointerEvents: 'none',
@@ -144,20 +147,10 @@ const getStyles = ({ colors }) => ({
     width: 4,
     zIndex: 69,
   },
-  span: {
-    ':hover': {
-      background: colors.main.opaque,
-    },
-    cursor: 'pointer',
-    display: 'inline-block',
-    padding: '0 0em 1em',
-    transition: '.5s',
-    width: '200px',
-  },
   timeBars: {
     cursor: 'none',
     height: 40,
     position: 'relative',
     width: '100%',
   },
-})
+}

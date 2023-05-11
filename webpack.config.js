@@ -11,10 +11,6 @@ module.exports = (env, argv) => {
       main: './main',
       preload: './main/preload.js',
     },
-    // https://github.com/lovell/sharp/issues/2350
-    externals: {
-      sharp: 'commonjs sharp',
-    },
     output: {
       path: path.join(__dirname, 'bundle'),
     },

@@ -1,8 +1,8 @@
-import { useTheme } from '@emotion/react'
+import theme from '../utils/theme'
+import { useAccentColor } from '../hooks'
 
 export const Input = props => {
-  const theme = useTheme
-  const styles = getStyles(theme)
+  const accent = useAccentColor()
 
   return (
     <div css={styles.base}>
@@ -13,6 +13,7 @@ export const Input = props => {
           data-label={props.label}
           onChange={props.onChange}
           required={props.required}
+          style={{ background: accent.opaque }}
           type={props.type || 'text'}
           value={props.value}
         />
@@ -21,7 +22,7 @@ export const Input = props => {
   )
 }
 
-const getStyles = ({ colors }) => ({
+const styles = {
   base: {
     boxSizing: 'border-box',
     flex: '1 1 100%',
@@ -30,13 +31,12 @@ const getStyles = ({ colors }) => ({
   },
   input: {
     appearance: 'none',
-    background: colors.main.opaque,
     border: 'none',
     boxShadow: 'none',
     boxSizing: 'border-box',
-    color: colors.text,
+    color: theme.textColor,
     display: 'block',
-    fontFamily: 'AveriaSerif-Light',
+    fontFamily: theme.font,
     fontSize: '150%',
     marginBottom: '1em',
     outline: 'none',
@@ -54,4 +54,4 @@ const getStyles = ({ colors }) => ({
     textAlign: 'left',
     textTransform: 'capitalize',
   },
-})
+}

@@ -1,16 +1,17 @@
 import { useEffect, useRef } from 'react'
 import keycode from 'keycode'
 import { useDispatch } from 'react-redux'
-import { useTheme } from '@emotion/react'
 
 import { clearFilter, filter as filterAction } from '../reducers/library'
 import {
+  useAccentColor,
   useAdminDisplay,
   useCloseFilter,
   useFilter,
   useIsFilterActive,
 } from '../hooks'
 import { CloseButton } from './CloseButton'
+import theme from '../utils/theme'
 
 const isAlphanumeric = keyCode => keyCode >= 48 && keyCode <= 90
 const deletePressed = keyCode => keyCode === keycode('del')
@@ -22,8 +23,7 @@ export const FilterInput = () => {
   const filter = useFilter()
   const isFilterActive = useIsFilterActive()
   useCloseFilter()
-  const theme = useTheme()
-  const styles = getStyles(theme)
+  const accent = useAccentColor()
 
   useEffect(() => {
     const handleKeydown = event => {
@@ -50,6 +50,7 @@ export const FilterInput = () => {
         css={styles.input}
         onChange={handleChange}
         ref={inputEl}
+        style={{ background: accent.opaque }}
         type="text"
         value={filter}
       />
@@ -57,19 +58,18 @@ export const FilterInput = () => {
   )
 }
 
-const getStyles = ({ colors }) => ({
+const styles = {
   hide: {
     opacity: 0,
     transform: 'translateY(-5em)',
   },
   input: {
     appearance: 'none',
-    background: colors.main.opaque,
     border: 'none',
     boxShadow: 'none',
-    color: colors.text,
+    color: theme.textColor,
     display: 'block',
-    fontFamily: 'AveriaSerif-Light',
+    fontFamily: theme.font,
     fontSize: '2em',
     marginBottom: '1em',
     outline: 'none',
@@ -90,7 +90,7 @@ const getStyles = ({ colors }) => ({
     transform: 'translateY(0em)',
   },
   span: {
-    color: colors.text,
+    color: theme.textColor,
     cursor: 'pointer',
     fontSize: '2em',
     padding: '1em',
@@ -98,4 +98,4 @@ const getStyles = ({ colors }) => ({
     right: 0,
     top: 0,
   },
-})
+}

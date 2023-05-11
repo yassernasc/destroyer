@@ -1,4 +1,4 @@
-import { Global, ThemeProvider } from '@emotion/react'
+import { Global } from '@emotion/react'
 
 import { Admin } from './Admin'
 import { Bar } from './Bar'
@@ -9,13 +9,11 @@ import { Player } from './Player'
 import { Showcase } from './Showcase'
 import { Status } from './Status'
 import averiaSerif from '../assets/averia-serif.woff2'
-import { useTheme } from '../hooks'
+import theme from '../utils/theme'
 
 export const App = () => {
-  const theme = useTheme()
-
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <Global styles={styles} />
       <Bar />
       <Admin />
@@ -25,35 +23,34 @@ export const App = () => {
       <Notification />
       <Player />
       <FilterInput />
-    </ThemeProvider>
+    </>
   )
 }
 
-const styles = ({ colors, font }) => ({
+const styles = {
   '::selection': {
-    backgroundColor: colors.main.base,
+    backgroundColor: theme.baseColor,
     opacity: 0,
   },
   body: {
-    backgroundColor: colors.base,
-    color: colors.text,
-    fontFamily: font,
+    color: theme.textColor,
+    fontFamily: theme.font,
     lineHeight: 1.5,
     margin: 0,
     padding: 0,
   },
   button: {
-    fontFamily: font,
+    fontFamily: theme.font,
   },
   html: {
     '@font-face': {
-      fontFamily: 'averia-serif',
+      fontFamily: theme.font,
       src: `url(${averiaSerif})`,
     },
     textSizeAdjust: '100%',
     WebkitFontSmoothing: 'antialiased',
   },
   input: {
-    fontFamily: font,
+    fontFamily: theme.font,
   },
-})
+}

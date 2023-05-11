@@ -1,22 +1,23 @@
 import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
-import { useTheme } from '@emotion/react'
 
 import { admin as adminAction, close } from '../reducers/admin'
 import {
+  useAccentColor,
   useAdminDisplay,
   useCloseAdmin,
   useShowAdminOnEmptyLibrary,
 } from '../hooks'
 import { scan } from '../reducers/library'
+import theme from '../utils/theme'
 
 export const Admin = () => {
   const dispatch = useDispatch()
   const display = useAdminDisplay()
+  const accent = useAccentColor()
+
   useCloseAdmin()
   useShowAdminOnEmptyLibrary()
-  const theme = useTheme()
-  const styles = getStyles(theme)
 
   useEffect(() => {
     window.local.rescan(() => dispatch(scan()))
@@ -41,15 +42,15 @@ export const Admin = () => {
       onDragLeave={() => dispatch(close())}
       onDragOver={event => event.preventDefault()}
       onDrop={handleDrop}
+      style={{ backgroundColor: accent.opaque }}
     >
       <span css={styles.span}>Drop music collection here</span>
     </figure>
   )
 }
 
-const getStyles = ({ colors }) => ({
+const styles = {
   drop: {
-    backgroundColor: colors.main.opaque,
     boxSizing: 'border-box',
     display: 'flex',
     height: '100vh',
@@ -71,9 +72,9 @@ const getStyles = ({ colors }) => ({
     pointerEvents: 'auto',
   },
   span: {
-    borderBottom: `2px solid ${colors.text}`,
+    borderBottom: `2px solid ${theme.textColor}`,
     fontSize: '2em',
     margin: 'auto',
     pointerEvents: 'none',
   },
-})
+}

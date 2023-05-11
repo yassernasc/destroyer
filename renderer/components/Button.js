@@ -1,14 +1,14 @@
-import { useTheme } from '@emotion/react'
+import { useAccentColor } from '../hooks'
 
 export const Button = props => {
-  const theme = useTheme()
-  const styles = getStyles(theme)
+  const accent = useAccentColor()
 
   return (
     <button
       css={[styles.base, props.disabled ? styles.disabled : {}]}
       disabled={props.disabled}
       onClick={props.callback}
+      style={{ color: accent.opaque }}
       type={props.type}
     >
       {props.value}
@@ -16,7 +16,7 @@ export const Button = props => {
   )
 }
 
-const getStyles = ({ colors }) => ({
+const styles = {
   base: {
     ':hover': {
       background: 'rgba(255, 255, 255, 0.8)',
@@ -27,7 +27,6 @@ const getStyles = ({ colors }) => ({
     borderRadius: '.2em',
     boxShadow: '.2em .2em 0px rgba(0, 0, 0, .1)',
     boxSizing: 'border-box',
-    color: colors.main.opaque,
     cursor: 'pointer',
     display: 'block',
     fontSize: '100%',
@@ -44,4 +43,4 @@ const getStyles = ({ colors }) => ({
     cursor: 'not-allowed',
     opacity: '.5',
   },
-})
+}

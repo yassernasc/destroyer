@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+import { resetAccent, updateAccentByAlbumCover } from './theme'
+
 export const playerStatus = {
   paused: 'paused',
   playing: 'playing',
@@ -43,7 +45,7 @@ const playerSlice = createSlice({
         state.status = playing
       }
     },
-    stop(state) {
+    stopPlayer(state) {
       state.queue = []
       state.queueIndex = null
       state.status = stopped
@@ -91,11 +93,17 @@ const playTrack = trackId => (dispatch, getState) => {
 const playAlbum =
   (albumId, index = 0) =>
   (dispatch, getState) => {
-    const { tracks } = getState().library.albums[albumId]
+    const { cover, tracks } = getState().library.albums[albumId]
     dispatch(playQueue({ queue: tracks, queueIndex: index }))
+    dispatch(updateAccentByAlbumCover(cover))
   }
 
-const { playIndex, playQueue, tick, toggle, next, previous, stop } =
+const stop = () => dispatch => {
+  dispatch(stopPlayer())
+  dispatch(resetAccent())
+}
+
+const { playIndex, playQueue, tick, toggle, next, previous, stopPlayer } =
   playerSlice.actions
 export { playAlbum, playTrack, nextTrack, previousTrack, stop, tick, toggle }
 export default playerSlice.reducer

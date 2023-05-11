@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux'
 
 import { nextTrack, playerStatus, tick } from '../reducers/player'
 import {
-  useDynamicColor,
   useLastfm,
   useMediaSession,
   usePlayerStatus,
@@ -26,7 +25,6 @@ export const Player = () => {
   usePlayerToggle()
   useTouchBar()
   useLastfm()
-  useDynamicColor()
   useUpdateTick(audioEl)
 
   const updateCurrentTime = time => {

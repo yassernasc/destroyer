@@ -1,17 +1,24 @@
-import { useTheme } from '@emotion/react'
+import { useHoverDirty } from 'react-use'
+import { useRef } from 'react'
+
+import { useAccentColor } from '../hooks'
 
 export const Bar = () => {
-  const theme = useTheme()
-  const styles = getStyles(theme)
+  const ref = useRef(null)
+  const hovering = useHoverDirty(ref)
+  const accent = useAccentColor()
 
-  return <nav css={styles.base} />
+  return (
+    <nav
+      css={styles.base}
+      ref={ref}
+      style={hovering ? { backgroundColor: accent.opaque } : {}}
+    />
+  )
 }
 
-const getStyles = ({ colors }) => ({
+const styles = {
   base: {
-    ':hover': {
-      backgroundColor: colors.main.opaque,
-    },
     height: '1.5em',
     left: 0,
     position: 'fixed',
@@ -21,4 +28,4 @@ const getStyles = ({ colors }) => ({
     width: '100vw',
     zIndex: 100,
   },
-})
+}

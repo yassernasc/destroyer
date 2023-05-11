@@ -1,16 +1,15 @@
 import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
-import { useTheme } from '@emotion/react'
 
 import { clear, scanUpdate } from '../reducers/notification'
 import { useIsScanningLibrary, useNotificationMessage } from '../hooks'
+import { useAccentColor } from '../hooks/useAccentColor'
 
 export const Notification = () => {
   const dispatch = useDispatch()
   const message = useNotificationMessage()
   const isScanning = useIsScanningLibrary()
-  const theme = useTheme()
-  const styles = getStyles(theme)
+  const accent = useAccentColor()
   const display = message !== ''
 
   useEffect(() => {
@@ -27,16 +26,18 @@ export const Notification = () => {
   }, [isScanning])
 
   return (
-    <section css={[styles.base, display ? styles.show : styles.hide]}>
+    <section
+      css={[styles.base, display ? styles.show : styles.hide]}
+      style={{ backgroundColor: accent.opaque }}
+    >
       <span css={styles.span}>{message}</span>
     </section>
   )
 }
 
-const getStyles = ({ colors }) => ({
+const styles = {
   base: {
     alignItems: 'center',
-    backgroundColor: colors.main.opaque,
     display: 'flex',
     fontSize: '120%',
     height: '100vh',
@@ -58,4 +59,4 @@ const getStyles = ({ colors }) => ({
   span: {
     margin: 'auto',
   },
-})
+}

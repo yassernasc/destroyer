@@ -1,13 +1,22 @@
-import { useTheme } from '@emotion/react'
+import { useHoverDirty } from 'react-use'
+import { useRef } from 'react'
+
+import { useAccentColor } from '../hooks'
 
 const formatNumber = number => number.toString().padStart(2, '0')
 
 export const Track = props => {
-  const theme = useTheme()
-  const styles = getStyles(theme)
+  const ref = useRef(null)
+  const hovering = useHoverDirty(ref)
+  const accent = useAccentColor()
 
   return (
-    <li css={styles.li} onClick={props.onClick}>
+    <li
+      css={styles.li}
+      onClick={props.onClick}
+      ref={ref}
+      style={hovering ? { background: accent.opaque } : {}}
+    >
       <span css={styles.no}>{formatNumber(props.number)}</span>
       <span css={[styles.span, props.isPlaying ? styles.current : {}]}>
         {props.title}
@@ -16,14 +25,11 @@ export const Track = props => {
   )
 }
 
-const getStyles = ({ colors }) => ({
+const styles = {
   current: {
     borderBottom: '2px solid white',
   },
   li: {
-    ':hover': {
-      background: colors.main.opaque,
-    },
     cursor: 'pointer',
     display: 'block',
     margin: 0,
@@ -37,4 +43,4 @@ const getStyles = ({ colors }) => ({
     fontWeight: 'bold',
     padding: '0 .25em',
   },
-})
+}
