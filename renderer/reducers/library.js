@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
+import { playerStatus, stop } from './player'
 import { close } from './showcase'
-import { stop } from './player'
 
 const librarySlice = createSlice({
   extraReducers: builder => {
@@ -28,11 +28,11 @@ const librarySlice = createSlice({
   },
   name: 'library',
   reducers: {
+    applyFilter(state, action) {
+      state.filter = action.payload
+    },
     clearFilter(state) {
       state.filter = ''
-    },
-    filter(state, action) {
-      state.filter = action.payload
     },
   },
 })
@@ -40,8 +40,15 @@ const librarySlice = createSlice({
 const scan = createAsyncThunk(
   'library/scan',
   (paths, { dispatch, getState }) => {
-    dispatch(stop())
-    dispatch(close())
+    const { showcase, player } = getState()
+
+    if (showcase.albumId !== null) {
+      dispatch(close())
+    }
+
+    if (player.status !== playerStatus.stopped) {
+      dispatch(stop())
+    }
 
     if (!paths) {
       paths = getState().library.paths
@@ -51,6 +58,17 @@ const scan = createAsyncThunk(
   }
 )
 
+const filter = str => (dispatch, getState) => {
+  dispatch(applyFilter(str))
+
+  const { albumId } = getState().showcase
+  if (albumId) {
+    dispatch(close())
+  }
+}
+
 export { scan }
-export const { clearFilter, filter } = librarySlice.actions
+
+const { applyFilter, clearFilter } = librarySlice.actions
+export { filter, clearFilter }
 export default librarySlice.reducer

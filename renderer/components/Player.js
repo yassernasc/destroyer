@@ -54,7 +54,7 @@ export const Player = () => {
     if (status === playerStatus.playing && audioEl.current.src) {
       play()
     }
-    if (status === playerStatus.paused) {
+    if ([playerStatus.paused, playerStatus.stopped].includes(status)) {
       pause()
     }
   }, [status])
