@@ -24,3 +24,7 @@ contextBridge.exposeInMainWorld('touchBar', {
   updateMetadata: metadata =>
     ipcRenderer.send('touch-bar:update-metadata', metadata),
 })
+
+contextBridge.exposeInMainWorld('env', {
+  os: process.platform,
+})

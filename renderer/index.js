@@ -7,6 +7,7 @@ import storage from 'redux-persist/lib/storage'
 
 import { App } from './components/App'
 import adminReducer from './reducers/admin'
+import envReducer from './reducers/env'
 import lastfmReducer from './reducers/lastfm'
 import libraryReducer from './reducers/library'
 import notificationReducer from './reducers/notification'
@@ -16,6 +17,7 @@ import themeReducer from './reducers/theme'
 
 const reducer = combineReducers({
   admin: adminReducer,
+  env: envReducer,
   lastfm: lastfmReducer,
   library: libraryReducer,
   notification: notificationReducer,
