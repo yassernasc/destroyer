@@ -13,6 +13,7 @@ import libraryReducer from './reducers/library'
 import notificationReducer from './reducers/notification'
 import playerReducer from './reducers/player'
 import showcaseReducer from './reducers/showcase'
+import { syncInitialStateWithMain } from './utils/sync'
 import themeReducer from './reducers/theme'
 
 const reducer = combineReducers({
@@ -32,7 +33,9 @@ const store = configureStore({
   devTools: { actionsDenylist: 'player/tick' },
   reducer: persistedReducer,
 })
-const persistor = persistStore(store)
+const persistor = persistStore(store, null, () =>
+  syncInitialStateWithMain(store.getState())
+)
 
 const container = document.getElementById('root')
 const root = createRoot(container)

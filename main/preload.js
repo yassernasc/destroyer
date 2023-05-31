@@ -8,6 +8,8 @@ contextBridge.exposeInMainWorld('local', {
 
 contextBridge.exposeInMainWorld('menu', {
   addFiles: callback => ipcRenderer.on('add-files', callback),
+  initialSorting: sorting => ipcRenderer.send('menu:initial-sorting', sorting),
+  onSortingUpdate: criteria => ipcRenderer.on('menu:update-sorting', criteria),
 })
 
 contextBridge.exposeInMainWorld('lastfm', {

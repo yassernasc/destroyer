@@ -2,7 +2,9 @@ const Walk = require('@root/walk')
 const path = require('path')
 const musicMetadata = require('music-metadata')
 const { normalize, schema } = require('normalizr')
-const { nanoid: id } = require('@reduxjs/toolkit')
+const { nanoid } = require('@reduxjs/toolkit')
+
+const id = () => nanoid(12)
 
 const musicFormats = ['.flac', '.m4a', '.mp3', '.mp4', '.aac']
 const imageFormats = ['.jpg', '.png', '.webp']
@@ -43,11 +45,13 @@ class LocalDisk {
               disk: metadata.common.disk.no,
               duration: metadata.format.duration,
               path: pathname,
+              releaseDate: metadata.common.originaldate,
               title: metadata.common.title,
               trackNumber: metadata.common.track.no,
             })
 
             const metadata = await musicMetadata.parseFile(pathname)
+
             this.#addTrack(formatMetadata(metadata))
           } catch (err) {
             return false
@@ -74,17 +78,9 @@ class LocalDisk {
 
   #addTrack(metadata) {
     const createAlbum = () => {
-      this.#window.webContents.send('new-album-found', {
-        album: metadata.album,
-        artist: metadata.artist,
-      })
-
-      return {
-        artist: metadata.artist,
-        cover: null,
-        id: id(),
-        title: metadata.album,
-      }
+      const { album, artist, releaseDate } = metadata
+      this.#window.webContents.send('new-album-found', { album, artist })
+      return { artist, cover: null, id: id(), releaseDate, title: album }
     }
 
     const createTrack = trackInfo => ({
@@ -123,45 +119,6 @@ class LocalDisk {
     this.#library.forEach(album => (album.cover = matchCoverByPath(album)))
   }
 
-  #sort() {
-    const sortTracksFn = (a, b) => {
-      if (a.disk < b.disk) {
-        return -1
-      }
-      if (a.disk > b.disk) {
-        return 1
-      }
-      if (a.trackNumber < b.trackNumber) {
-        return -1
-      }
-      if (a.trackNumber > b.trackNumber) {
-        return 1
-      }
-
-      return 0
-    }
-
-    const sortAlbumsFn = (a, b) => {
-      if (a.artist < b.artist) {
-        return -1
-      }
-      if (a.artist > b.artist) {
-        return 1
-      }
-      if (a.title < b.title) {
-        return -1
-      }
-      if (a.title > b.title) {
-        return 1
-      }
-
-      return 0
-    }
-
-    this.#library.forEach(album => album.tracks.sort(sortTracksFn))
-    this.#library.sort(sortAlbumsFn)
-  }
-
   #getNormalizedLibrary() {
     const trackEntity = new schema.Entity('tracks')
     const albumEntity = new schema.Entity('albums', { tracks: [trackEntity] })
@@ -175,7 +132,6 @@ class LocalDisk {
 
   #refineLibrary() {
     this.#findCovers()
-    this.#sort()
     return this.#getNormalizedLibrary()
   }
 }

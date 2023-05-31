@@ -25,6 +25,7 @@
     "@emotion/react": "^11.9.3",
     "@reduxjs/toolkit": "^1.8.3",
     "@root/walk": "^1.1.0",
+    "date-fns": "^2.30.0",
     "electron-devtools-installer": "^3.2.0",
     "electron-fetch": "^1.7.4",
     "electron-window-state": "^4.1.0",

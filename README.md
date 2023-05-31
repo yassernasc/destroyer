@@ -20,8 +20,9 @@
 ## v3.0 Comming Soon:
 
 * Last.fm Scrobbling :fire:
-* Native media controls integration
-* Restore all state from previous session
+* Desktop native media controls
+* Automatically restore previous session
+* Album sorting by release date
 * Massive packages upgrades
 
 ## On Artwork:

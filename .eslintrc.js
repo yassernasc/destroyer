@@ -16,7 +16,7 @@ module.exports = {
       },
       rules: {
         'react/jsx-sort-props': 'warn',
-        'react/prop-types': 'warn',
+        'react/prop-types': 'off',
       },
       settings: { react: { version: 'detect' } },
     },
@@ -25,6 +25,12 @@ module.exports = {
       extends: ['eslint:recommended', 'plugin:node/recommended'],
       files: ['main/**/*.js'],
       parserOptions: { ecmaVersion: 2022 },
+      rules: {
+        'node/no-unpublished-require': [
+          'error',
+          { allowModules: ['electron'] },
+        ],
+      },
     },
   ],
   parserOptions: { ecmaVersion: 'latest' },

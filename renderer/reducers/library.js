@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { playerStatus, stop } from './player'
+import { CriteriaEnum } from '../utils/sorting'
 import { close } from './showcase'
 
 const librarySlice = createSlice({
@@ -24,6 +25,10 @@ const librarySlice = createSlice({
     filter: '',
     paths: [],
     scanning: false,
+    sortingCriteria: {
+      album: CriteriaEnum.alphabetically,
+      artist: CriteriaEnum.alphabetically,
+    },
     tracks: {},
   },
   name: 'library',
@@ -33,6 +38,9 @@ const librarySlice = createSlice({
     },
     clearFilter(state) {
       state.filter = ''
+    },
+    sortingCriteria(state, action) {
+      state.sortingCriteria.album = action.payload
     },
   },
 })
@@ -67,8 +75,6 @@ const filter = str => (dispatch, getState) => {
   }
 }
 
-export { scan }
-
-const { applyFilter, clearFilter } = librarySlice.actions
-export { filter, clearFilter }
+const { applyFilter, clearFilter, sortingCriteria } = librarySlice.actions
+export { filter, clearFilter, scan, sortingCriteria }
 export default librarySlice.reducer

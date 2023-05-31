@@ -1,3 +1,4 @@
 import { useSelector } from 'react-redux'
 
-export const useFilter = () => useSelector(state => state.library.filter)
+export const selectFilter = state => state.library.filter
+export const useFilter = () => useSelector(selectFilter)

@@ -84,6 +84,10 @@ app.on('open-url', (event, url) => {
   }
 })
 
+app.on('new-sorting-criteria', criteria =>
+  mainWindow.webContents.send('menu:update-sorting', criteria)
+)
+
 lastfm.events.on('connected', payload =>
   mainWindow.webContents.send('lastfm:connected', payload)
 )
@@ -100,14 +104,16 @@ lastfm.events.on('new-scrobble-status', status =>
 ipcMain.handle('local:scan', (event, pathList) =>
   new LocalDisk(mainWindow).scan(pathList)
 )
+
+ipcMain.once('lastfm:connected-start', (event, isConnected) =>
+  lastfm.setInitialStatus(isConnected ? 'connected' : 'disconnected')
+)
+
 ipcMain.on('touch-bar:update-metadata', (event, metadata) =>
   updateMetadata(metadata)
 )
 ipcMain.on('lastfm:now-playing', (event, metadata) =>
   lastfm.nowPlaying(metadata)
-)
-ipcMain.on('lastfm:connected-start', (event, isConnected) =>
-  lastfm.setInitialStatus(isConnected ? 'connected' : 'disconnected')
 )
 ipcMain.on('lastfm:scrobble', (event, metadata) => lastfm.scrobble(metadata))
 

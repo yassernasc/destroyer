@@ -1,13 +1,24 @@
-import { useFilteredLibrary, usePlayerStatus, useShowcaseAlbum } from '../hooks'
+import { useDispatch } from 'react-redux'
+import { useEffect } from 'react'
+
+import { useLibrary, usePlayerStatus, useShowcaseAlbum } from '../hooks'
 import { Album } from './Album'
 import { playerStatus } from '../reducers/player'
+import { sortingCriteria } from '../reducers/library'
 
 export const Library = () => {
-  const library = useFilteredLibrary()
+  const library = useLibrary()
   const status = usePlayerStatus()
+  const dispatch = useDispatch()
 
   const showcaseAlbum = useShowcaseAlbum()
   const showcaseOpen = showcaseAlbum !== null
+
+  useEffect(() => {
+    window.menu.onSortingUpdate((event, criteria) =>
+      dispatch(sortingCriteria(criteria))
+    )
+  }, [])
 
   return (
     <ul

@@ -1,4 +1,4 @@
-const { app, Menu } = require('electron')
+const { app, Menu, ipcMain } = require('electron')
 
 const isMac = process.platform === 'darwin'
 
@@ -26,6 +26,45 @@ const createMenu = (window, lastfm) => {
     {
       label: 'Library',
       submenu: [
+        {
+          label: 'Sorting',
+          submenu: [
+            {
+              label: 'Artists',
+              submenu: [
+                {
+                  checked: true,
+                  enabled: false,
+                  label: 'Alphabetically',
+                  type: 'radio',
+                },
+              ],
+            },
+            {
+              label: 'Albums',
+              submenu: [
+                {
+                  click: ({ id }) => newSortingSelected(id),
+                  id: 'alphabetically',
+                  label: 'Alphabetically',
+                  type: 'radio',
+                },
+                {
+                  click: ({ id }) => newSortingSelected(id),
+                  id: 'newest-first',
+                  label: 'Newest First',
+                  type: 'radio',
+                },
+                {
+                  click: ({ id }) => newSortingSelected(id),
+                  id: 'oldest-first',
+                  label: 'Oldest First',
+                  type: 'radio',
+                },
+              ],
+            },
+          ],
+        },
         {
           click: () => window.webContents.send('local:rescan'),
           label: 'Rescan',
@@ -174,6 +213,15 @@ const createMenu = (window, lastfm) => {
   updateLastfmMenus(lastfm.status)
   lastfm.events.on('new-status', updateLastfmMenus)
   lastfm.events.on('initial-status', updateLastfmMenus)
+
+  //album sorting logic
+  ipcMain.once('menu:initial-sorting', (event, initialSorting) => {
+    const item = menu.getMenuItemById(initialSorting.album)
+    item.checked = true
+  })
+
+  const newSortingSelected = criteria =>
+    app.emit('new-sorting-criteria', criteria)
 
   return menu
 }
