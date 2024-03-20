@@ -5,6 +5,12 @@ import { selectAlbums } from './useAlbums'
 import { selectFilter } from './useFilter'
 import { sortAlbums } from '../utils/sorting'
 
+// string helpers for the filter feature
+const removeAccents = str =>
+  str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+const transform = str => removeAccents(str).toLowerCase()
+const match = (a, b) => transform(a).includes(transform(b))
+
 const selectSortingCriteria = state => state.library.sortingCriteria
 const selectSortedAlbums = createSelector(
   selectAlbums,
@@ -20,10 +26,9 @@ const selectSortedAndFilteredAlbums = createSelector(
   selectFilter,
   (albums, filter) => {
     const filterAlbums = () => {
-      return albums.filter(album => {
-        const match = (a, b) => a.toLowerCase().includes(b.toLowerCase())
-        return match(album.title, filter) || match(album.artist, filter)
-      })
+      return albums.filter(
+        album => match(album.title, filter) || match(album.artist, filter)
+      )
     }
 
     return filter === '' ? albums : filterAlbums()
