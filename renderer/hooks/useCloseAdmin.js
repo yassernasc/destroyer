@@ -6,17 +6,17 @@ import { close } from '../reducers/admin'
 import { useAdminDisplay } from '.'
 
 export const useCloseAdmin = () => {
-  const display = useAdminDisplay()
+  const isAdminOpen = useAdminDisplay()
   const dispatch = useDispatch()
 
   useEffect(() => {
     const handleKeydown = event => {
-      if (display && event.keyCode === keycode('esc')) {
+      if (isAdminOpen && event.keyCode === keycode('esc')) {
         dispatch(close())
       }
     }
 
     window.addEventListener('keydown', handleKeydown)
     return () => window.removeEventListener('keydown', handleKeydown)
-  }, [display])
+  }, [isAdminOpen])
 }

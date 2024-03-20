@@ -7,6 +7,7 @@ import {
   useIsShowcasePlaying,
   usePlayingTrackId,
   useShowcaseAlbum,
+  useShowcaseToggle,
   useShowcaseTracks,
 } from '../hooks'
 import { Track } from './Track'
@@ -19,6 +20,7 @@ export const Showcase = () => {
   const isShowcasePlaying = useIsShowcasePlaying()
   const tracks = useShowcaseTracks()
   const { close, play } = useCursors()
+  useShowcaseToggle()
 
   const display = album !== null
 

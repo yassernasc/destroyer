@@ -13,5 +13,16 @@ const showcaseSlice = createSlice({
   },
 })
 
+const toggleShowcase = playingIAlbumd => (dispatch, getState) => {
+  const { albumId } = getState().showcase
+
+  if (albumId) {
+    dispatch(close())
+  } else if (playingIAlbumd) {
+    dispatch(showcase(playingIAlbumd))
+  }
+}
+
 export const { showcase, close } = showcaseSlice.actions
+export { toggleShowcase }
 export default showcaseSlice.reducer
